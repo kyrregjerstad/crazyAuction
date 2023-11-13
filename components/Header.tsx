@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Button } from './ui/button';
+import UserMenu from './UserMenu';
 
 const Header = () => {
   return (
@@ -17,14 +18,7 @@ const Header = () => {
         </Link>
       </nav>
 
-      <div>
-        <Link href='/api/auth/signout'>Sign out </Link>
-        <Link href='/api/auth/signin'>Sign in </Link>
-      </div>
-      {/* <Button className='rounded-full' variant='ghost'>
-        Profile
-        <span className='sr-only'>User profile</span>
-      </Button> */}
+      <UserMenu />
     </header>
   );
 };
