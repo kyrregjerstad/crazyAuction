@@ -17,10 +17,14 @@ const Header = () => {
         </Link>
       </nav>
 
-      <Button className='rounded-full' variant='ghost'>
+      <div>
+        <Link href='/api/auth/signout'>Sign out </Link>
+        <Link href='/api/auth/signin'>Sign in </Link>
+      </div>
+      {/* <Button className='rounded-full' variant='ghost'>
         Profile
         <span className='sr-only'>User profile</span>
-      </Button>
+      </Button> */}
     </header>
   );
 };
