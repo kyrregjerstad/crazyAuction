@@ -6,6 +6,7 @@ import type { JWT } from 'next-auth/jwt';
 
 interface CustomJWT extends JWT {
   accessToken: string;
+  avatar?: string;
 }
 
 const handler = NextAuth({
@@ -38,6 +39,7 @@ const handler = NextAuth({
 
       if (user) {
         customToken.accessToken = user.accessToken;
+        token.avatar = user.avatar;
       }
       return customToken;
     },
@@ -45,9 +47,8 @@ const handler = NextAuth({
     session: async ({ session, token }) => {
       const customToken = token as CustomJWT;
 
-      if (token?.accessToken) {
-        session.user.accessToken = customToken.accessToken;
-      }
+      session.user.accessToken = customToken.accessToken;
+      session.user.avatar = customToken.avatar;
       return session;
     },
   },
