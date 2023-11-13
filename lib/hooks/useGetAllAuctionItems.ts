@@ -1,16 +1,12 @@
-import { SingleListing, allListingsSchema } from '../schemas/listing';
+import { API_AUCTION_LISTINGS_URL } from '@/lib/constants';
+import { fetcher } from '@/lib/fetcher';
+import { Listing, allListingsSchema } from '@/lib/schemas/listing';
 
 export default async function useGetAllAuctionItems() {
-  const data = await fetch(
-    'https://api.noroff.dev/api/v1/auction/listings?_seller=true&_bids=true',
-  );
-  const items = (await data.json()) as SingleListing[];
+  const data = await fetcher<Listing[]>({
+    url: `${API_AUCTION_LISTINGS_URL}?_seller=true&_bids=true`,
+    schema: allListingsSchema,
+  });
 
-  const validation = allListingsSchema.safeParse(items);
-
-  if (!validation.success) {
-    throw new Error(validation.error.message);
-  }
-
-  return items;
+  return data;
 }

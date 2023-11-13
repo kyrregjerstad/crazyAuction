@@ -31,6 +31,6 @@ export const singleListingSchema = z.object({
   }),
 });
 
-export type SingleListing = z.infer<typeof singleListingSchema>;
+export type Listing = z.infer<typeof singleListingSchema>;
 
 export const allListingsSchema = z.array(singleListingSchema);

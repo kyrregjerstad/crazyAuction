@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button } from './ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
-import { SingleListing } from '@/lib/schemas/listing';
+import { Listing } from '@/lib/schemas/listing';
 
 type Props = {
-  listing: SingleListing;
+  listing: Listing;
 };
 
 const AuctionItemCard = ({ listing }: Props) => {
