@@ -8,7 +8,7 @@ const Header = () => {
       <nav className='flex flex-row items-center gap-6 text-lg font-medium lg:gap-8'>
         <Link
           className='flex items-center gap-2 text-lg font-semibold text-accent'
-          href='#'
+          href='/'
         >
           Home icon
           <span className='sr-only'>FastBid</span>
