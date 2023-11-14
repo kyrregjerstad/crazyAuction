@@ -1,4 +1,4 @@
-import AuctionItemCard from '@/components/auctionItemCard';
+import AuctionItemCard from '@/components/AuctionItemCard';
 import useGetAllAuctionItems from '@/lib/hooks/useGetAllAuctionItems';
 
 export default async function Home() {

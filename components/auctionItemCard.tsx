@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from './ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Listing } from '@/lib/schemas/listing';
+import Link from 'next/link';
 
 type Props = {
   listing: Listing;
@@ -12,7 +13,7 @@ const AuctionItemCard = ({ listing }: Props) => {
     <Card className='bg-secondary'>
       <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
         <CardTitle className='text-2xl font-bold text-secondary-foreground'>
-          {listing.title}
+          <Link href={`/item/${listing.id}`}>{listing.title}</Link>
         </CardTitle>
       </CardHeader>
       <CardContent>
