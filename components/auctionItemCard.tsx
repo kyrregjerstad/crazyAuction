@@ -3,6 +3,7 @@ import { Button } from './ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Listing } from '@/lib/schemas/listing';
 import Link from 'next/link';
+import Image from './Image';
 
 type Props = {
   listing: Listing;
@@ -17,17 +18,13 @@ const AuctionItemCard = ({ listing }: Props) => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <img
-          alt='Item 1'
-          className='h-40 w-full rounded-md object-cover'
-          height='200'
-          src={listing?.media[0] || ''}
-          style={{
-            aspectRatio: '200/200',
-            objectFit: 'cover',
-          }}
-          width='200'
+        <Image
+          src={listing.media[0] || ''}
+          width={500}
+          height={500}
+          alt='Product Image'
         />
+
         <p className='mt-2 max-h-[50px] overflow-hidden overflow-ellipsis text-xs text-gray-400'>
           {listing.description}
         </p>

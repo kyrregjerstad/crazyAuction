@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+
 import { CldImage, CldImageProps } from 'next-cloudinary';
 
 /*
