@@ -1,3 +1,4 @@
+import ImageGallery from '@/components/ImageGallery';
 import { Button } from '@/components/ui/button';
 import useGetSingleAuctionItem from '@/lib/hooks/useGetSingleAuctionItem';
 import { getServerSession } from 'next-auth';
@@ -12,99 +13,15 @@ const ItemDetailsPage = async ({ params }: Props) => {
 
   const auctionItem = await useGetSingleAuctionItem(params.id);
 
+  console.log(auctionItem?.media.at(1));
+
   if (!auctionItem) return null;
 
   return (
     <div className='mx-auto max-w-5xl p-8'>
       <div className='grid items-start gap-8 md:grid-cols-2'>
-        <div className='relative space-y-4'>
-          <div className='aspect-w-1 aspect-h-2 md:aspect-h-1 relative'>
-            <img
-              alt='Product Image Main'
-              className='rounded-lg object-cover'
-              height='500'
-              src={auctionItem.media.at(0) || ''}
-              style={{
-                aspectRatio: '1',
-                objectFit: 'cover',
-              }}
-              width='500'
-            />
-            <button className='absolute left-0 top-1/2 -translate-y-1/2 transform rounded-r-lg bg-black bg-opacity-50 p-2 text-white'>
-              <svg
-                className=' h-6 w-6'
-                fill='none'
-                height='24'
-                stroke='currentColor'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth='2'
-                viewBox='0 0 24 24'
-                width='24'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path d='m15 18-6-6 6-6' />
-              </svg>
-            </button>
-            <button className='absolute right-0 top-1/2 -translate-y-1/2 transform rounded-l-lg bg-black bg-opacity-50 p-2 text-white'>
-              <svg
-                className=' h-6 w-6'
-                fill='none'
-                height='24'
-                stroke='currentColor'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth='2'
-                viewBox='0 0 24 24'
-                width='24'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path d='m9 18 6-6-6-6' />
-              </svg>
-            </button>
-          </div>
-          <div className='grid grid-cols-3 gap-2'>
-            <div className='aspect-w-1 aspect-h-1'>
-              <img
-                alt='Product Image 1'
-                className='cursor-pointer rounded-lg object-cover'
-                height='200'
-                src={auctionItem.media.at(0) || ''}
-                style={{
-                  aspectRatio: '1',
-                  objectFit: 'cover',
-                }}
-                width='200'
-              />
-            </div>
-            <div className='aspect-w-1 aspect-h-1'>
-              <img
-                alt='Product Image 2'
-                className='cursor-pointer rounded-lg object-cover'
-                height='200'
-                src={auctionItem.media.at(0) || ''}
-                style={{
-                  aspectRatio: '1',
-                  objectFit: 'cover',
-                }}
-                width='200'
-              />
-            </div>
-            <div className='aspect-w-1 aspect-h-1'>
-              <img
-                alt='Product Image 3'
-                className='cursor-pointer rounded-lg object-cover'
-                height='200'
-                src={auctionItem.media.at(0) || ''}
-                style={{
-                  aspectRatio: '1',
-                  objectFit: 'cover',
-                }}
-                width='200'
-              />
-            </div>
-          </div>
-        </div>
+        <ImageGallery images={auctionItem.media} />
+
         <div className='space-y-6'>
           <h1 className='text-3xl font-bold'>{auctionItem.title}</h1>
           <div className='text-5xl font-bold text-white'>
