@@ -63,9 +63,9 @@ const ImageGallery = ({ images }: { images: string[] }) => {
             >
               <Image
                 src={img}
-                width={100}
-                height={80}
-                className='w-full object-cover'
+                width={200}
+                height={100}
+                className='h-full w-full object-cover'
                 alt={`Product Thumbnail ${index + 1}`}
               />
             </div>
