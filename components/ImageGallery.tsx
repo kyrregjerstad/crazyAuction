@@ -1,99 +1,75 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import Image from './Image';
+import { Button } from './ui/button';
+import { motion } from 'framer-motion';
 
 const ImageGallery = ({ images }: { images: string[] }) => {
-  const imageAmount = images.length;
   const [currentImage, setCurrentImage] = useState(0);
+
+  const handleNext = () => {
+    setCurrentImage((prev) => (prev + 1) % images.length);
+  };
+
+  const handlePrev = () => {
+    setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const selectImage = (index: number) => {
+    setCurrentImage(index);
+  };
+
+  const imageVariants = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+  };
 
   return (
     <>
       <div className='relative space-y-4'>
         <div className='aspect-w-1 aspect-h-2 md:aspect-h-1 relative'>
-          <img
-            alt='Product Image Main'
-            className='rounded-lg object-cover'
-            height='500'
-            src={images.at(0) || ''}
-            style={{
-              aspectRatio: '1',
-              objectFit: 'cover',
-            }}
-            width='500'
-          />
-          <button className='absolute left-0 top-1/2 -translate-y-1/2 transform rounded-r-lg bg-black bg-opacity-50 p-2 text-white'>
-            <svg
-              className=' h-6 w-6'
-              fill='none'
-              height='24'
-              stroke='currentColor'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth='2'
-              viewBox='0 0 24 24'
-              width='24'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path d='m15 18-6-6 6-6' />
-            </svg>
-          </button>
-          <button className='absolute right-0 top-1/2 -translate-y-1/2 transform rounded-l-lg bg-black bg-opacity-50 p-2 text-white'>
-            <svg
-              className=' h-6 w-6'
-              fill='none'
-              height='24'
-              stroke='currentColor'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth='2'
-              viewBox='0 0 24 24'
-              width='24'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path d='m9 18 6-6-6-6' />
-            </svg>
-          </button>
+          <motion.div
+            key={currentImage}
+            variants={imageVariants}
+            initial='initial'
+            animate='animate'
+            exit='exit'
+            transition={{ duration: 0.4 }}
+            className='aspect-square rounded-lg object-cover'
+          >
+            <Image
+              src={images[currentImage] || ''}
+              width={500}
+              height={500}
+              className='aspect-square rounded-lg object-cover'
+              alt='Product Image'
+            />
+          </motion.div>
+
+          <PrevBtn handlePrev={handlePrev} />
+          <NextBtn handleNext={handleNext} />
         </div>
-        <div className='grid grid-cols-3 gap-2'>
-          <div className='aspect-w-1 aspect-h-1'>
-            <img
-              alt='Product Image 1'
-              className='cursor-pointer rounded-lg object-cover'
-              height='200'
-              src={images.at(1) || ''}
-              style={{
-                aspectRatio: '1',
-                objectFit: 'cover',
-              }}
-              width='200'
-            />
-          </div>
-          <div className='aspect-w-1 aspect-h-1'>
-            <img
-              alt='Product Image 2'
-              className='cursor-pointer rounded-lg object-cover'
-              height='200'
-              src={images.at(2) || ''}
-              style={{
-                aspectRatio: '1',
-                objectFit: 'cover',
-              }}
-              width='200'
-            />
-          </div>
-          <div className='aspect-w-1 aspect-h-1'>
-            <img
-              alt='Product Image 3'
-              className='cursor-pointer rounded-lg object-cover'
-              height='200'
-              src={images.at(3) || ''}
-              style={{
-                aspectRatio: '1',
-                objectFit: 'cover',
-              }}
-              width='200'
-            />
-          </div>
+        <div className='grid w-full grid-cols-4 gap-4'>
+          {images.map((img, index) => (
+            <div
+              key={index}
+              className={cn('cursor-pointer overflow-hidden rounded-lg', {
+                'ring-1 ring-accent': index === currentImage,
+              })}
+              onClick={() => selectImage(index)}
+            >
+              <Image
+                src={img}
+                width={100}
+                height={80}
+                className='w-full object-cover'
+                alt={`Product Thumbnail ${index + 1}`}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </>
@@ -101,3 +77,59 @@ const ImageGallery = ({ images }: { images: string[] }) => {
 };
 
 export default ImageGallery;
+
+type NextBtnProps = {
+  handleNext: () => void;
+};
+
+const NextBtn = ({ handleNext }: NextBtnProps) => {
+  return (
+    <Button
+      onClick={handleNext}
+      className='absolute right-0 top-1/2 -translate-y-1/2 transform rounded-l-lg bg-black bg-opacity-50 p-2 text-white'
+    >
+      <svg
+        className=' h-6 w-6'
+        fill='none'
+        height='24'
+        stroke='currentColor'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        strokeWidth='2'
+        viewBox='0 0 24 24'
+        width='24'
+        xmlns='http://www.w3.org/2000/svg'
+      >
+        <path d='m9 18 6-6-6-6' />
+      </svg>
+    </Button>
+  );
+};
+
+type PrevBtnProps = {
+  handlePrev: () => void;
+};
+
+const PrevBtn = ({ handlePrev }: PrevBtnProps) => {
+  return (
+    <Button
+      onClick={handlePrev}
+      className='absolute left-0 top-1/2 -translate-y-1/2 transform rounded-r-lg bg-black bg-opacity-50 p-2 text-white'
+    >
+      <svg
+        className=' h-6 w-6'
+        fill='none'
+        height='24'
+        stroke='currentColor'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        strokeWidth='2'
+        viewBox='0 0 24 24'
+        width='24'
+        xmlns='http://www.w3.org/2000/svg'
+      >
+        <path d='m15 18-6-6 6-6' />
+      </svg>
+    </Button>
+  );
+};
