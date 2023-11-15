@@ -34,7 +34,7 @@ const AuctionItemCard = ({ listing }: Props) => {
           {listing.description}
         </p>
         <p className='mt-2 text-xs text-gray-400'>
-          Starting bid: {listing.bids[0]?.amount || 'none'}
+          Current bid: {listing.bids.at(-1)?.amount || 'none'}
         </p>
         <div className='flex-1' />
         <Button
