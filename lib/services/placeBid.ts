@@ -1,5 +1,5 @@
 import { API_AUCTION_LISTINGS_URL } from '@/lib/constants';
-import { fetcher } from '@/lib/fetcher';
+import { fetcher } from '@/lib/services/fetcher';
 import { Listing, singleListingSchema } from '@/lib/schemas/listing';
 
 type PlaceBid = {

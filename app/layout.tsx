@@ -3,6 +3,7 @@ import { GeistMono } from 'geist/font/mono';
 import './globals.css';
 import Header from '@/components/Header';
 import AuthProvider from './auth/Provider';
+import QueryClientProvider from './providers/QueryClientProvider';
 
 export default function RootLayout({
   children,
@@ -15,10 +16,12 @@ export default function RootLayout({
       className={`${GeistSans.variable} ${GeistMono.variable} dark`}
     >
       <body>
-        <AuthProvider>
-          <Header />
-          {children}
-        </AuthProvider>
+        <QueryClientProvider>
+          <AuthProvider>
+            <Header />
+            {children}
+          </AuthProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );
