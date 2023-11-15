@@ -1,8 +1,7 @@
+import BidBox from '@/components/BidBox';
 import ImageGallery from '@/components/ImageGallery';
-import { Button } from '@/components/ui/button';
 import useGetSingleAuctionItem from '@/lib/hooks/useGetSingleAuctionItem';
 import { getServerSession } from 'next-auth';
-import React from 'react';
 
 interface Props {
   params: { id: string };
@@ -13,9 +12,9 @@ const ItemDetailsPage = async ({ params }: Props) => {
 
   const auctionItem = await useGetSingleAuctionItem(params.id);
 
-  console.log(auctionItem?.media.at(1));
-
   if (!auctionItem) return null;
+
+  const currentBid = auctionItem.bids.at(-1)?.amount || 0;
 
   return (
     <div className='mx-auto max-w-5xl p-8'>
@@ -25,11 +24,9 @@ const ItemDetailsPage = async ({ params }: Props) => {
         <div className='space-y-6'>
           <h1 className='text-3xl font-bold'>{auctionItem.title}</h1>
           <div className='text-5xl font-bold text-white'>
-            Current Bid: ${auctionItem.bids.at(-1)?.amount}
+            Current Bid: ${currentBid}
           </div>
-          <Button className='bg-accent text-white' variant='default'>
-            Place a bid
-          </Button>
+          <BidBox listingId={params.id} currentBid={currentBid} />
           <p className='text-lg'>{auctionItem.description}</p>
           <div className='rounded-lg bg-zinc-800/50 p-6'>
             <h2 className='text-xl font-semibold'>Seller Information</h2>
