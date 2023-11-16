@@ -10,7 +10,7 @@ export default async function HomePage() {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['listings'],
+    queryKey: ['allListings'],
     queryFn: getAllListings,
   });
 

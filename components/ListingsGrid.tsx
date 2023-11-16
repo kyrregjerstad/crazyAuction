@@ -1,12 +1,11 @@
 'use client';
-import { Listing } from '@/lib/schemas/listing';
 import { getAllListings } from '@/lib/services/getAllListings';
 import { useQuery } from '@tanstack/react-query';
 import AuctionItemCard from './AuctionItemCard';
 
 const ListingsGrid = () => {
-  const { data: listings, isLoading } = useQuery<Listing[]>({
-    queryKey: ['listings'],
+  const { data: listings, isLoading } = useQuery({
+    queryKey: ['allListings'],
     queryFn: getAllListings,
   });
 

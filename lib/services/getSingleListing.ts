@@ -1,11 +1,17 @@
+import { createZodFetcher } from 'zod-fetch';
 import { API_AUCTION_LISTINGS_URL } from '../constants';
+import { singleListingSchema } from '../schemas/listing';
 
-export const getSingleListing = async ({ id }: { id: string }) =>
-  fetch(`${API_AUCTION_LISTINGS_URL}/${id}?_seller=true&_bids=true`).then(
-    (data) => {
-      if (!data.ok) {
-        throw new Error('An error occurred while fetching the data.');
-      }
-      return data.json();
-    },
-  );
+const fetchWithZod = createZodFetcher();
+
+export const getSingleListing = async (id: string) => {
+  try {
+    return await fetchWithZod(
+      singleListingSchema,
+      `${API_AUCTION_LISTINGS_URL}/${id}?_seller=true&_bids=true`,
+    );
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

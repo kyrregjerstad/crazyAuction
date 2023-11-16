@@ -18,14 +18,16 @@ export const singleListingSchema = z.object({
     email: z.string().email(),
     avatar: z.string().nullable(),
   }),
-  bids: z.array(
-    z.object({
-      id: z.string(),
-      amount: z.number(),
-      bidderName: z.string(),
-      created: isoDate,
-    }),
-  ),
+  bids: z
+    .array(
+      z.object({
+        id: z.string(),
+        amount: z.number(),
+        bidderName: z.string(),
+        created: isoDate,
+      }),
+    )
+    .optional(),
   _count: z.object({
     bids: z.number(),
   }),

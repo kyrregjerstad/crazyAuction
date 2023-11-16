@@ -1,6 +1,6 @@
 'use client';
 
-import placeBid from '@/lib/services/placeBid';
+import { placeBid } from '@/lib/services/placeBid';
 import { use, useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';

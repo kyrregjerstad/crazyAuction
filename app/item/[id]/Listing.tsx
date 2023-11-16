@@ -1,14 +1,13 @@
 'use client';
 import BidBox from '@/components/BidBox';
 import ImageGallery from '@/components/ImageGallery';
-import { Listing } from '@/lib/schemas/listing';
 import { getSingleListing } from '@/lib/services/getSingleListing';
 import { useQuery } from '@tanstack/react-query';
 
-const Listing = ({ listingId }: { listingId: string }) => {
-  const { data: listing, isLoading } = useQuery<Listing>({
-    queryKey: ['listing', listingId],
-    queryFn: () => getSingleListing({ id: listingId }),
+const SingleListingPage = ({ listingId }: { listingId: string }) => {
+  const { data: singleListing, isLoading } = useQuery({
+    queryKey: ['singleListing', listingId],
+    queryFn: () => getSingleListing(listingId),
     refetchInterval: 1000 * 10, // 10 seconds
   });
 
@@ -16,21 +15,21 @@ const Listing = ({ listingId }: { listingId: string }) => {
     return <div>Loading...</div>;
   }
 
-  if (!listing) {
+  if (!singleListing) {
     return <div>No listing found</div>;
   }
 
-  const currentBid = listing.bids.at(-1)?.amount || 0;
+  const currentBid = singleListing.bids?.at(-1)?.amount || 0;
   return (
     <>
-      <ImageGallery images={listing.media} />
+      <ImageGallery images={singleListing.media} />
       <div className='space-y-6'>
-        <h1 className='text-3xl font-bold'>{listing.title}</h1>
+        <h1 className='text-3xl font-bold'>{singleListing.title}</h1>
         <div className='text-5xl font-bold text-white'>
           Current Bid: ${currentBid}
         </div>
         <BidBox listingId={listingId} currentBid={currentBid} />
-        <p className='text-lg'>{listing.description}</p>
+        <p className='text-lg'>{singleListing.description}</p>
         <div className='rounded-lg bg-zinc-800/50 p-6'>
           <h2 className='text-xl font-semibold'>Seller Information</h2>
           <div className='mt-4 flex items-center'>
@@ -49,7 +48,7 @@ const Listing = ({ listingId }: { listingId: string }) => {
               <path d='M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2' />
               <circle cx='12' cy='7' r='4' />
             </svg>
-            <span className='font-medium'>{listing.seller.name}</span>
+            <span className='font-medium'>{singleListing.seller.name}</span>
           </div>
           <div className='mt-2 flex items-center'>
             <svg
@@ -74,4 +73,4 @@ const Listing = ({ listingId }: { listingId: string }) => {
   );
 };
 
-export default Listing;
+export default SingleListingPage;

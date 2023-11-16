@@ -1,34 +1,46 @@
 import { z } from 'zod';
 
-type ValidationSchema<T> = z.ZodSchema<T> | undefined;
-
-type FetcherArgs<T> = {
+export interface FetcherArgs<TSchema extends z.ZodType<any, any>> {
   url: string;
   options?: RequestInit;
-  schema?: ValidationSchema<T>;
-};
+  schema: TSchema;
+}
 
-export async function fetcher<T>({ url, options, schema }: FetcherArgs<T>) {
-  try {
-    const response = await fetch(url, options);
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message);
-    }
-
-    if (!schema) {
-      return data as T;
-    }
-
-    const validation = schema.safeParse(data);
-
-    if (!validation.success) {
-      throw new Error(validation.error.message);
-    }
-
-    return data as T;
-  } catch (error) {
-    console.error(error);
+export class FetchError extends Error {
+  constructor(
+    public statusCode: number,
+    public message: string,
+  ) {
+    super(message);
   }
+}
+
+export async function fetcher<TSchema extends z.ZodType<any, any>>({
+  url,
+  options,
+  schema,
+}: FetcherArgs<TSchema>): Promise<z.infer<TSchema> | unknown> {
+  const response = await fetch(url, { ...options });
+
+  if (!response.ok) {
+    let errorMessage = response.statusText;
+    try {
+      const errorData = await response.json();
+      errorMessage = errorData.message || errorMessage;
+    } catch {
+      // ignore and use default error message
+    }
+    throw new FetchError(response.status, errorMessage);
+  }
+
+  let data = await response.json();
+
+  const validation = schema.safeParse(data);
+  if (!validation.success) {
+    throw new Error(
+      validation.error.issues.map((issue) => issue.message).join('\n'),
+    );
+  }
+
+  return validation.data;
 }
