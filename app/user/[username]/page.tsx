@@ -1,7 +1,4 @@
-import BidBox from '@/components/BidBox';
-import ImageGallery from '@/components/ImageGallery';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import useGetSingleAuctionItem from '@/lib/hooks/useGetSingleAuctionItem';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getServerSession } from 'next-auth';
 
 interface Props {
@@ -10,8 +7,6 @@ interface Props {
 
 const ItemDetailsPage = async ({ params }: Props) => {
   const session = await getServerSession();
-
-  const auctionItem = await useGetSingleAuctionItem(params.username);
 
   // if (!auctionItem) return null;
 
