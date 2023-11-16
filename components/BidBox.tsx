@@ -6,6 +6,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { getServerSession } from 'next-auth';
 import { useSession } from 'next-auth/react';
+import { QueryClient, useMutation } from '@tanstack/react-query';
 
 type BidBoxProps = {
   listingId: string;
@@ -16,16 +17,25 @@ const BidBox = ({ listingId, currentBid }: BidBoxProps) => {
   const { data } = useSession();
   const [amount, setAmount] = useState(currentBid + 1);
 
+  const queryClient = new QueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: () =>
+      placeBid({
+        listingId,
+        amount: amount,
+        jwt: data!.user.accessToken,
+      }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
+    mutationKey: ['currentBid'],
+  });
+
   if (!data?.user) return null;
 
   const handleSubmit = async () => {
-    const res = await placeBid({
-      listingId,
-      amount,
-      jwt: data?.user.accessToken,
-    });
-    console.log(res);
+    mutate();
   };
+
   return (
     <div className='flex w-full max-w-sm items-center space-x-2'>
       <Input

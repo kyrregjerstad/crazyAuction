@@ -2,13 +2,18 @@
 import BidBox from '@/components/BidBox';
 import ImageGallery from '@/components/ImageGallery';
 import { getSingleListing } from '@/lib/services/getSingleListing';
-import { useQuery } from '@tanstack/react-query';
+import { useMutationState, useQuery } from '@tanstack/react-query';
 
 const SingleListingPage = ({ listingId }: { listingId: string }) => {
   const { data: singleListing, isLoading } = useQuery({
     queryKey: ['singleListing', listingId],
     queryFn: () => getSingleListing(listingId),
     refetchInterval: 1000 * 10, // 10 seconds
+  });
+
+  const variables = useMutationState({
+    filters: { mutationKey: ['currentBid'], status: 'pending' },
+    select: (mutation) => mutation.state.variables,
   });
 
   if (isLoading) {
