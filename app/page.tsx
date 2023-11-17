@@ -15,10 +15,10 @@ export default async function HomePage() {
   });
 
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24'>
+    <div className='max-w-7xl p-2 sm:p-4 '>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <ListingsGrid />
       </HydrationBoundary>
-    </main>
+    </div>
   );
 }

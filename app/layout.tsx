@@ -19,7 +19,9 @@ export default function RootLayout({
         <QueryClientProvider>
           <AuthProvider>
             <Header />
-            {children}
+            <main className='flex min-h-screen flex-col items-center justify-between'>
+              {children}
+            </main>
           </AuthProvider>
         </QueryClientProvider>
       </body>
