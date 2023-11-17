@@ -2,13 +2,6 @@ import { API_LOGIN_URL } from '@/lib/constants';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-import type { JWT } from 'next-auth/jwt';
-
-interface CustomJWT extends JWT {
-  accessToken: string;
-  avatar?: string;
-}
-
 const handler = NextAuth({
   providers: [
     CredentialsProvider({

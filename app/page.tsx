@@ -14,7 +14,11 @@ export default async function HomePage() {
 
   await queryClient.prefetchQuery({
     queryKey: ['allListings'],
-    queryFn: getAllListings,
+    queryFn: () =>
+      getAllListings({
+        sort: 'endsAt',
+        sortOrder: 'asc',
+      }),
   });
 
   return (
