@@ -10,7 +10,7 @@ const Header = () => {
           className='flex items-center gap-2 text-lg font-semibold text-accent'
           href='/'
         >
-          Home icon
+          Crazy Auction
           <span className='sr-only'>FastBid</span>
         </Link>
         <Link className='text-accent' href='/'>

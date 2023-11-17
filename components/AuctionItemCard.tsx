@@ -7,6 +7,7 @@ import Image from './Image';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { cn } from '@/lib/utils';
+import fallbackImg from '@/public/fallback-image.webp';
 
 dayjs.extend(relativeTime);
 
@@ -31,7 +32,7 @@ const AuctionItemCard = ({ listing }: Props) => {
         <div className='flex aspect-[16/10] items-center overflow-hidden rounded-md'>
           <Link href={`/item/${listing.id}`} className='w-full'>
             <Image
-              src={listing.media.at(0) || ''}
+              src={listing.media.at(0) || fallbackImg}
               width={600}
               height={400}
               alt='Product Image'
