@@ -35,20 +35,11 @@ const handler = NextAuth({
   ],
   callbacks: {
     jwt: async ({ token, user }) => {
-      const customToken = token as CustomJWT;
-
-      if (user) {
-        customToken.accessToken = user.accessToken;
-        token.avatar = user.avatar;
-      }
-      return customToken;
+      return { user, ...token };
     },
 
-    session: async ({ session, token }) => {
-      const customToken = token as CustomJWT;
-
-      session.user.accessToken = customToken.accessToken;
-      session.user.avatar = customToken.avatar;
+    session: async ({ session, token, user }) => {
+      session.user = token.user as any;
       return session;
     },
   },

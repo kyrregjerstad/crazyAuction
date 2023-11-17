@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import UserMenu from './UserMenu';
+import Logo from './Logo';
 
 const Header = () => {
   return (
@@ -12,7 +13,7 @@ const Header = () => {
           Home icon
           <span className='sr-only'>FastBid</span>
         </Link>
-        <Link className='text-accent' href='#'>
+        <Link className='text-accent' href='/'>
           Auctions
         </Link>
       </nav>

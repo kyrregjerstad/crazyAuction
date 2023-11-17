@@ -14,8 +14,12 @@ type BidBoxProps = {
 };
 
 const BidBox = ({ listingId, currentBid }: BidBoxProps) => {
-  const { data } = useSession();
+  const session = useSession();
   const [amount, setAmount] = useState(currentBid + 1);
+
+  console.log(session);
+
+  const { data } = session;
 
   const queryClient = new QueryClient();
 

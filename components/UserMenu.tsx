@@ -28,7 +28,9 @@ const UserMenu = () => {
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>
+              <Link href={`user/${data.user.name}`}>My Account</Link>
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuLabel>
               <Link href='/api/auth/signout'>Log out</Link>

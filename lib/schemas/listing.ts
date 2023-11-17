@@ -13,6 +13,9 @@ export const singleListingSchema = z.object({
   created: isoDate,
   updated: isoDate,
   endsAt: isoDate,
+});
+
+export const singleListingSchemaExtended = singleListingSchema.extend({
   seller: z.object({
     name: z.string(),
     email: z.string().email(),
@@ -33,6 +36,6 @@ export const singleListingSchema = z.object({
   }),
 });
 
-export type Listing = z.infer<typeof singleListingSchema>;
+export type Listing = z.infer<typeof singleListingSchemaExtended>;
 
-export const allListingsSchema = z.array(singleListingSchema);
+export const allListingsSchema = z.array(singleListingSchemaExtended);

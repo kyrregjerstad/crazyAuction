@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getSingleUser } from '@/lib/services/getSingleUser';
 import { getServerSession } from 'next-auth';
 
 interface Props {
@@ -7,6 +8,17 @@ interface Props {
 
 const ItemDetailsPage = async ({ params }: Props) => {
   const session = await getServerSession();
+
+  if (!session) return null;
+
+  console.log(session);
+
+  const user = await getSingleUser({
+    username: session.user.name,
+    jwt: session.user.accessToken,
+  });
+
+  if (!user) return null;
 
   // if (!auctionItem) return null;
 
@@ -28,7 +40,7 @@ const ItemDetailsPage = async ({ params }: Props) => {
             width='64'
           />
           <div>
-            <h2 className='text-lg font-bold'>John Doe</h2>
+            <h2 className='text-lg font-bold'>{user.name}</h2>
             <p className='text-sm'>Los Angeles, CA</p>
             <p className='text-sm'>Member since 2020</p>
           </div>

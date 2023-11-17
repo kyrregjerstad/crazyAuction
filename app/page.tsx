@@ -5,9 +5,12 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import { getServerSession } from 'next-auth';
 
 export default async function HomePage() {
   const queryClient = new QueryClient();
+
+  const session = await getServerSession();
 
   await queryClient.prefetchQuery({
     queryKey: ['allListings'],
