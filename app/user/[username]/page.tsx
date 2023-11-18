@@ -1,24 +1,34 @@
+import authOptions from '@/app/auth/authOptions';
+import AuctionItemCard from '@/components/AuctionItemCard';
+import Image from '@/components/Image';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Listing, ListingFull } from '@/lib/schemas/listing';
 import { getSingleUser } from '@/lib/services/getSingleUser';
+import { List } from 'lucide-react';
+
 import { getServerSession } from 'next-auth';
+import Link from 'next/link';
 
 interface Props {
   params: { username: string };
 }
 
 const ItemDetailsPage = async ({ params }: Props) => {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
+
+  const { username } = params;
 
   if (!session) return null;
 
-  console.log(session);
-
   const user = await getSingleUser({
-    username: session.user.name,
+    username: username,
     jwt: session.user.accessToken,
   });
 
   if (!user) return null;
+
+  const { avatar, name, credits, listings, wins } = user;
 
   // if (!auctionItem) return null;
 
@@ -28,74 +38,53 @@ const ItemDetailsPage = async ({ params }: Props) => {
     <div className='grid gap-6 md:grid-cols-3'>
       <div className='rounded-lg p-4 shadow-md'>
         <div className='flex items-center gap-4'>
-          <img
-            alt='Profile Picture'
-            className='rounded-full'
-            height='64'
-            src='/placeholder.svg'
-            style={{
-              aspectRatio: '64/64',
-              objectFit: 'cover',
-            }}
-            width='64'
-          />
+          <Avatar className='h-32 w-32'>
+            <AvatarImage src={avatar || ''} />
+            <AvatarFallback>CA</AvatarFallback>
+          </Avatar>
           <div>
-            <h2 className='text-lg font-bold'>{user.name}</h2>
-            <p className='text-sm'>Los Angeles, CA</p>
-            <p className='text-sm'>Member since 2020</p>
+            <h2 className='text-2xl font-bold'>{name}</h2>
+            <h3>${credits} Credits</h3>
+            <h3>{user._count.listings} auctions</h3>
           </div>
         </div>
       </div>
-      <div className='rounded-lg p-4 shadow-md md:col-span-2'>
-        <h2 className='mb-2 text-lg font-bold'>Bidding Activity</h2>
-        <p className='text-sm'>Total Bids: 20</p>
-        <p className='text-sm'>Won Bids: 5</p>
-        <p className='text-sm'>Lost Bids: 15</p>
-      </div>
+
       <div className='rounded-lg  p-4 shadow-md md:col-span-3'>
         <h2 className='mb-2 text-lg font-bold'>Current Auctions</h2>
         <div className='grid gap-4'>
-          <Card>
-            <CardHeader className='pb-4'>
-              <CardTitle>Item 1</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className='text-sm'>Current Bid: $100</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className='pb-4'>
-              <CardTitle>Item 2</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className='text-sm'>Current Bid: $200</p>
-            </CardContent>
-          </Card>
+          {listings.map((listing) => (
+            <Listing key={listing.id} listing={listing}></Listing>
+          ))}
         </div>
       </div>
       <div className='rounded-lg  p-4 shadow-md md:col-span-3'>
-        <h2 className='mb-2 text-lg font-bold'>Past Auctions</h2>
-        <div className='grid gap-4'>
-          <Card>
-            <CardHeader className='pb-4'>
-              <CardTitle>Item 3</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className='text-sm'>Winning Bid: $150</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className='pb-4'>
-              <CardTitle>Item 4</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className='text-sm'>Winning Bid: $250</p>
-            </CardContent>
-          </Card>
-        </div>
+        <h2 className='mb-2 text-lg font-bold'>Wins</h2>
+        <div className='grid gap-4'></div>
       </div>
     </div>
   );
 };
 
 export default ItemDetailsPage;
+
+type ListingProps = {
+  listing: Listing;
+};
+
+const Listing = ({ listing }: ListingProps) => {
+  return (
+    <>
+      <Card>
+        <CardHeader className='pb-4'>
+          <Link href={`/item/${listing.id}`}>
+            <CardTitle>{listing.title}</CardTitle>
+          </Link>
+        </CardHeader>
+        <CardContent>
+          <p className='text-sm'>{listing.description}</p>
+        </CardContent>
+      </Card>
+    </>
+  );
+};

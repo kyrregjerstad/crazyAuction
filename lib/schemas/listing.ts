@@ -36,6 +36,7 @@ export const singleListingSchemaExtended = singleListingSchema.extend({
   }),
 });
 
-export type Listing = z.infer<typeof singleListingSchemaExtended>;
+export type Listing = z.infer<typeof singleListingSchema>;
+export type ListingFull = z.infer<typeof singleListingSchemaExtended>;
 
 export const allListingsSchema = z.array(singleListingSchemaExtended);

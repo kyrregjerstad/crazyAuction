@@ -12,7 +12,7 @@ type Params = {
 export const getSingleUser = async ({ username, jwt }: Params) => {
   try {
     return await fetchWithZod(
-      singleUserSchema,
+      singleUserSchema.optional(),
       `${API_PROFILES_URL}/${username}?_listings=true`,
       {
         method: 'GET',

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from './ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
-import { Listing } from '@/lib/schemas/listing';
+import { ListingFull } from '@/lib/schemas/listing';
 import Link from 'next/link';
 import Image from './Image';
 import dayjs from 'dayjs';
@@ -12,7 +12,7 @@ import fallbackImg from '@/public/fallback-image.webp';
 dayjs.extend(relativeTime);
 
 type Props = {
-  listing: Listing;
+  listing: ListingFull;
 };
 
 const AuctionItemCard = ({ listing }: Props) => {

@@ -29,7 +29,7 @@ const UserMenu = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>
-              <Link href={`user/${data.user.name}`}>My Account</Link>
+              <Link href={`/user/${data.user.name}`}>My Account</Link>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuLabel>
