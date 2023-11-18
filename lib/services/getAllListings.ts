@@ -5,11 +5,17 @@ import { allListingsSchema } from '../schemas/listing';
 const fetchWithZod = createZodFetcher();
 
 type Sort = 'endsAt' | 'created' | 'price';
-type SortOrder = 'asc' | 'desc';
+type Order = 'asc' | 'desc';
+
+export type SearchParams = {
+  sort?: Sort;
+  order?: Order;
+  active?: string;
+};
 
 type Params = {
   sort?: Sort;
-  sortOrder?: SortOrder;
+  order?: Order;
   active?: boolean;
   limit?: number;
   offset?: number;
@@ -17,7 +23,7 @@ type Params = {
 
 export const getAllListings = async ({
   sort = 'created',
-  sortOrder = 'desc',
+  order: sortOrder = 'desc',
   active = true,
   limit,
   offset,
