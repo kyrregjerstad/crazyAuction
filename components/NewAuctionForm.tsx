@@ -36,8 +36,10 @@ import postListing, {
 import { cn } from '@/lib/utils';
 import { useSession } from 'next-auth/react';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/navigation';
 
 const NewAuctionForm = () => {
+  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
   });
@@ -47,12 +49,15 @@ const NewAuctionForm = () => {
   const today = dayjs();
   const oneYearFromNow = today.add(1, 'year');
 
-  // Remove the time part for comparison
   const startOfDay = today.startOf('day');
   const endOfDayOneYearFromNow = oneYearFromNow.endOf('day');
 
   const onSubmit: SubmitHandler<FormValues> = (data) =>
-    postListing({ formData: data, jwt: session.data!.user.accessToken });
+    postListing({ formData: data, jwt: session.data!.user.accessToken }).then(
+      (data) => {
+        if (data?.id) router.push(`/item/${data.id}`);
+      },
+    );
 
   return (
     <Form {...form}>
@@ -198,6 +203,7 @@ const NewAuctionForm = () => {
                   <Input
                     placeholder='Time'
                     type='time'
+                    defaultValue={format(today.toDate(), 'HH:mm')}
                     {...field}
                     className='bg-foreground text-background'
                   />
@@ -207,64 +213,10 @@ const NewAuctionForm = () => {
             )}
           />
         </div>
-
-        {/* <div className='mb-4'>
-          <Label className='block text-sm font-medium' htmlFor='title'>
-            Title
-          </Label>
-          <Input
-            className='mt-1 w-full bg-white text-background'
-            id='title'
-            type='text'
-          />
-        </div>
-        <div className='mb-4'>
-          <Label className='block text-sm font-medium' htmlFor='description'>
-            Description
-          </Label>
-          <Textarea className='mt-1 w-full bg-white text-background' />
-        </div>
-        <div className='mb-4'>
-          <Label className='block text-sm font-medium' htmlFor='media'>
-            Media
-          </Label>
-          <Input
-            className='mt-1 w-full bg-white text-background'
-            id='media'
-            type='file'
-          />
-        </div>
-        <div className='mb-4'>
-          <Label className='block text-sm font-medium' htmlFor='tags'>
-            Tags
-          </Label>
-          <Input
-            className='mt-1 w-full bg-white text-background'
-            id='tags'
-            type='text'
-          />
-        </div>
-        <div className='mb-6 flex gap-2'>
-          <div className='flex-1'>
-            <Label className='block text-sm font-medium' htmlFor='date'>
-              Ending Date
-            </Label>
-            <AuctionEndDatePicker />
-          </div>
-          <div className='w-18 '>
-            <Label className='block text-sm font-medium' htmlFor='date'>
-              Ending Time
-            </Label>
-            <Input
-              className='w-full bg-white text-background'
-              id='time'
-              type='time'
-            />
-          </div>
-        </div> */}
         <Button
           className='hover:bg-accent-hover focus:bg-accent-hover w-full bg-accent text-white'
           type='submit'
+          disabled={form.formState.isSubmitting}
         >
           Create Auction
         </Button>

@@ -59,7 +59,7 @@ const postListing = async ({ formData, jwt }: Params) => {
       API_AUCTION_LISTINGS_URL,
       requestOptions,
     );
-    console.log(res);
+
     return res;
   } catch (error) {
     console.error(error);
