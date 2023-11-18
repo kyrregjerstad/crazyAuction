@@ -5,7 +5,7 @@ import UserMenu from './UserMenu';
 
 const Header = () => {
   return (
-    <header className='z-1000 sticky top-0 bg-background bg-opacity-90  backdrop-blur-lg '>
+    <header className='sticky top-0 z-50 bg-background bg-opacity-90  backdrop-blur-lg '>
       <div className='flex h-16 items-center justify-between px-4 md:px-6'>
         <nav className='flex flex-row items-center gap-6 bg-opacity-100 text-lg font-medium lg:gap-8'>
           <Link

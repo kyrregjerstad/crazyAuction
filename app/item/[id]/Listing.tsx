@@ -3,6 +3,7 @@ import BidBox from '@/components/BidBox';
 import ImageGallery from '@/components/ImageGallery';
 import { getSingleListing } from '@/lib/services/getSingleListing';
 import { useMutationState, useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 
 const SingleListingPage = ({ listingId }: { listingId: string }) => {
   const { data: singleListing, isLoading } = useQuery({
@@ -53,7 +54,11 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
               <path d='M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2' />
               <circle cx='12' cy='7' r='4' />
             </svg>
-            <span className='font-medium'>{singleListing.seller.name}</span>
+            <span className='font-medium'>
+              <Link href={`/user/${singleListing.seller.name}`}>
+                {singleListing.seller.name}
+              </Link>
+            </span>
           </div>
           <div className='mt-2 flex items-center'>
             <svg

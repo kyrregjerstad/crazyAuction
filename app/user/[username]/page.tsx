@@ -36,17 +36,19 @@ const ItemDetailsPage = async ({ params }: Props) => {
 
   return (
     <div className='grid gap-6 md:grid-cols-3'>
-      <div className='rounded-lg p-4 shadow-md'>
-        <div className='flex items-center gap-4'>
-          <Avatar className='h-32 w-32'>
-            <AvatarImage src={avatar || ''} />
-            <AvatarFallback>CA</AvatarFallback>
-          </Avatar>
-          <div>
-            <h2 className='text-2xl font-bold'>{name}</h2>
-            <h3>${credits} Credits</h3>
-            <h3>{user._count.listings} auctions</h3>
+      <div className='flex items-center gap-4'>
+        <div className='rounded-lg shadow-md'>
+          <div className='flex items-center gap-4'>
+            <Avatar className='h-32 w-32'>
+              <AvatarImage src={avatar || ''} />
+              <AvatarFallback>CA</AvatarFallback>
+            </Avatar>
           </div>
+        </div>
+        <div>
+          <h2 className='text-2xl font-bold'>{name}</h2>
+          <h3>${credits} Credits</h3>
+          <h3>{user._count.listings} auctions</h3>
         </div>
       </div>
 
