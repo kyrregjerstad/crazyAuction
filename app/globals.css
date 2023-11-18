@@ -57,7 +57,9 @@
     --accent: 60% 0.25 9; /* #ea0062 */
     --accent-foreground: 100% 0 0;
 
-    --destructive: 39.59% 0.133 25.72;
+    --accent-hover: 50% 0.25 9;
+
+    --destructive: 53.44% 0.2443 25.72;
     --destructive-foreground: 100% 0 0;
 
     --border: 28% 0.037 259.97;

@@ -45,6 +45,7 @@ module.exports = {
         accent: {
           DEFAULT: 'oklch(var(--accent))',
           foreground: 'oklch(var(--accent-foreground))',
+          hover: 'oklch(var(--accent-hover))',
         },
         popover: {
           DEFAULT: 'oklch(var(--popover))',

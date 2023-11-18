@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import UserMenu from './UserMenu';
 import Logo from './Logo';
+import { buttonVariants } from '@/components/ui/button';
 
 const Header = () => {
   return (
@@ -18,7 +19,13 @@ const Header = () => {
         </Link>
       </nav>
 
-      <UserMenu />
+      <div className='flex gap-4'>
+        <Link className={buttonVariants({ variant: 'outline' })} href='/new'>
+          New Auction
+        </Link>
+
+        <UserMenu />
+      </div>
     </header>
   );
 };
