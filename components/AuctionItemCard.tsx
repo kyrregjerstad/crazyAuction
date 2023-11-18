@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from './ui/button';
+import { Button, buttonVariants } from './ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { ListingFull } from '@/lib/schemas/listing';
 import Link from 'next/link';
@@ -59,12 +59,12 @@ const AuctionItemCard = ({ listing }: Props) => {
             </span>
           </p>
         </div>
-        <Button
-          className='border border-accent bg-transparent text-secondary-foreground transition-colors duration-200 hover:bg-accent hover:text-accent-foreground'
-          size='lg'
+        <Link
+          href={`/item/${listing.id}`}
+          className={`${buttonVariants()}} border border-accent bg-transparent text-secondary-foreground transition-colors duration-200 hover:bg-accent hover:text-accent-foreground`}
         >
           See more
-        </Button>
+        </Link>
       </CardContent>
     </Card>
   );
