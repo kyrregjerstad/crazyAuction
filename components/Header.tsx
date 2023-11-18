@@ -2,6 +2,11 @@ import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 import HeaderLine from './HeaderLine';
 import UserMenu from './UserMenu';
+import HeaderLinks from './HeaderLinks';
+
+type HeaderProps = {
+  searchParams?: any;
+};
 
 const Header = () => {
   return (
@@ -15,9 +20,7 @@ const Header = () => {
             Crazy Auction
             <span className='sr-only'>FastBid</span>
           </Link>
-          <Link className='text-accent' href='/'>
-            Auctions
-          </Link>
+          <HeaderLinks />
         </nav>
 
         <div className='flex gap-4'>

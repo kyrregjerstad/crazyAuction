@@ -24,7 +24,7 @@ const useHasScrolled = ({ threshold = 0 }) => {
 };
 
 const HeaderLine = () => {
-  const hasScrolled = useHasScrolled({ threshold: 40 });
+  const hasScrolled = useHasScrolled({ threshold: 20 });
 
   return (
     <div
