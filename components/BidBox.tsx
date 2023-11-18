@@ -15,9 +15,7 @@ type BidBoxProps = {
 
 const BidBox = ({ listingId, currentBid }: BidBoxProps) => {
   const session = useSession();
-  const [amount, setAmount] = useState(currentBid + 1);
-
-  console.log(session);
+  const [amount, setAmount] = useState(Math.round(currentBid * 1.1));
 
   const { data } = session;
 
@@ -44,7 +42,7 @@ const BidBox = ({ listingId, currentBid }: BidBoxProps) => {
     <div className='flex w-full max-w-sm items-center space-x-2'>
       <Input
         type='number'
-        placeholder={`${currentBid + 1}`}
+        placeholder={`${Math.round(currentBid * 1.1)}`}
         className='w-24'
         min={currentBid + 1}
         onChange={(e) => setAmount(Number(e.target.value))}
