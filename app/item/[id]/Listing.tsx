@@ -1,5 +1,4 @@
 'use client';
-import { AnimatedCounter } from 'react-animated-counter';
 
 import ImageGallery from '@/components/ImageGallery';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -75,12 +74,19 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
       <div className='space-y-6'>
         <h1 className='text-3xl font-bold'>{title}</h1>
         <div className='flex items-end text-xl font-bold text-white'>
-          <span className='mr-2 text-5xl'>$</span>
-          <AnimatedCounter
+          {/* <AnimatedCounter
             value={isPending ? pendingAmount : currentBid}
             className='font-mono text-5xl tracking-tighter'
             incrementColor='#ea0062'
-          />
+          /> */}
+          <div className='text-5xl'>
+            ${' '}
+            {isPending ? (
+              <span className='opacity-50'>{pendingAmount}</span>
+            ) : (
+              <span>{currentBid}</span>
+            )}
+          </div>
         </div>
         <div className='flex w-full max-w-sm items-center space-x-2'>
           <Input
