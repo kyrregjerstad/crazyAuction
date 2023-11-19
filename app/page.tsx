@@ -1,3 +1,4 @@
+import ListingsGridLoading from '@/components/ListingGridLoading';
 import ListingsGrid from '@/components/ListingsGrid';
 import SearchFilters from '@/components/SearchFilters';
 import { getAllListings, SearchParams } from '@/lib/services/getAllListings';
@@ -6,7 +7,6 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
-import { getServerSession } from 'next-auth';
 
 type Props = {
   searchParams?: SearchParams;

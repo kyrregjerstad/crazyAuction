@@ -1,8 +1,7 @@
-import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 import HeaderLine from './HeaderLine';
-import UserMenu from './UserMenu';
 import HeaderLinks from './HeaderLinks';
+import UserMenu from './UserMenu';
 
 type HeaderProps = {
   searchParams?: any;
