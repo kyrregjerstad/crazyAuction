@@ -21,6 +21,8 @@ export const orderOptions: { value: SortingOrder; label: string }[] = [
 ];
 
 const SearchFilters = ({ sort, order, active }: SearchParams) => {
+  sort = sort || 'endsAt';
+  order = order || 'asc';
   return (
     <div className='flex gap-4'>
       <div>
