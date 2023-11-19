@@ -16,6 +16,11 @@ module.exports = {
       },
     },
     extend: {
+      maxWidth: {
+        '8xl': '90rem',
+        '9xl': '110rem',
+        '10xl': '150rem',
+      },
       fontFamily: {
         sans: ['var(--font-geist-sans)'],
         mono: ['var(--font-geist-mono)'],
