@@ -1,4 +1,6 @@
 'use client';
+import { AnimatedCounter } from 'react-animated-counter';
+
 import ImageGallery from '@/components/ImageGallery';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Bid } from '@/lib/schemas/listing';
@@ -10,7 +12,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { placeBid } from '@/lib/services/placeBid';
-import { cn } from '@/lib/utils';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -73,16 +74,13 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
       <ImageGallery images={media} />
       <div className='space-y-6'>
         <h1 className='text-3xl font-bold'>{title}</h1>
-        <div className='text-5xl font-bold text-white'>
-          Current Bid:{' '}
-          <span
-            className={cn(
-              isPending ? 'opacity-50' : 'opacity-100',
-              'transition-opacity',
-            )}
-          >
-            ${isPending ? +pendingAmount : +currentBid}
-          </span>
+        <div className='flex items-end text-xl font-bold text-white'>
+          <span className='mr-2 text-5xl'>$</span>
+          <AnimatedCounter
+            value={isPending ? pendingAmount : currentBid}
+            className='font-mono text-5xl tracking-tighter'
+            incrementColor='#ea0062'
+          />
         </div>
         <div className='flex w-full max-w-sm items-center space-x-2'>
           <Input
@@ -201,5 +199,24 @@ function BidHistoryItem({ bid, index }: { bid: Bid; index: number }) {
         <p className='text-sm text-gray-400'>{bidderName}</p>
       </div>
     </li>
+  );
+}
+
+function Counter({ amount }: { amount: number }) {
+  const [counterValue, setCounterValue] = useState(500);
+
+  // Handle random increment/decrement
+  const handleCounterUpdate = (increment: boolean) => {
+    const delta = (Math.floor(Math.random() * 100) + 1) * 0.99;
+    setCounterValue(increment ? counterValue + delta : counterValue - delta);
+  };
+
+  return (
+    <div>
+      <div>
+        <button onClick={() => handleCounterUpdate(false)}>Decrement</button>
+        <button onClick={() => handleCounterUpdate(true)}>Increment</button>
+      </div>
+    </div>
   );
 }
