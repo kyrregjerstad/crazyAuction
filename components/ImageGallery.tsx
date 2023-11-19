@@ -29,49 +29,67 @@ const ImageGallery = ({ images }: { images: string[] }) => {
 
   return (
     <>
-      <div className='relative space-y-4'>
+      {images.length === 0 ? (
         <div className='aspect-w-1 aspect-h-2 md:aspect-h-1 relative'>
-          <motion.div
-            key={currentImage}
-            variants={imageVariants}
-            initial='initial'
-            animate='animate'
-            exit='exit'
-            transition={{ duration: 0.4 }}
-            className='aspect-square rounded-lg object-cover'
-          >
+          <div className='aspect-square rounded-lg object-cover'>
             <Image
-              src={images[currentImage] || ''}
+              src='/fallback-image.webp'
               width={500}
               height={500}
               className='aspect-square rounded-lg object-cover'
-              alt='Product Image'
+              alt='Fallback image'
             />
-          </motion.div>
-
-          <PrevBtn handlePrev={handlePrev} />
-          <NextBtn handleNext={handleNext} />
+          </div>
         </div>
-        <div className='grid w-full grid-cols-4 gap-4'>
-          {images.map((img, index) => (
-            <div
-              key={index}
-              className={cn('cursor-pointer overflow-hidden rounded-lg', {
-                'ring-1 ring-accent': index === currentImage,
-              })}
-              onClick={() => selectImage(index)}
+      ) : (
+        <div className='relative space-y-4'>
+          <div className='aspect-w-1 aspect-h-2 md:aspect-h-1 relative'>
+            <motion.div
+              key={currentImage}
+              variants={imageVariants}
+              initial='initial'
+              animate='animate'
+              exit='exit'
+              transition={{ duration: 0.4 }}
+              className='aspect-square rounded-lg object-cover'
             >
               <Image
-                src={img}
-                width={200}
-                height={100}
-                className='h-full w-full object-cover'
-                alt={`Product Thumbnail ${index + 1}`}
+                src={images[currentImage] || ''}
+                width={500}
+                height={500}
+                className='aspect-square rounded-lg object-cover'
+                alt='Product Image'
               />
-            </div>
-          ))}
+            </motion.div>
+
+            {images.length > 1 && (
+              <>
+                <PrevBtn handlePrev={handlePrev} />
+                <NextBtn handleNext={handleNext} />
+              </>
+            )}
+          </div>
+          <div className='grid w-full grid-cols-4 gap-4'>
+            {images.map((img, index) => (
+              <div
+                key={index}
+                className={cn('cursor-pointer overflow-hidden rounded-lg', {
+                  'ring-1 ring-accent': index === currentImage,
+                })}
+                onClick={() => selectImage(index)}
+              >
+                <Image
+                  src={img}
+                  width={200}
+                  height={100}
+                  className='h-full w-full object-cover'
+                  alt={`Product Thumbnail ${index + 1}`}
+                />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
