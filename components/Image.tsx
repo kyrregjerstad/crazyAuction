@@ -41,7 +41,7 @@ export function cloudinaryLoader({ src, width, quality }: ImageLoaderProps) {
   }
 
   if (hasNoImage) {
-    return '@/public/fallback-image.webp';
+    return '/fallback-image.webp';
   }
 
   return url;
