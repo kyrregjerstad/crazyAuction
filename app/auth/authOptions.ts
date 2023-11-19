@@ -7,6 +7,7 @@ const authOptions: NextAuthOptions = {
     signIn: '/auth/login',
     signOut: '/auth/logout',
     error: '/auth/login',
+    newUser: '/auth/register',
   },
   providers: [
     CredentialsProvider({
