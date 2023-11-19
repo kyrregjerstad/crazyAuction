@@ -201,22 +201,3 @@ function BidHistoryItem({ bid, index }: { bid: Bid; index: number }) {
     </li>
   );
 }
-
-function Counter({ amount }: { amount: number }) {
-  const [counterValue, setCounterValue] = useState(500);
-
-  // Handle random increment/decrement
-  const handleCounterUpdate = (increment: boolean) => {
-    const delta = (Math.floor(Math.random() * 100) + 1) * 0.99;
-    setCounterValue(increment ? counterValue + delta : counterValue - delta);
-  };
-
-  return (
-    <div>
-      <div>
-        <button onClick={() => handleCounterUpdate(false)}>Decrement</button>
-        <button onClick={() => handleCounterUpdate(true)}>Increment</button>
-      </div>
-    </div>
-  );
-}
