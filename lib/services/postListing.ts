@@ -12,7 +12,7 @@ const fetchWithZod = createZodFetcher();
 export const formSchema = z.object({
   title: z.string().min(1).max(280),
   description: z.string().min(1).max(280).optional(),
-  media: z.string().url().max(8).optional(),
+  media: z.array(z.string().url().optional()),
   tags: z.string().min(1).max(8).optional(),
   date: z.date(),
   time: z.string(),

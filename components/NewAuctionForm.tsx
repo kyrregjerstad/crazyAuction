@@ -37,6 +37,8 @@ import { cn } from '@/lib/utils';
 import { useSession } from 'next-auth/react';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
+import { CldUploadWidget, CldUploadWidgetProps } from 'next-cloudinary';
+import { useState } from 'react';
 
 const NewAuctionForm = () => {
   const router = useRouter();
@@ -46,6 +48,40 @@ const NewAuctionForm = () => {
 
   const session = useSession();
 
+  const [resources, setResources] = useState<string[]>([]);
+
+  type CloudinaryUploadEventResult = {
+    event: string;
+    info: {
+      asset_id: string;
+      bytes: number;
+      created_at: string;
+      etag: string;
+      format: string;
+      height: number;
+      original_filename: string;
+      placeholder: boolean;
+      public_id: string;
+      resource_type: string;
+      secure_url: string;
+      signature: string;
+      tags: string[];
+      type: string;
+      url: string;
+      version: number;
+      version_id: string;
+      width: number;
+    };
+  };
+
+  const handleUploadSuccess = (result: CloudinaryUploadEventResult) => {
+    const newUrl = result?.info.secure_url;
+    if (newUrl) {
+      const updatedMedia = [newUrl];
+      form.setValue('media', updatedMedia);
+      setResources((prev) => [...prev, result.info.secure_url]);
+    }
+  };
   const today = dayjs();
   const oneYearFromNow = today.add(1, 'year');
 
@@ -91,6 +127,7 @@ const NewAuctionForm = () => {
               <FormControl>
                 <Textarea
                   placeholder='Description'
+                  maxLength={250}
                   {...field}
                   className='bg-foreground text-background'
                 />
@@ -105,13 +142,24 @@ const NewAuctionForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Media</FormLabel>
+
               <FormControl>
-                <Input
-                  placeholder='Media'
-                  type='file'
-                  {...field}
-                  className='bg-foreground text-background'
-                />
+                <CldUploadWidget
+                  uploadPreset='ohkdlhxr'
+                  // the cloudinary widget is not properly typed
+                  // @ts-ignore
+                  onSuccess={handleUploadSuccess}
+                >
+                  {({ open }) => (
+                    <Button
+                      className='w-full bg-accent text-white hover:bg-accent-hover focus:bg-accent-hover'
+                      type='button'
+                      onClick={() => open()}
+                    >
+                      Upload an Image
+                    </Button>
+                  )}
+                </CldUploadWidget>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -214,7 +262,7 @@ const NewAuctionForm = () => {
           />
         </div>
         <Button
-          className='hover:bg-accent-hover focus:bg-accent-hover w-full bg-accent text-white'
+          className='w-full bg-accent text-white hover:bg-accent-hover focus:bg-accent-hover'
           type='submit'
           disabled={form.formState.isSubmitting}
         >
