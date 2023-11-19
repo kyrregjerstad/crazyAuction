@@ -3,25 +3,66 @@ import BidBox from '@/components/BidBox';
 import ImageGallery from '@/components/ImageGallery';
 import { Bid } from '@/lib/schemas/listing';
 import { getSingleListing } from '@/lib/services/getSingleListing';
-import { useMutationState, useQuery } from '@tanstack/react-query';
+import {
+  QueryClient,
+  useMutation,
+  useMutationState,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 import Link from 'next/link';
+import { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { placeBid } from '@/lib/services/placeBid';
+import { useSession } from 'next-auth/react';
+import { cn } from '@/lib/utils';
 
 dayjs.extend(relativeTime);
 
 const SingleListingPage = ({ listingId }: { listingId: string }) => {
+  const session = useSession();
+  const { data } = session;
+
+  const queryClient = useQueryClient();
+
   const { data: singleListing, isLoading } = useQuery({
     queryKey: ['singleListing', listingId],
     queryFn: () => getSingleListing(listingId),
-    refetchInterval: 1000 * 10, // 10 seconds
+    refetchInterval: 10000, // refetch every 10 seconds
   });
 
-  const variables = useMutationState({
-    filters: { mutationKey: ['currentBid'], status: 'pending' },
-    select: (mutation) => mutation.state.variables,
+  const calculateStartingAmount = (currentBid: number) =>
+    Math.max(Math.round(currentBid * 1.1), currentBid + 1);
+
+  const startingBid = calculateStartingAmount(
+    singleListing?.bids?.at(-1)?.amount || 0,
+  );
+
+  const currentBid = singleListing?.bids?.at(-1)?.amount || 0;
+  const [amount, setAmount] = useState(startingBid); // default to 10% more than the current bid (rounded), or 1 more than the current for low values
+
+  const {
+    mutate,
+    isPending,
+    variables: pendingAmount,
+  } = useMutation({
+    mutationFn: async (newAmount: number) =>
+      placeBid({
+        listingId,
+        amount: newAmount,
+        jwt: data!.user.accessToken,
+      }),
+
+    onSettled: async () => {
+      return await queryClient.invalidateQueries({
+        queryKey: ['singleListing', listingId],
+      });
+    },
   });
 
   if (isLoading) {
@@ -34,16 +75,40 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
 
   const { title, description, seller, media, bids } = singleListing;
 
-  const currentBid = singleListing.bids?.at(-1)?.amount || 0;
   return (
     <>
       <ImageGallery images={media} />
       <div className='space-y-6'>
         <h1 className='text-3xl font-bold'>{title}</h1>
         <div className='text-5xl font-bold text-white'>
-          Current Bid: ${currentBid}
+          Current Bid:{' '}
+          <span
+            className={cn(
+              isPending ? 'opacity-50' : 'opacity-100',
+              'transition-opacity',
+            )}
+          >
+            ${isPending ? +pendingAmount : +currentBid}
+          </span>
         </div>
-        <BidBox listingId={listingId} currentBid={currentBid} />
+        <div className='flex w-full max-w-sm items-center space-x-2'>
+          <Input
+            type='number'
+            placeholder={`${Math.round(currentBid * 1.1)}`}
+            className='w-24'
+            min={currentBid + 1}
+            onChange={(e) => setAmount(Number(e.target.value))}
+            value={amount}
+          />
+
+          <Button
+            className='bg-accent text-white'
+            variant='default'
+            onClick={() => mutate(amount)}
+          >
+            Place a bid
+          </Button>
+        </div>
         <p className='text-lg'>{description}</p>
         <div className='rounded-lg bg-zinc-800/50 p-6'>
           <h2 className='text-xl font-semibold'>Seller Information</h2>

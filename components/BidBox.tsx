@@ -22,20 +22,23 @@ const BidBox = ({ listingId, currentBid }: BidBoxProps) => {
   const queryClient = new QueryClient();
 
   const { mutate } = useMutation({
-    mutationFn: () =>
+    mutationFn: (amount: number) =>
       placeBid({
         listingId,
         amount: amount,
         jwt: data!.user.accessToken,
       }),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
-    mutationKey: ['currentBid'],
+    onSettled: () =>
+      queryClient.invalidateQueries({
+        queryKey: ['currentBid', listingId, currentBid],
+      }),
+    mutationKey: ['currentBid', listingId, currentBid],
   });
 
   if (!data?.user) return null;
 
   const handleSubmit = async () => {
-    mutate();
+    mutate(amount);
   };
 
   return (
