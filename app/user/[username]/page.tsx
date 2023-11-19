@@ -1,11 +1,8 @@
 import authOptions from '@/app/auth/authOptions';
-import AuctionItemCard from '@/components/AuctionItemCard';
-import Image from '@/components/Image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Listing, ListingFull } from '@/lib/schemas/listing';
+import { Listing } from '@/lib/schemas/listing';
 import { getSingleUser } from '@/lib/services/getSingleUser';
-import { List } from 'lucide-react';
 
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
@@ -55,9 +52,13 @@ const ItemDetailsPage = async ({ params }: Props) => {
       <div className='rounded-lg  p-4 shadow-md md:col-span-3'>
         <h2 className='mb-2 text-lg font-bold'>Current Auctions</h2>
         <div className='grid gap-4'>
-          {listings.map((listing) => (
-            <Listing key={listing.id} listing={listing}></Listing>
-          ))}
+          {listings ? (
+            listings.map((listing) => (
+              <Listing key={listing.id} listing={listing} />
+            ))
+          ) : (
+            <p>No auctions</p>
+          )}
         </div>
       </div>
       <div className='rounded-lg  p-4 shadow-md md:col-span-3'>
