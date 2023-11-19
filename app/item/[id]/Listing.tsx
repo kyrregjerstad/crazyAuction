@@ -14,6 +14,7 @@ import { placeBid } from '@/lib/services/placeBid';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 dayjs.extend(relativeTime);
 
@@ -109,24 +110,33 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
         <p className='text-lg'>{description}</p>
         <div className='rounded-lg bg-zinc-800/50 p-6'>
           <h2 className='text-xl font-semibold'>Seller Information</h2>
-          <div className='mt-4 flex items-center'>
-            <svg
-              className=' mr-2 h-8 w-8'
-              fill='none'
-              height='24'
-              stroke='currentColor'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth='2'
-              viewBox='0 0 24 24'
-              width='24'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path d='M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2' />
-              <circle cx='12' cy='7' r='4' />
-            </svg>
+          <div className='mt-4 flex items-center gap-2'>
+            {seller.avatar ? (
+              <Avatar className='h-8 w-8 border border-accent'>
+                <AvatarImage src={seller.avatar} />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            ) : (
+              <svg
+                className=' mr-2 h-8 w-8'
+                fill='none'
+                height='24'
+                stroke='currentColor'
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth='2'
+                viewBox='0 0 24 24'
+                width='24'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path d='M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2' />
+                <circle cx='12' cy='7' r='4' />
+              </svg>
+            )}
             <span className='font-medium'>
-              <Link href={`/user/${seller.name}`}>{seller.name}</Link>
+              <Link href={`/user/${seller.name}`} className='hover:underline'>
+                {seller.name}
+              </Link>
             </span>
           </div>
           <div className='mt-2 flex items-center'>
