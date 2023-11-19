@@ -1,26 +1,19 @@
 'use client';
-import BidBox from '@/components/BidBox';
 import ImageGallery from '@/components/ImageGallery';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Bid } from '@/lib/schemas/listing';
 import { getSingleListing } from '@/lib/services/getSingleListing';
-import {
-  QueryClient,
-  useMutation,
-  useMutationState,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { placeBid } from '@/lib/services/placeBid';
+import { cn } from '@/lib/utils';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { placeBid } from '@/lib/services/placeBid';
-import { useSession } from 'next-auth/react';
-import { cn } from '@/lib/utils';
 
 dayjs.extend(relativeTime);
 
