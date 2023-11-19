@@ -24,10 +24,6 @@ const Header = () => {
         </nav>
 
         <div className='flex gap-4'>
-          <Link className={buttonVariants({ variant: 'outline' })} href='/new'>
-            New Auction
-          </Link>
-
           <UserMenu />
         </div>
       </div>
