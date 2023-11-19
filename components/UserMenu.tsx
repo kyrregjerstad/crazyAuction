@@ -26,7 +26,7 @@ const UserMenu = () => {
           </Link>
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <Avatar>
+              <Avatar className='border-2 border-accent transition-transform hover:scale-110'>
                 <AvatarImage src={avatarUrl} />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>

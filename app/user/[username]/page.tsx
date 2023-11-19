@@ -36,7 +36,7 @@ const ItemDetailsPage = async ({ params }: Props) => {
       <div className='flex items-center gap-4'>
         <div className='rounded-lg shadow-md'>
           <div className='flex items-center gap-4'>
-            <Avatar className='h-32 w-32'>
+            <Avatar className='h-32 w-32 border-2 border-accent'>
               <AvatarImage src={avatar || ''} />
               <AvatarFallback>CA</AvatarFallback>
             </Avatar>
