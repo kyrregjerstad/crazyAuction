@@ -10,7 +10,7 @@ import {
 } from './ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { Button, buttonVariants } from './ui/button';
 
 const UserMenu = () => {
@@ -31,13 +31,21 @@ const UserMenu = () => {
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent align='end'>
               <DropdownMenuLabel>
-                <Link href={`/user/${data.user.name}`}>My Account</Link>
+                <Link href={`/user/${data.user.name}`} className=''>
+                  My Account
+                </Link>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuLabel>
-                <Link href='/api/auth/signout'>Log out</Link>
+                <Button
+                  onClick={() => signOut({ redirect: true, callbackUrl: '/' })}
+                  variant={'ghost'}
+                  className='w-full'
+                >
+                  Log out
+                </Button>
               </DropdownMenuLabel>
             </DropdownMenuContent>
           </DropdownMenu>

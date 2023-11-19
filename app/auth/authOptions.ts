@@ -3,6 +3,11 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { API_LOGIN_URL } from '@/lib/constants';
 
 const authOptions: NextAuthOptions = {
+  pages: {
+    signIn: '/auth/login',
+    signOut: '/auth/logout',
+    error: '/auth/login',
+  },
   providers: [
     CredentialsProvider({
       name: 'Credentials',
