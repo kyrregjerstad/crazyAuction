@@ -38,7 +38,7 @@ const useRegisterForm = () => {
       });
       reward();
 
-      await wait(1000);
+      await wait(3000); // wait for toast and confetti to finish :)
 
       await signIn('credentials', {
         email: data.email,
