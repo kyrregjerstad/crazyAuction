@@ -1,74 +1,121 @@
 'use client';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { signIn } from 'next-auth/react';
-import React from 'react';
+import useRegisterForm from '@/lib/hooks/forms/useRegisterForm';
 
-const page = () => {
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const { email, password } = event.currentTarget;
-
-    await signIn('credentials', {
-      email: email.value,
-      password: password.value,
-      redirect: true,
-      callbackUrl: '/',
-    });
-  };
+const RegisterPage = () => {
+  const { form, registerUser } = useRegisterForm();
+  const {
+    control,
+    formState: { isSubmitting },
+  } = form;
 
   return (
     <div className='mx-auto w-full max-w-md space-y-6 pt-24'>
+      <Avatar className='border-2 border-accent transition-transform hover:scale-110'>
+        <AvatarImage src={'avatarUrl'} />
+        <AvatarFallback>CA</AvatarFallback>
+      </Avatar>
       <h1 className='text-center text-3xl font-bold'>
         Register to CrazyAuction
       </h1>
-      <form className='space-y-4' onSubmit={onSubmit}>
-        <div className='space-y-2'>
-          <Label htmlFor='email'>name</Label>
-          <Input
-            className='bg-black text-foreground'
-            id='name'
-            type='text'
-            placeholder='your name'
-            required
+      <Form {...form}>
+        <form className='space-y-4' onSubmit={registerUser}>
+          <FormField
+            control={control}
+            name='name'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder='Your name' type='text' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className='space-y-2'>
-          <Label htmlFor='email'>email</Label>
-          <Input
-            className='bg-black text-foreground'
-            id='email'
-            type='email'
-            placeholder='@noroff.no'
-            required
+
+          <FormField
+            control={control}
+            name='email'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder='Your email' type='email' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className='space-y-2'>
-          <Label htmlFor='password'>password</Label>
-          <Input
-            className='bg-black text-foreground'
-            id='password'
-            required
-            type='password'
+          <FormField
+            control={control}
+            name='password'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder='Your password'
+                    type='password'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className='space-y-2'>
-          <Label htmlFor='password-repeat'>repeat password</Label>
-          <Input
-            className='bg-black text-foreground'
-            id='password-repeat'
-            required
-            type='password'
+          <FormField
+            control={control}
+            name='repeatPassword'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password Confirmation</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder='Repeat password'
+                    type='password'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <Button className='w-full bg-accent' type='submit'>
-          Register
-        </Button>
-      </form>
+          <FormField
+            control={control}
+            name='avatar'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Avatar</FormLabel>
+                <FormControl>
+                  <Input placeholder='Avatar Url' type='url' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <Button
+            className='w-full bg-accent'
+            type='submit'
+            disabled={isSubmitting}
+          >
+            Register
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 };
 
-export default page;
+export default RegisterPage;
