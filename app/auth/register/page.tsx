@@ -11,14 +11,17 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useReward } from 'react-rewards';
+
 import useRegisterForm from '@/lib/hooks/forms/useRegisterForm';
 
 const RegisterPage = () => {
   const { form, registerUser } = useRegisterForm();
+
   const {
     control,
     watch,
-    formState: { isSubmitting, isDirty },
+    formState: { isSubmitting, isDirty, isSubmitted },
   } = form;
 
   const name = watch('name');
@@ -114,14 +117,15 @@ const RegisterPage = () => {
           <Button
             className='w-full bg-accent'
             type='submit'
-            disabled={isSubmitting || !isDirty}
+            disabled={isSubmitting || !isDirty || isSubmitted}
           >
+            <span id='confetti' />
             {isSubmitting ? (
-              <span className='flex items-center justify-center gap-2'>
-                <span className='text-white'>Registering...</span> <Spinner />
-              </span>
+              <Spinner />
+            ) : isSubmitted ? (
+              'Registered! 🎉'
             ) : (
-              <span className='text-white'>Register</span>
+              'Register'
             )}
           </Button>
         </form>

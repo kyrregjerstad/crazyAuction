@@ -11,7 +11,7 @@ export async function wait(ms: number, shouldReject = false) {
       if (shouldReject) {
         reject(new Error('Something went wrong'));
       } else {
-        resolve;
+        resolve(true);
       }
     }, ms);
   });

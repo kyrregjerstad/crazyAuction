@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import AuthProvider from './auth/Provider';
 import QueryClientProvider from './providers/QueryClientProvider';
+import { Toaster } from '@/components/ui/toaster';
 
 export default function RootLayout({
   children,
@@ -22,6 +23,7 @@ export default function RootLayout({
             <main className='flex min-h-screen flex-col items-center justify-between'>
               {children}
             </main>
+            <Toaster />
           </AuthProvider>
         </QueryClientProvider>
       </body>

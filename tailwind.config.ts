@@ -39,6 +39,10 @@ module.exports = {
           DEFAULT: 'oklch(var(--secondary) / var(--tw-bg-opacity, 1))',
           foreground: 'oklch(var(--secondary-foreground))',
         },
+        success: {
+          DEFAULT: 'oklch(var(--success) / var(--tw-bg-opacity, 1))',
+          foreground: 'oklch(var(--success-foreground))',
+        },
         destructive: {
           DEFAULT: 'oklch(var(--destructive) / var(--tw-bg-opacity, 1))',
           foreground: 'oklch(var(--destructive-foreground))',

@@ -1,11 +1,16 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useToast } from '@/components/ui/use-toast';
 import { Register, registerSchema } from '@/lib/schemas/register';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { postRegisterUser } from '@/lib/services/postSignUp';
-import { signIn } from 'next-auth/react';
 import { wait } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn } from 'next-auth/react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useReward } from 'react-rewards';
 
 const useRegisterForm = () => {
+  const { toast } = useToast();
+  const { reward } = useReward('confetti', 'confetti');
+
   const form = useForm<Register>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -24,6 +29,16 @@ const useRegisterForm = () => {
       const res = await postRegisterUser(data);
 
       if (!res) throw new Error('Something went wrong');
+
+      toast({
+        title: 'Account created 🎉',
+        description: "Ready for some crazy auctions? Let's go!",
+        variant: 'success',
+        duration: 5000,
+      });
+      reward();
+
+      await wait(1000);
 
       await signIn('credentials', {
         email: data.email,
