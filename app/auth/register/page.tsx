@@ -16,18 +16,23 @@ const RegisterPage = () => {
   const { form, registerUser } = useRegisterForm();
   const {
     control,
-    formState: { isSubmitting },
+    watch,
+    formState: { isSubmitting, isDirty },
   } = form;
+
+  const name = watch('name');
+  const avatarUrl = watch('avatar');
+  const firstLetter = name && name.length > 0 ? name[0].toUpperCase() : '';
 
   return (
     <div className='mx-auto w-full max-w-md space-y-6 pt-24'>
-      <Avatar className='border-2 border-accent transition-transform hover:scale-110'>
-        <AvatarImage src={'avatarUrl'} />
-        <AvatarFallback>CA</AvatarFallback>
-      </Avatar>
-      <h1 className='text-center text-3xl font-bold'>
-        Register to CrazyAuction
-      </h1>
+      <div className='flex w-full justify-center'>
+        <Avatar className='h-28 w-28 border-2 border-accent text-5xl'>
+          <AvatarImage src={avatarUrl} />
+          <AvatarFallback>{firstLetter}</AvatarFallback>
+        </Avatar>
+      </div>
+      <h1 className='text-center text-3xl font-bold'>Register</h1>
       <Form {...form}>
         <form className='space-y-4' onSubmit={registerUser}>
           <FormField
@@ -108,7 +113,7 @@ const RegisterPage = () => {
           <Button
             className='w-full bg-accent'
             type='submit'
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isDirty}
           >
             Register
           </Button>

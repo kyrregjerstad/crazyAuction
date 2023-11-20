@@ -1,6 +1,7 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Register, registerSchema } from '@/lib/schemas/register';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { postRegisterUser } from '@/lib/services/postSignUp';
 
 const useRegisterForm = () => {
   const form = useForm<Register>({
@@ -16,10 +17,9 @@ const useRegisterForm = () => {
 
   const { handleSubmit } = form;
 
-  const onSubmit: SubmitHandler<Register> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<Register> = async (data) => {
     try {
-      // postRegisterUser(data);
+      const res = await postRegisterUser(data);
     } catch (error) {
       console.error(error);
     }

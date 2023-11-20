@@ -5,14 +5,18 @@ import { Register, registerResponseSchema } from '../schemas/register';
 const fetchWithZod = createZodFetcher();
 
 export const postRegisterUser = async (params: Register) => {
-  const body = JSON.stringify({
-    ...params,
-  });
+  const transformedParams = {
+    name: params.name,
+    email: params.email,
+    password: params.password,
+    avatar: params.avatar,
+  }; // remove the repeatPassword field
 
   try {
     return await fetchWithZod(registerResponseSchema, API_REGISTER_URL, {
       method: 'POST',
-      body,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(transformedParams),
     });
   } catch (error) {
     console.error(error);
