@@ -1,4 +1,5 @@
 'use client';
+import Spinner from '@/components/Spinner';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -115,7 +116,13 @@ const RegisterPage = () => {
             type='submit'
             disabled={isSubmitting || !isDirty}
           >
-            Register
+            {isSubmitting ? (
+              <span className='flex items-center justify-center gap-2'>
+                <span className='text-white'>Registering...</span> <Spinner />
+              </span>
+            ) : (
+              <span className='text-white'>Register</span>
+            )}
           </Button>
         </form>
       </Form>
