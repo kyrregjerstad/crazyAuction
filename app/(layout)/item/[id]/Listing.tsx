@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { placeBid } from '@/lib/services/placeBid';
 import { useSession } from 'next-auth/react';
@@ -22,8 +22,6 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
   const session = useSession();
   const { data } = session;
 
-  const isLoggedIn = session.status === 'authenticated';
-
   const queryClient = useQueryClient();
 
   const { data: singleListing, isLoading } = useQuery({
@@ -31,6 +29,9 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
     queryFn: () => getSingleListing(listingId),
     refetchInterval: 10000, // refetch every 10 seconds
   });
+
+  const isLoggedInUser = useIsLoggedInUser(singleListing?.seller.name);
+  const isAuthenticated = session.status === 'authenticated';
 
   const calculateStartingAmount = (currentBid: number) =>
     Math.max(Math.round(currentBid * 1.1), currentBid + 1);
@@ -91,31 +92,40 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
             )}
           </div>
         </div>
-        <div className='flex w-full max-w-sm items-center space-x-2'>
-          <Input
-            type='number'
-            placeholder={`${Math.round(currentBid * 1.1)}`}
-            className='w-24'
-            min={currentBid + 1}
-            onChange={(e) => setAmount(Number(e.target.value))}
-            value={amount}
-            disabled={!isLoggedIn || isPending}
-          />
-
-          <Button
-            className='bg-accent text-white'
-            variant='default'
-            onClick={() => mutate(amount)}
-            disabled={!isLoggedIn || isPending}
+        {isLoggedInUser ? (
+          <Link
+            href={`/listing/${listingId}/edit`}
+            className={buttonVariants({ variant: 'accent' })}
           >
-            Place a bid
-          </Button>
-          {!isLoggedIn && (
-            <p className='text-sm text-gray-400'>
-              You must be logged in to place a bid
-            </p>
-          )}
-        </div>
+            Edit Listing
+          </Link>
+        ) : (
+          <div className='flex w-full max-w-sm items-center space-x-2'>
+            <Input
+              type='number'
+              placeholder={`${Math.round(currentBid * 1.1)}`}
+              className='w-24'
+              min={currentBid + 1}
+              onChange={(e) => setAmount(Number(e.target.value))}
+              value={amount}
+              disabled={!isAuthenticated || isPending}
+            />
+
+            <Button
+              className='bg-accent text-white'
+              variant='default'
+              onClick={() => mutate(amount)}
+              disabled={!isAuthenticated || isPending}
+            >
+              Place a bid
+            </Button>
+            {!isAuthenticated && (
+              <p className='text-sm text-gray-400'>
+                You must be logged in to place a bid
+              </p>
+            )}
+          </div>
+        )}
         <p className='text-lg'>{description}</p>
         <div className='rounded-lg bg-zinc-800/50 p-6'>
           <h2 className='text-xl font-semibold'>Seller Information</h2>
@@ -166,7 +176,7 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
             <span className='ml-2'>Verified Seller</span>
           </div>
         </div>
-        <BidHistory bids={bids} isLoggedIn={isLoggedIn} />
+        <BidHistory bids={bids} isLoggedIn={isAuthenticated} />
       </div>
     </>
   );
@@ -248,3 +258,12 @@ function BidHistoryItem({ bid, index }: { bid: Bid; index: number }) {
     </li>
   );
 }
+
+const useIsLoggedInUser = (username: string | undefined) => {
+  const session = useSession();
+  const { data } = session;
+  if (!username || !data) {
+    return false;
+  }
+  return session.status === 'authenticated' && data.user.name === username;
+};
