@@ -22,6 +22,8 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
   const session = useSession();
   const { data } = session;
 
+  const isLoggedIn = session.status === 'authenticated';
+
   const queryClient = useQueryClient();
 
   const { data: singleListing, isLoading } = useQuery({
@@ -97,15 +99,22 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
             min={currentBid + 1}
             onChange={(e) => setAmount(Number(e.target.value))}
             value={amount}
+            disabled={!isLoggedIn || isPending}
           />
 
           <Button
             className='bg-accent text-white'
             variant='default'
             onClick={() => mutate(amount)}
+            disabled={!isLoggedIn || isPending}
           >
             Place a bid
           </Button>
+          {!isLoggedIn && (
+            <p className='text-sm text-gray-400'>
+              You must be logged in to place a bid
+            </p>
+          )}
         </div>
         <p className='text-lg'>{description}</p>
         <div className='rounded-lg bg-zinc-800/50 p-6'>
@@ -157,7 +166,7 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
             <span className='ml-2'>Verified Seller</span>
           </div>
         </div>
-        <BidHistory bids={bids} />
+        <BidHistory bids={bids} isLoggedIn={isLoggedIn} />
       </div>
     </>
   );
@@ -165,7 +174,29 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
 
 export default SingleListingPage;
 
-function BidHistory({ bids }: { bids?: Bid[] }) {
+function BidHistory({
+  bids,
+  isLoggedIn,
+}: {
+  bids?: Bid[];
+  isLoggedIn: boolean;
+}) {
+  if (!isLoggedIn) {
+    return (
+      <div className='w-full max-w-md rounded-lg p-6 text-foreground'>
+        <h2 className='mb-6 text-lg font-semibold text-accent'>Bid History</h2>
+        <div className='relative m-3 leading-loose'>
+          <div className='absolute left-[10px] top-2 h-full w-[2px]  bg-gradient-to-b from-accent' />
+          <div className='flex h-32 items-center justify-center'>
+            <p className='text-gray-400'>
+              You must be logged in to view bid history
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!bids || bids.length === 0) {
     return (
       <div className='w-full max-w-md rounded-lg p-6 text-foreground'>
