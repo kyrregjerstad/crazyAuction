@@ -10,7 +10,7 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 import { getServerSession } from 'next-auth';
-import authOptions from '../auth/authOptions';
+import authOptions from '../../auth/authOptions';
 
 type Props = {
   searchParams?: SearchParams;

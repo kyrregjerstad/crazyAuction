@@ -1,17 +1,15 @@
 'use client';
-import React from 'react';
+import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Button, buttonVariants } from './ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import Link from 'next/link';
-import { signOut, useSession } from 'next-auth/react';
-import { Button, buttonVariants } from './ui/button';
 
 const UserMenu = () => {
   const { data, status } = useSession();
@@ -51,12 +49,20 @@ const UserMenu = () => {
           </DropdownMenu>
         </>
       ) : (
-        <Link
-          href='/api/auth/signin'
-          className={buttonVariants({ variant: 'accent' })}
-        >
-          Sign in
-        </Link>
+        <>
+          <Link
+            href='/auth/login'
+            className={buttonVariants({ variant: 'outline' })}
+          >
+            Login
+          </Link>
+          <Link
+            href='/auth/register'
+            className={buttonVariants({ variant: 'accent' })}
+          >
+            Register
+          </Link>
+        </>
       )}
     </>
   );

@@ -1,10 +1,9 @@
-import { GeistSans } from 'geist/font/sans';
-import { GeistMono } from 'geist/font/mono';
-import './globals.css';
-import Header from '@/components/Header';
-import AuthProvider from './auth/Provider';
-import QueryClientProvider from './providers/QueryClientProvider';
 import { Toaster } from '@/components/ui/toaster';
+import { GeistMono } from 'geist/font/mono';
+import { GeistSans } from 'geist/font/sans';
+import AuthProvider from './auth/Provider';
+import './globals.css';
+import QueryClientProvider from './providers/QueryClientProvider';
 
 export default function RootLayout({
   children,
@@ -19,10 +18,8 @@ export default function RootLayout({
       <body>
         <QueryClientProvider>
           <AuthProvider>
-            <Header />
-            <main className='flex min-h-screen flex-col items-center justify-between'>
-              {children}
-            </main>
+            {/* <Header /> */}
+            {children}
             <Toaster />
           </AuthProvider>
         </QueryClientProvider>
