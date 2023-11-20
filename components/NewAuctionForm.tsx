@@ -94,16 +94,16 @@ const NewAuctionForm = () => {
   //   // 'https://picsum.photos/id/8/200',
   // ];
 
-  setImages([
-    'https://picsum.photos/id/1/200',
-    'https://picsum.photos/id/2/200',
-    'https://picsum.photos/id/3/200',
-    'https://picsum.photos/id/4/200',
-    'https://picsum.photos/id/5/200',
-    // 'https://picsum.photos/id/6/200',
-    // 'https://picsum.photos/id/7/200',
-    // 'https://picsum.photos/id/8/200',
-  ]);
+  // setImages([
+  //   'https://picsum.photos/id/1/200',
+  //   'https://picsum.photos/id/2/200',
+  //   'https://picsum.photos/id/3/200',
+  //   'https://picsum.photos/id/4/200',
+  //   'https://picsum.photos/id/5/200',
+  //   // 'https://picsum.photos/id/6/200',
+  //   // 'https://picsum.photos/id/7/200',
+  //   // 'https://picsum.photos/id/8/200',
+  // ]);
 
   const testSubmit = async () => {};
 
