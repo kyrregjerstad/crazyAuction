@@ -9,7 +9,7 @@ dayjs.extend(utc);
 
 const fetchWithZod = createZodFetcher();
 
-export const formSchema = z.object({
+export const auctionFormSchema = z.object({
   title: z.string().min(1).max(280),
   description: z.string().min(1).max(280).optional(),
   media: z.array(z.string().url().optional()),
@@ -18,10 +18,10 @@ export const formSchema = z.object({
   time: z.string(),
 });
 
-export type FormValues = z.infer<typeof formSchema>;
+export type AuctionForm = z.infer<typeof auctionFormSchema>;
 
 type Params = {
-  formData: FormValues;
+  formData: AuctionForm;
   jwt: string;
 };
 

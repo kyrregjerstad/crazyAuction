@@ -21,7 +21,7 @@ const RegisterPage = () => {
   const {
     control,
     watch,
-    formState: { isSubmitting, isDirty, isSubmitted },
+    formState: { isSubmitting, isDirty, isSubmitSuccessful },
   } = form;
 
   const name = watch('name');
@@ -117,12 +117,12 @@ const RegisterPage = () => {
           <Button
             className='w-full bg-accent'
             type='submit'
-            disabled={isSubmitting || !isDirty || isSubmitted}
+            disabled={isSubmitting || !isDirty || isSubmitSuccessful}
           >
             <span id='confetti' />
             {isSubmitting ? (
               <Spinner />
-            ) : isSubmitted ? (
+            ) : isSubmitSuccessful ? (
               'Registered! 🎉'
             ) : (
               'Register'
