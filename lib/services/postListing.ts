@@ -12,6 +12,7 @@ const fetchWithZod = createZodFetcher();
 export const auctionFormSchema = z.object({
   title: z.string().min(1).max(280),
   description: z.string().min(1).max(280).optional(),
+  images: z.instanceof(FileList).optional(),
   media: z.array(z.string().url().optional()),
   tags: z.string().min(1).max(8).optional(),
   date: z.date(),

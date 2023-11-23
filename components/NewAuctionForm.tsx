@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
 import { addDays, format } from 'date-fns';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar as CalendarIcon, X as DeleteIcon } from 'lucide-react';
 
 import { Calendar } from '@/components/ui/calendar';
 
@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import useAuctionForm from '@/lib/hooks/forms/useAuctionForm';
-import { cn } from '@/lib/utils';
+import { cn, convertFilesToBase64, toBase64 } from '@/lib/utils';
 import dayjs from 'dayjs';
 import {
   Popover,
@@ -34,6 +34,8 @@ import {
 
 import Spinner from './Spinner';
 import { useState } from 'react';
+import { uploadToCloudinary } from '@/lib/server/actions';
+import { ControllerRenderProps } from 'react-hook-form';
 
 const NewAuctionForm = () => {
   const { form, postAuction } = useAuctionForm();
@@ -81,39 +83,71 @@ const NewAuctionForm = () => {
   const startOfDay = today.startOf('day');
   const endOfDayOneYearFromNow = oneYearFromNow.endOf('day');
 
-  const [images, setImages] = useState<string[]>([]);
-
-  // const images = [
-  //   'https://picsum.photos/id/1/200',
-  //   'https://picsum.photos/id/2/200',
-  //   'https://picsum.photos/id/3/200',
-  //   'https://picsum.photos/id/4/200',
-  //   'https://picsum.photos/id/5/200',
-  //   // 'https://picsum.photos/id/6/200',
-  //   // 'https://picsum.photos/id/7/200',
-  //   // 'https://picsum.photos/id/8/200',
-  // ];
+  const [images, setImages] = useState<string[]>([
+    'https://picsum.photos/id/1/1000',
+    'https://picsum.photos/id/2/1000',
+    'https://picsum.photos/id/3/1000',
+    'https://picsum.photos/id/4/1000',
+    'https://picsum.photos/id/5/1000',
+  ]);
 
   // setImages([
-  //   'https://picsum.photos/id/1/200',
-  //   'https://picsum.photos/id/2/200',
-  //   'https://picsum.photos/id/3/200',
-  //   'https://picsum.photos/id/4/200',
-  //   'https://picsum.photos/id/5/200',
+  // 'https://picsum.photos/id/1/200',
+  // 'https://picsum.photos/id/2/200',
+  // 'https://picsum.photos/id/3/200',
+  // 'https://picsum.photos/id/4/200',
+  // 'https://picsum.photos/id/5/200',
   //   // 'https://picsum.photos/id/6/200',
   //   // 'https://picsum.photos/id/7/200',
   //   // 'https://picsum.photos/id/8/200',
   // ]);
 
-  const testSubmit = async () => {};
+  const [imagesUploading, setImagesUploading] = useState(false);
+
+  type HandleUploadParams = {
+    field: ControllerRenderProps<
+      {
+        date: Date;
+        time: string;
+        title: string;
+        media: (string | undefined)[];
+        description?: string;
+        images?: FileList;
+        tags?: string;
+      },
+      'images'
+    >;
+  }; // TODO: let's get this from the validation schema
+
+  const handleUploadImage = async ({ field }: HandleUploadParams) => {
+    if (!field.value) {
+      console.log('No files selected.');
+      return;
+    }
+
+    const form = new FormData();
+    const fileList = field.value;
+    const filesArray = Array.from(fileList);
+
+    for (const file of filesArray) {
+      form.append('image', file);
+    }
+
+    setImagesUploading(true);
+    try {
+      const res = await uploadToCloudinary(form);
+      console.log(res);
+      setImagesUploading(false);
+      setImages((prev) => [...prev, ...res]);
+    } catch (error) {
+      console.error('Error uploading images', error);
+      setImagesUploading(false);
+    }
+  };
 
   return (
     <>
       <div className='flex w-full flex-col gap-5 p-4 md:flex-row'>
-        <Button onClick={testSubmit} variant='outline'>
-          Test
-        </Button>
-
         <Form {...form}>
           <form
             className='flex w-full max-w-lg flex-col gap-5'
@@ -156,7 +190,7 @@ const NewAuctionForm = () => {
             />
             <FormField
               control={control}
-              name='media'
+              name='images'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Media</FormLabel>
@@ -164,12 +198,40 @@ const NewAuctionForm = () => {
                   <FormControl>
                     <>
                       <div className='flex gap-4'>
+                        <Input
+                          type='file'
+                          placeholder='Upload files'
+                          multiple
+                          max={8 - images.length}
+                          accept='image/*'
+                          onChange={(e) => {
+                            console.log(e.target.files?.length);
+                            const files = e.target.files;
+
+                            if (images.length + files?.length! > 8) {
+                              console.log('Too many files');
+                              alert(
+                                'You can only upload a total of 8 images, please remove some.',
+                              );
+                              e.target.value = '';
+                              return;
+                            }
+
+                            field.onChange(files);
+                          }}
+                        />
                         <Button
                           type='button'
                           variant='outline'
                           className='flex-1'
+                          onClick={() => handleUploadImage({ field })}
+                          disabled={
+                            imagesUploading ||
+                            images.length >= 8 ||
+                            !field.value
+                          }
                         >
-                          Upload Files
+                          {imagesUploading ? <Spinner /> : 'Upload'}
                         </Button>
                         <Popover>
                           <PopoverTrigger
@@ -306,10 +368,12 @@ const NewAuctionForm = () => {
                 'Create Auction'
               )}
             </Button>
+            <div className='flex w-full items-center justify-center'>
+              <span id='reward' />
+            </div>
           </form>
-          <span id='reward' />
         </Form>
-        <ImageGallery images={images} />
+        <ImageGallery images={images} setImages={setImages} />
       </div>
     </>
   );
@@ -318,35 +382,68 @@ const NewAuctionForm = () => {
 export default NewAuctionForm;
 
 const useUploadImage = () => {
-  const postImage = async () => {
+  const postImage = async (fileList: FileList) => {
+    const form = new FormData();
+
+    form.set('file', fileList[0]);
+
     try {
       const res = await fetch('/api/upload', {
         method: 'POST',
+        body: form,
       });
 
       const data = await res.json();
-
-      return data;
+      console.log(data);
     } catch (error) {
-      console.log(error);
+      console.error('Error converting files to base64', error);
     }
   };
 
   return { postImage };
 };
 
-const ImageGallery = ({ images }: { images: string[] }) => {
+type ImageGalleryProps = {
+  images: string[];
+  setImages: (images: string[]) => void;
+};
+
+const ImageGallery = ({ images, setImages }: ImageGalleryProps) => {
   const getGridCols = (length: number) => {
-    if (length <= 3) return 'grid-cols-1';
+    if (length <= 2) return 'grid-cols-1';
     if (length <= 6) return 'grid-cols-2';
     if (length <= 8) return 'grid-cols-3';
     return 'grid-cols-2';
   };
 
+  const handleRemoveImage = (image: string) => {
+    const updatedImages = images.filter((img) => img !== image);
+    setImages(updatedImages);
+  };
+
+  const RemoveImageButton = ({ image }: { image: string }) => (
+    <Button
+      variant='outline'
+      size='icon'
+      className='absolute right-0 top-0'
+      onClick={() => handleRemoveImage(image)}
+    >
+      <DeleteIcon className='h-6 w-6' />
+    </Button>
+  );
+
   return (
-    <div className={`grid ${getGridCols(images.length)} h-fit gap-4`}>
-      {images.map((image) => (
-        <div key={image}>
+    <div
+      className={`grid ${getGridCols(
+        images.length,
+      )} h-fit max-h-36 max-w-md gap-4`}
+    >
+      {images.map((image, i) => (
+        <div key={image} className='relative'>
+          <span className='absolute left-0 top-0 flex aspect-square w-6 items-center justify-center rounded-sm bg-neutral-500/70 text-center'>
+            {i + 1}
+          </span>
+          <RemoveImageButton image={image} />
           <img
             key={image}
             src={image}

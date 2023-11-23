@@ -1,15 +1,17 @@
 import { useToast } from '@/components/ui/use-toast';
-import emoji from '@/lib/emoji';
+import { Register, registerSchema } from '@/lib/schemas/register';
+import { postRegisterUser } from '@/lib/services/postSignUp';
+import { wait } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn, useSession } from 'next-auth/react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useReward } from 'react-rewards';
 import postListing, {
   AuctionForm,
   auctionFormSchema,
 } from '@/lib/services/postListing';
-import { wait } from '@/lib/utils';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useReward } from 'react-rewards';
+import emoji from '@/lib/emoji';
 
 const useAuctionForm = () => {
   const router = useRouter();
