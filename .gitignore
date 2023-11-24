@@ -34,3 +34,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local Netlify folder
+.netlify
+
+.env
+
+# Sentry Config File
+.sentryclirc
+
+# Sentry Config File
+.sentryclirc
