@@ -7,14 +7,16 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
+const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+
 const fetchWithZod = createZodFetcher();
 
 export const auctionFormSchema = z.object({
   title: z.string().min(1).max(280),
   description: z.string().min(1).max(280).optional(),
   images: z.instanceof(FileList).optional(),
-  media: z.array(z.string().url().optional()),
-  tags: z.string().min(1).max(8).optional(),
+  imageUrls: z.array(z.string().url()),
+  tags: z.string().optional(),
   date: z.date(),
   time: z.string(),
 });
@@ -34,6 +36,12 @@ const formatDate = (inputDate: Date, inputTime: string) => {
 };
 
 const postListing = async ({ formData, jwt }: Params) => {
+  const transformedMediaLinks = formData.imageUrls.map(
+    (url) => `${workerUrl}/cache/${url}`,
+  ); // add cloud_flare worker url to cache the image, in order to reduce cloud_inary costs
+
+  const tagsArr = formData.tags?.split(' ').map((tag) => tag.trim()) || [];
+
   const headers = new Headers();
   headers.append('Content-Type', 'application/json');
   headers.append('Authorization', `Bearer ${jwt}`);
@@ -43,8 +51,8 @@ const postListing = async ({ formData, jwt }: Params) => {
   const transformedFormData = {
     title: formData.title,
     description: formData.description,
-    media: formData.media,
-    tags: formData.tags,
+    media: transformedMediaLinks,
+    tags: tagsArr,
     endsAt: formattedDate,
   };
 

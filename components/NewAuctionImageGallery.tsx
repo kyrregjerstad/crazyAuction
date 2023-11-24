@@ -1,5 +1,6 @@
 import { X as DeleteIcon } from 'lucide-react';
 
+import Image from '@/components/Image';
 import {
   DndContext,
   DragEndEvent,
@@ -15,21 +16,22 @@ import {
   rectSortingStrategy,
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
-import Image from 'next/image';
 import React from 'react';
 import { Button } from './ui/button';
 
+import { AuctionForm } from '@/lib/services/postListing';
 import { cn } from '@/lib/utils';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { UseFormSetValue } from 'react-hook-form';
 
 type ImageGalleryProps = {
   images: string[];
-  setImages: (images: string[]) => void;
+  setValue: UseFormSetValue<AuctionForm>;
 };
 
-const NewAuctionImageGallery = ({ images, setImages }: ImageGalleryProps) => {
+const NewAuctionImageGallery = ({ images, setValue }: ImageGalleryProps) => {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -38,8 +40,8 @@ const NewAuctionImageGallery = ({ images, setImages }: ImageGalleryProps) => {
   );
 
   const handleRemoveImage = (clickedImg: string) => {
-    const updatedImages = images.filter((img) => img !== clickedImg);
-    setImages(updatedImages);
+    const updatedImageUrls = images.filter((img) => img !== clickedImg);
+    setValue('imageUrls', updatedImageUrls, { shouldValidate: true });
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -49,8 +51,8 @@ const NewAuctionImageGallery = ({ images, setImages }: ImageGalleryProps) => {
       const oldIndex = images.indexOf(active.id.toString());
       const newIndex = images.indexOf(over?.id?.toString() || '');
 
-      const newImages = arrayMove(images, oldIndex, newIndex);
-      setImages(newImages);
+      const newImageOrder = arrayMove(images, oldIndex, newIndex);
+      setValue('imageUrls', newImageOrder, { shouldValidate: true });
     }
   };
 

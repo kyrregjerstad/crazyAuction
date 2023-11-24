@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
-import { addDays, format, set } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 
 import { Calendar } from '@/components/ui/calendar';
@@ -33,9 +33,10 @@ import useAuctionForm from '@/lib/hooks/forms/useAuctionForm';
 import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 
-import { uploadToCloudinary } from '@/lib/server/actions';
+import useUploadImage from '@/lib/hooks/useUploadImage';
+import { AuctionForm } from '@/lib/services/postListing';
 import { useState } from 'react';
-import { ControllerRenderProps } from 'react-hook-form';
+import { UseFormSetValue } from 'react-hook-form';
 import NewAuctionImageGallery from './NewAuctionImageGallery';
 import Spinner from './Spinner';
 
@@ -45,24 +46,18 @@ const NewAuctionForm = () => {
     control,
     formState: { isDirty, isSubmitting, isSubmitSuccessful },
     setValue,
+    getValues,
   } = form;
 
   const { handleUploadImage, imagesUploading, handleSelectImage } =
     useUploadImage();
 
+  const images = getValues('imageUrls');
+
   const today = dayjs();
   const oneYearFromNow = today.add(1, 'year');
-
   const startOfDay = today.startOf('day');
   const endOfDayOneYearFromNow = oneYearFromNow.endOf('day');
-
-  const [images, setImages] = useState<string[]>([
-    'https://picsum.photos/id/1/1000',
-    'https://picsum.photos/id/2/1000',
-    'https://picsum.photos/id/3/1000',
-    'https://picsum.photos/id/4/1000',
-    'https://picsum.photos/id/5/1000',
-  ]);
 
   return (
     <>
@@ -112,7 +107,7 @@ const NewAuctionForm = () => {
               name='images'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Media</FormLabel>
+                  <FormLabel>Images</FormLabel>
 
                   <FormControl>
                     <div className='flex gap-4'>
@@ -132,9 +127,12 @@ const NewAuctionForm = () => {
                         variant='outline'
                         className='flex-1'
                         onClick={async () => {
-                          const res = await handleUploadImage({ field });
-                          if (!res) return;
-                          setImages([...images, ...res]);
+                          const imageUrls = await handleUploadImage({ field });
+                          if (!imageUrls) return;
+                          /* each image src is put here, this is what's being used on the form submission */
+                          setValue('imageUrls', [...images, ...imageUrls], {
+                            shouldValidate: true,
+                          });
                         }}
                         disabled={
                           imagesUploading || images.length >= 8 || !field.value
@@ -142,7 +140,7 @@ const NewAuctionForm = () => {
                       >
                         {imagesUploading ? <Spinner /> : 'Upload'}
                       </Button>
-                      <LinkPopover images={images} setImages={setImages} />
+                      <LinkPopover images={images} setValue={setValue} />
                     </div>
                   </FormControl>
                   <FormMessage />
@@ -236,7 +234,6 @@ const NewAuctionForm = () => {
                       <Input
                         placeholder='Time'
                         type='time'
-                        defaultValue={format(today.toDate(), 'HH:mm')}
                         {...field}
                         className='bg-foreground text-background'
                       />
@@ -264,7 +261,7 @@ const NewAuctionForm = () => {
             </div>
           </form>
         </Form>
-        <NewAuctionImageGallery images={images} setImages={setImages} />
+        <NewAuctionImageGallery images={images} setValue={setValue} />
       </div>
     </>
   );
@@ -274,10 +271,10 @@ export default NewAuctionForm;
 
 type LinkPopoverProps = {
   images: string[];
-  setImages: (images: string[]) => void;
+  setValue: UseFormSetValue<AuctionForm>;
 };
 
-const LinkPopover = ({ images, setImages }: LinkPopoverProps) => {
+const LinkPopover = ({ images, setValue }: LinkPopoverProps) => {
   const { handleAddLink, imagesUploading } = useUploadImage();
 
   const [link, setLink] = useState<string>('');
@@ -306,7 +303,8 @@ const LinkPopover = ({ images, setImages }: LinkPopoverProps) => {
           onClick={async () => {
             const validLink = await handleAddLink({ link });
             if (!validLink) return;
-            setImages([...images, validLink]);
+            const newImageUrls = [...images, validLink];
+            setValue('imageUrls', newImageUrls, { shouldValidate: true });
             setLink('');
           }}
         >
@@ -315,106 +313,4 @@ const LinkPopover = ({ images, setImages }: LinkPopoverProps) => {
       </PopoverContent>
     </Popover>
   );
-};
-
-const useUploadImage = () => {
-  const [imagesUploading, setImagesUploading] = useState(false);
-
-  type field = ControllerRenderProps<
-    {
-      date: Date;
-      time: string;
-      title: string;
-      media: (string | undefined)[];
-      description?: string;
-      images?: FileList;
-      tags?: string;
-    },
-    'images'
-  >; // TODO: let's try to get this from the validation schema
-
-  type HandleUploadParams = {
-    field: field;
-  };
-
-  const handleUploadImage = async ({ field }: HandleUploadParams) => {
-    if (!field.value) {
-      console.log('No files selected.');
-      return;
-    }
-
-    const form = new FormData();
-    const fileList = field.value;
-    const filesArray = Array.from(fileList);
-
-    for (const file of filesArray) {
-      form.append('image', file);
-    }
-
-    setImagesUploading(true);
-
-    try {
-      const res = await uploadToCloudinary(form);
-      console.log(res);
-      setImagesUploading(false);
-      return res;
-    } catch (error) {
-      console.error('Error uploading images', error);
-      setImagesUploading(false);
-      return [''];
-    }
-  };
-
-  type HandleSelectImageParams = {
-    event: React.ChangeEvent<HTMLInputElement>;
-    field: field;
-    images: string[];
-  };
-
-  const handleSelectImage = async ({
-    event,
-    field,
-    images,
-  }: HandleSelectImageParams) => {
-    const files = event.target.files;
-
-    if (images.length + files?.length! > 8) {
-      console.log('Too many files');
-      alert('You can only upload a total of 8 images, please remove some.');
-      event.target.value = '';
-      return;
-    }
-
-    field.onChange(files);
-  };
-
-  type HandleAddLinkParams = {};
-
-  const handleAddLink = async ({ link }: { link: string }) => {
-    setImagesUploading(true);
-
-    const res = await fetch(link);
-    if (!res.ok) {
-      console.error('Error fetching image');
-      setImagesUploading(false);
-      return;
-    }
-
-    if (!res.headers.get('content-type')?.startsWith('image')) {
-      console.error('Not an image');
-      setImagesUploading(false);
-      return;
-    }
-
-    setImagesUploading(false);
-
-    return link;
-  };
-
-  return {
-    handleUploadImage,
-    imagesUploading,
-    handleSelectImage,
-    handleAddLink,
-  };
 };

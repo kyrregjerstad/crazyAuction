@@ -28,10 +28,11 @@ const useAuctionForm = () => {
     defaultValues: {
       title: '',
       description: '',
-      media: [],
+      images: undefined,
+      imageUrls: [],
       tags: '',
       date: new Date(),
-      time: '',
+      time: new Date().toLocaleTimeString().slice(0, -3), // remove seconds
     }, // set default values to empty strings to avoid uncontrolled to controlled error
   });
 
