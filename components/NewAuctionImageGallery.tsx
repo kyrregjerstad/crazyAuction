@@ -24,76 +24,6 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { motion, AnimatePresence } from 'framer-motion';
 
-type SortableItemProps = {
-  image: string;
-  index: number;
-  handleRemoveImage: (image: string) => void;
-};
-
-const SortableItem = ({
-  image,
-  index,
-  handleRemoveImage,
-}: SortableItemProps) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-    isSorting,
-  } = useSortable({ id: image });
-
-  const style: React.CSSProperties = {
-    zIndex: isDragging ? 100 : 0,
-    scale: isDragging ? 1.1 : 1,
-    transform: CSS.Transform.toString(transform),
-    transition: `${transition}, opacity 0.2s ease-in-out, scale 0.2s ease-in-out`,
-  };
-
-  return (
-    <motion.div
-      className={cn('relative', isDragging && 'z-50')}
-      key={image}
-      initial={{ opacity: 0 }}
-      transition={{ duration: 1 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0, transition: { duration: 0.15 } }}
-    >
-      <RemoveImageButton
-        image={image}
-        handleRemoveImage={handleRemoveImage}
-        isSorting={isSorting}
-      />
-      <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-        <div
-          className={cn(
-            'relative aspect-square max-w-[150px] overflow-hidden rounded-md border transition-shadow lg:max-w-[250px]',
-            isDragging ? 'border border-accent shadow-md' : 'shadow-none',
-          )}
-        >
-          <span
-            className={cn(
-              'absolute left-0 top-0 flex aspect-square w-6 items-center justify-center rounded-sm bg-neutral-500/70 text-center transition-opacity',
-              isSorting ? 'opacity-0' : 'opacity-100',
-            )}
-          >
-            {index + 1}
-          </span>
-          <Image
-            src={image}
-            width={200}
-            height={200}
-            alt='test'
-            className='h-full w-full max-w-full rounded-lg object-cover'
-          />
-        </div>
-      </div>
-    </motion.div>
-  );
-};
-
 type ImageGalleryProps = {
   images: string[];
   setImages: (images: string[]) => void;
@@ -160,6 +90,71 @@ const NewAuctionImageGallery = ({ images, setImages }: ImageGalleryProps) => {
 
 export default NewAuctionImageGallery;
 
+type SortableItemProps = {
+  image: string;
+  index: number;
+  handleRemoveImage: (image: string) => void;
+};
+
+const SortableItem = ({
+  image,
+  index,
+  handleRemoveImage,
+}: SortableItemProps) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+    isSorting,
+  } = useSortable({ id: image });
+
+  const style: React.CSSProperties = {
+    zIndex: isDragging ? 100 : 0,
+    scale: isDragging ? 1.1 : 1,
+    transform: CSS.Transform.toString(transform),
+    transition: `${transition}, opacity 0.2s ease-in-out, scale 0.2s ease-in-out`,
+  };
+
+  return (
+    <motion.div
+      className={cn('relative', isDragging && 'z-50')}
+      key={image}
+      initial={{ opacity: 0 }}
+      transition={{ duration: 1 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0, transition: { duration: 0.15 } }}
+    >
+      <RemoveImageButton
+        image={image}
+        handleRemoveImage={handleRemoveImage}
+        isSorting={isSorting}
+      />
+      <div
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+        className={cn(
+          'relative aspect-square max-w-[150px] overflow-hidden rounded-md border transition-shadow lg:max-w-[250px]',
+          isDragging ? 'border border-accent shadow-md' : 'shadow-none',
+        )}
+      >
+        <IndexIndicator index={index} />
+        <Image
+          src={image}
+          width={200}
+          height={200}
+          alt='test'
+          className='h-full w-full max-w-full rounded-lg object-cover'
+        />
+      </div>
+    </motion.div>
+  );
+};
+
 type RemoveImageButtonProps = {
   image: string;
   handleRemoveImage: (image: string) => void;
@@ -182,4 +177,10 @@ const RemoveImageButton = ({
   >
     <DeleteIcon className='h-4 w-4' />
   </Button>
+);
+
+const IndexIndicator = ({ index }: { index: number }) => (
+  <span className='absolute left-0 top-0 flex aspect-square w-6 items-center justify-center rounded-sm bg-neutral-500/70 text-center'>
+    {index + 1}
+  </span>
 );
