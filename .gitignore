@@ -39,3 +39,9 @@ next-env.d.ts
 .netlify
 
 .env
+
+# Sentry Config File
+.sentryclirc
+
+# Sentry Config File
+.sentryclirc
