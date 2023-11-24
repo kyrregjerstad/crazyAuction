@@ -59,6 +59,7 @@ const AuctionItemCard = ({ listing }: Props) => {
             </span>
           </p>
         </div>
+
         <Link
           href={`/item/${listing.id}`}
           className={`${buttonVariants()}} border border-accent bg-transparent text-secondary-foreground transition-colors duration-200 hover:bg-accent hover:text-accent-foreground`}

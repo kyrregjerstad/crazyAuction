@@ -3,7 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { signIn } from 'next-auth/react';
+import Image from 'next/image';
 import React from 'react';
+import Logo from '@/public/CrazyAuction-no-outline.svg';
 
 const page = () => {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -21,6 +23,9 @@ const page = () => {
 
   return (
     <div className='mx-auto w-full max-w-md space-y-6 pt-24'>
+      <div className='flex items-center justify-center'>
+        <Image src={Logo} width={300} height={300} alt='crazy auction logo' />
+      </div>
       <h1 className='text-center text-3xl font-bold'>Login to CrazyAuction</h1>
       <form className='space-y-4' onSubmit={onSubmit}>
         <div className='space-y-2'>

@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import '../globals.css';
+import Logo from '@/public/CrazyAuction-no-outline-no-hammer.svg';
+import Image from 'next/image';
 
 export default function RootLayout({
   children,
@@ -25,7 +27,8 @@ const Header = () => {
             className='flex items-center gap-2 text-lg font-semibold text-accent'
             href='/'
           >
-            Crazy Auction
+            <Image src={Logo} alt='CrazyAuction' width={64} height={64} />
+
             <span className='sr-only'>Crazy Auction</span>
           </Link>
         </nav>

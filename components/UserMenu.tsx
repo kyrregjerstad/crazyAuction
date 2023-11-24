@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
+import MagicButton from './MagicButton';
 
 const UserMenu = () => {
   const { data, status } = useSession();
@@ -19,9 +20,10 @@ const UserMenu = () => {
     <>
       {status === 'authenticated' ? (
         <>
-          <Link className={buttonVariants({ variant: 'outline' })} href='/new'>
+          {/* <Link className={buttonVariants({ variant: 'outline' })} href='/new'>
             New Auction
-          </Link>
+          </Link> */}
+          <MagicButton />
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar className='border-2 border-accent transition-transform hover:scale-110'>

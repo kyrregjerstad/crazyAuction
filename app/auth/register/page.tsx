@@ -12,8 +12,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useReward } from 'react-rewards';
+import Logo from '@/public/CrazyAuction-no-outline.svg';
 
 import useRegisterForm from '@/lib/hooks/forms/useRegisterForm';
+import Image from 'next/image';
 
 const RegisterPage = () => {
   const { form, registerUser } = useRegisterForm();
@@ -29,7 +31,7 @@ const RegisterPage = () => {
   const firstLetter = name && name.length > 0 ? name[0].toUpperCase() : '';
 
   return (
-    <div className='mx-auto w-full max-w-md space-y-6 pt-24'>
+    <div className='mx-auto w-full max-w-md space-y-6 pt-8'>
       <div className='flex w-full justify-center'>
         <Avatar className='h-28 w-28 border-2 border-accent text-5xl'>
           <AvatarImage src={avatarUrl} />
