@@ -36,6 +36,7 @@ import Spinner from './Spinner';
 import { useState } from 'react';
 import { uploadToCloudinary } from '@/lib/server/actions';
 import { ControllerRenderProps } from 'react-hook-form';
+import NewAuctionImageGallery from './NewAuctionImageGallery';
 
 const NewAuctionForm = () => {
   const { form, postAuction } = useAuctionForm();
@@ -393,7 +394,7 @@ const NewAuctionForm = () => {
             </div>
           </form>
         </Form>
-        <ImageGallery images={images} setImages={setImages} />
+        <NewAuctionImageGallery images={images} setImages={setImages} />
       </div>
     </>
   );
@@ -421,57 +422,4 @@ const useUploadImage = () => {
   };
 
   return { postImage };
-};
-
-type ImageGalleryProps = {
-  images: string[];
-  setImages: (images: string[]) => void;
-};
-
-const ImageGallery = ({ images, setImages }: ImageGalleryProps) => {
-  const getGridCols = (length: number) => {
-    if (length <= 2) return 'grid-cols-1';
-    if (length <= 6) return 'grid-cols-2';
-    if (length <= 8) return 'grid-cols-3';
-    return 'grid-cols-2';
-  };
-
-  const handleRemoveImage = (image: string) => {
-    const updatedImages = images.filter((img) => img !== image);
-    setImages(updatedImages);
-  };
-
-  const RemoveImageButton = ({ image }: { image: string }) => (
-    <Button
-      variant='outline'
-      size='icon'
-      className='absolute right-0 top-0'
-      onClick={() => handleRemoveImage(image)}
-    >
-      <DeleteIcon className='h-6 w-6' />
-    </Button>
-  );
-
-  return (
-    <div
-      className={`grid ${getGridCols(
-        images.length,
-      )} h-fit max-h-36 max-w-md gap-4`}
-    >
-      {images.map((image, i) => (
-        <div key={image} className='relative'>
-          <span className='absolute left-0 top-0 flex aspect-square w-6 items-center justify-center rounded-sm bg-neutral-500/70 text-center'>
-            {i + 1}
-          </span>
-          <RemoveImageButton image={image} />
-          <img
-            key={image}
-            src={image}
-            alt='test'
-            className='h-auto max-w-full rounded-lg'
-          />
-        </div>
-      ))}
-    </div>
-  );
 };

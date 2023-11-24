@@ -26,7 +26,7 @@ module.exports = {
         mono: ['var(--font-geist-mono)'],
       },
       colors: {
-        border: 'oklch(var(--border))',
+        border: 'oklch(var(--border) / var(--tw-border-opacity, 1))',
         input: 'oklch(var(--input))',
         ring: 'oklch(var(--ring))',
         background: 'oklch(var(--background) / var(--tw-bg-opacity, 1))',
