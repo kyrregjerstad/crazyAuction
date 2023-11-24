@@ -1,13 +1,14 @@
-import React from 'react';
-import { Button, buttonVariants } from './ui/button';
-import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { ListingFull } from '@/lib/schemas/listing';
-import Link from 'next/link';
-import Image from './Image';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import { cn } from '@/lib/utils';
 import fallbackImg from '@/public/fallback-image.webp';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import Image from './Image';
+import { buttonVariants } from './ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import AnimatedButton from './AnimatedButton';
 
 dayjs.extend(relativeTime);
 
@@ -59,13 +60,14 @@ const AuctionItemCard = ({ listing }: Props) => {
             </span>
           </p>
         </div>
-
-        <Link
+        <AnimatedButton
+          isLink
           href={`/item/${listing.id}`}
-          className={`${buttonVariants()}} border border-accent bg-transparent text-secondary-foreground transition-colors duration-200 hover:bg-accent hover:text-accent-foreground`}
+          variant='outline'
+          className='w-full border-accent bg-transparent'
         >
           See more
-        </Link>
+        </AnimatedButton>
       </CardContent>
     </Card>
   );

@@ -1,7 +1,6 @@
-import React from 'react';
-import { Button, buttonVariants } from './ui/button';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { buttonVariants } from './ui/button';
 
 const MagicButton = () => {
   return (

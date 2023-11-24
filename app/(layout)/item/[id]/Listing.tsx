@@ -15,6 +15,7 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import AnimatedButton from '@/components/AnimatedButton';
 
 dayjs.extend(relativeTime);
 
@@ -111,14 +112,16 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
               disabled={!isAuthenticated || isPending}
             />
 
-            <Button
-              className='bg-accent text-white'
-              variant='default'
+            <AnimatedButton
+              isLink={false}
+              variant='magic'
+              repeat={true}
+              className='w-18'
               onClick={() => mutate(amount)}
-              disabled={!isAuthenticated || isPending}
+              disabled={!isAuthenticated || isPending || amount < currentBid}
             >
               Place a bid
-            </Button>
+            </AnimatedButton>
             {!isAuthenticated && (
               <p className='text-sm text-gray-400'>
                 You must be logged in to place a bid

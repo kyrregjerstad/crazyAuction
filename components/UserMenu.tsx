@@ -20,9 +20,6 @@ const UserMenu = () => {
     <>
       {status === 'authenticated' ? (
         <>
-          {/* <Link className={buttonVariants({ variant: 'outline' })} href='/new'>
-            New Auction
-          </Link> */}
           <MagicButton />
           <DropdownMenu>
             <DropdownMenuTrigger>
