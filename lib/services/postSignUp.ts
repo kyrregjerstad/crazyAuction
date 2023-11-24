@@ -4,6 +4,16 @@ import { Register, registerResponseSchema } from '../schemas/register';
 
 const fetchWithZod = createZodFetcher();
 
+type RegisterResponseError = {
+  errors: [
+    {
+      message: string;
+    },
+  ];
+  status: string;
+  statusCode: number;
+};
+
 export const postRegisterUser = async (params: Register) => {
   const transformedParams = {
     name: params.name,
@@ -20,6 +30,6 @@ export const postRegisterUser = async (params: Register) => {
     });
   } catch (error) {
     console.error(error);
-    throw error;
+    return error as RegisterResponseError;
   }
 };

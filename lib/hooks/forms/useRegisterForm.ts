@@ -30,6 +30,8 @@ const useRegisterForm = () => {
 
       if (!res) throw new Error('Something went wrong');
 
+      if (res.errors) throw new Error('Response not ok');
+
       toast({
         title: 'Account created 🎉',
         description: "Ready for some crazy auctions? Let's go!",
