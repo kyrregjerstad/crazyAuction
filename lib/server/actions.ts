@@ -38,10 +38,12 @@ async function fileToBuffer(file: File): Promise<Uint8Array> {
 }
 
 async function uploadFile(buffer: Uint8Array) {
+  console.log('uploading...');
   const res = await new Promise((resolve, reject) => {
     cloudinary.uploader
       .upload_stream({ folder: 'crazy_auction' }, function (error, result) {
         if (error) {
+          console.error(error);
           reject(error);
           return;
         }
@@ -57,7 +59,8 @@ export async function uploadToCloudinary(formData: FormData) {
   const files = formData.getAll('image') as File[];
   if (!files) throw new Error('No files');
 
-  const uploadPromises = files.map(async (file) => {
+  const uploadPromises = files.map(async (file, index) => {
+    console.log(`Uploading file ${index + 1} of ${files.length}`);
     const buffer = await fileToBuffer(file);
 
     try {
