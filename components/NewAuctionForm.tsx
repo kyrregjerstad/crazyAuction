@@ -145,6 +145,38 @@ const NewAuctionForm = () => {
     }
   };
 
+  type HandleSelectImageParams = {
+    event: React.ChangeEvent<HTMLInputElement>;
+    field: ControllerRenderProps<
+      {
+        date: Date;
+        time: string;
+        title: string;
+        media: (string | undefined)[];
+        description?: string;
+        images?: FileList;
+        tags?: string;
+      },
+      'images'
+    >;
+  };
+
+  const handleSelectImage = async ({
+    event,
+    field,
+  }: HandleSelectImageParams) => {
+    const files = event.target.files;
+
+    if (images.length + files?.length! > 8) {
+      console.log('Too many files');
+      alert('You can only upload a total of 8 images, please remove some.');
+      e.target.value = '';
+      return;
+    }
+
+    field.onChange(files);
+  };
+
   return (
     <>
       <div className='flex w-full flex-col gap-5 p-4 md:flex-row'>
@@ -204,21 +236,9 @@ const NewAuctionForm = () => {
                           multiple
                           max={8 - images.length}
                           accept='image/*'
-                          onChange={(e) => {
-                            console.log(e.target.files?.length);
-                            const files = e.target.files;
-
-                            if (images.length + files?.length! > 8) {
-                              console.log('Too many files');
-                              alert(
-                                'You can only upload a total of 8 images, please remove some.',
-                              );
-                              e.target.value = '';
-                              return;
-                            }
-
-                            field.onChange(files);
-                          }}
+                          onChange={(event) =>
+                            handleSelectImage({ event, field })
+                          }
                         />
                         <Button
                           type='button'

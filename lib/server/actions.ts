@@ -57,23 +57,25 @@ export async function uploadToCloudinary(formData: FormData) {
   const files = formData.getAll('image') as File[];
   if (!files) throw new Error('No files');
 
-  const responses: string[] = [];
+  const uploadPromises = files.map(async (file) => {
+    const buffer = await fileToBuffer(file);
 
-  for (let i = 0; i < files.length; i++) {
-    const buffer = await fileToBuffer(files[i]);
+    try {
+      const res = await uploadFile(buffer);
+      const parsedRes = ApiResponseSchema.safeParse(res);
 
-    const res = await uploadFile(buffer);
+      if (!parsedRes.success) {
+        console.error(parsedRes.error);
+        return ''; // TODO: better error handling
+      }
 
-    const parsedRes = ApiResponseSchema.safeParse(res);
-
-    if (!parsedRes.success) {
-      console.error(parsedRes.error);
-      responses.push('');
-      continue;
+      return parsedRes.data.secure_url;
+    } catch (error) {
+      console.error(error);
+      return '';
     }
+  });
 
-    responses.push(parsedRes.data.secure_url);
-  }
-
+  const responses = await Promise.all(uploadPromises);
   return responses;
 }
