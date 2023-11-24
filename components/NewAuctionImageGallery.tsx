@@ -57,7 +57,7 @@ const NewAuctionImageGallery = ({ images, setImages }: ImageGalleryProps) => {
   return (
     <>
       {images.length === 0 ? (
-        <div className='flex h-full w-full max-w-lg flex-wrap items-center justify-center gap-4 md:max-w-xl'>
+        <div className='flex h-full w-full max-w-lg flex-wrap items-center justify-center gap-4 pt-8 md:max-w-xl'>
           <p className='text-sm text-neutral-500'>
             Auctions with images are more likely to sell. Add up to 8 images
           </p>
@@ -69,7 +69,7 @@ const NewAuctionImageGallery = ({ images, setImages }: ImageGalleryProps) => {
           onDragEnd={handleDragEnd}
         >
           <SortableContext items={images} strategy={rectSortingStrategy}>
-            <div className='flex h-fit w-full max-w-lg flex-wrap gap-4 md:max-w-xl'>
+            <div className='flex h-fit w-full max-w-lg flex-wrap gap-4 pt-8 md:max-w-xl'>
               <AnimatePresence>
                 {images.map((image, index) => (
                   <SortableItem
