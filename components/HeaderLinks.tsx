@@ -29,7 +29,7 @@ const HeaderLinks = () => {
             href === currentPath
               ? 'text-accent'
               : 'font-medium text-neutral-300'
-          } transition-colors duration-200 `}
+          } hidden transition-colors duration-200 sm:block`}
         >
           {name}
         </Link>

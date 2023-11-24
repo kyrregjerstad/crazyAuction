@@ -32,7 +32,7 @@ const ItemDetailsPage = async ({ params }: Props) => {
   // const currentBid = auctionItem.bids.at(-1)?.amount || 0;
 
   return (
-    <div className='grid gap-6 md:grid-cols-3'>
+    <div className='grid max-w-5xl gap-6 md:grid-cols-3'>
       <div className='flex items-center gap-4'>
         <div className='rounded-lg shadow-md'>
           <div className='flex items-center gap-4'>
