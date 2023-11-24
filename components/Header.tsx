@@ -3,7 +3,7 @@ import HeaderLine from './HeaderLine';
 import HeaderLinks from './HeaderLinks';
 import UserMenu from './UserMenu';
 import Image from 'next/image';
-import Logo from '@/public/CrazyAuction.svg';
+import Logo from '@/public/CrazyAuction-no-outline-no-hammer.svg';
 
 type HeaderProps = {
   searchParams?: any;
