@@ -12,10 +12,15 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
 import { addDays, format } from 'date-fns';
-import { Calendar as CalendarIcon, X as DeleteIcon } from 'lucide-react';
+import { Calendar as CalendarIcon } from 'lucide-react';
 
 import { Calendar } from '@/components/ui/calendar';
 
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
@@ -24,19 +29,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import useAuctionForm from '@/lib/hooks/forms/useAuctionForm';
-import { cn, convertFilesToBase64, toBase64 } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 
-import Spinner from './Spinner';
-import { useState } from 'react';
 import { uploadToCloudinary } from '@/lib/server/actions';
+import { useState } from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 import NewAuctionImageGallery from './NewAuctionImageGallery';
+import Spinner from './Spinner';
 
 const NewAuctionForm = () => {
   const { form, postAuction } = useAuctionForm();
@@ -180,7 +180,7 @@ const NewAuctionForm = () => {
 
   return (
     <>
-      <div className='flex w-full flex-col gap-5 p-4 md:flex-row'>
+      <div className='flex w-full flex-col items-center gap-5 p-4 md:flex-row md:items-start'>
         <Form {...form}>
           <form
             className='flex w-full max-w-lg flex-col gap-5'

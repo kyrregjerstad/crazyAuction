@@ -1,29 +1,28 @@
 import { X as DeleteIcon } from 'lucide-react';
 
-import React, { useState } from 'react';
-import { Button } from './ui/button';
-import Image from 'next/image';
 import {
   DndContext,
-  closestCenter,
+  DragEndEvent,
   KeyboardSensor,
   PointerSensor,
+  closestCenter,
   useSensor,
   useSensors,
-  DragEndEvent,
 } from '@dnd-kit/core';
 import {
+  SortableContext,
   arrayMove,
   rectSortingStrategy,
-  rectSwappingStrategy,
-  SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import Image from 'next/image';
+import React from 'react';
+import { Button } from './ui/button';
 
+import { cn } from '@/lib/utils';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { cn } from '@/lib/utils';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type SortableItemProps = {
   image: string;
@@ -47,14 +46,21 @@ const SortableItem = ({
   } = useSortable({ id: image });
 
   const style: React.CSSProperties = {
-    zIndex: isDragging ? 2000 : 0,
+    zIndex: isDragging ? 100 : 0,
     scale: isDragging ? 1.1 : 1,
     transform: CSS.Transform.toString(transform),
     transition: `${transition}, opacity 0.2s ease-in-out, scale 0.2s ease-in-out`,
   };
 
   return (
-    <div className={cn('group-preview-image relative', isDragging && 'z-50')}>
+    <motion.div
+      className={cn('relative', isDragging && 'z-50')}
+      key={image}
+      initial={{ opacity: 0 }}
+      transition={{ duration: 1 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0, transition: { duration: 0.15 } }}
+    >
       <RemoveImageButton
         image={image}
         handleRemoveImage={handleRemoveImage}
@@ -63,7 +69,7 @@ const SortableItem = ({
       <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
         <div
           className={cn(
-            'relative aspect-square max-w-[150px] overflow-hidden rounded-md border transition-shadow',
+            'relative aspect-square max-w-[150px] overflow-hidden rounded-md border transition-shadow lg:max-w-[250px]',
             isDragging ? 'border border-accent shadow-md' : 'shadow-none',
           )}
         >
@@ -80,11 +86,11 @@ const SortableItem = ({
             width={200}
             height={200}
             alt='test'
-            className='h-auto w-full max-w-full rounded-lg'
+            className='h-full w-full max-w-full rounded-lg object-cover'
           />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -103,7 +109,6 @@ const NewAuctionImageGallery = ({ images, setImages }: ImageGalleryProps) => {
 
   const handleRemoveImage = (clickedImg: string) => {
     const updatedImages = images.filter((img) => img !== clickedImg);
-    console.log('click', clickedImg, updatedImages);
     setImages(updatedImages);
   };
 
@@ -120,24 +125,36 @@ const NewAuctionImageGallery = ({ images, setImages }: ImageGalleryProps) => {
   };
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext items={images} strategy={rectSortingStrategy}>
-        <div className='flex h-fit flex-wrap gap-4'>
-          {images.map((image, index) => (
-            <SortableItem
-              key={image}
-              index={index}
-              image={image}
-              handleRemoveImage={handleRemoveImage}
-            />
-          ))}
+    <>
+      {images.length === 0 ? (
+        <div className='flex h-full w-full max-w-lg flex-wrap items-center justify-center gap-4 md:max-w-xl'>
+          <p className='text-sm text-neutral-500'>
+            Auctions with images are more likely to sell. Add up to 8 images
+          </p>
         </div>
-      </SortableContext>
-    </DndContext>
+      ) : (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext items={images} strategy={rectSortingStrategy}>
+            <div className='flex h-fit w-full max-w-lg flex-wrap gap-4 md:max-w-xl'>
+              <AnimatePresence>
+                {images.map((image, index) => (
+                  <SortableItem
+                    key={image}
+                    index={index}
+                    image={image}
+                    handleRemoveImage={handleRemoveImage}
+                  />
+                ))}
+              </AnimatePresence>
+            </div>
+          </SortableContext>
+        </DndContext>
+      )}
+    </>
   );
 };
 
