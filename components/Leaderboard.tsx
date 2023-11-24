@@ -26,8 +26,6 @@ const Leaderboard = () => {
       }),
   });
 
-  console.log(users);
-
   if (!users) {
     return null;
   }
@@ -54,7 +52,7 @@ const Leaderboard = () => {
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <Link
-                  href={`/user/q${user.name}`}
+                  href={`/user/${user.name}`}
                   className='flex items-center justify-center gap-2'
                 >
                   {user.name}
