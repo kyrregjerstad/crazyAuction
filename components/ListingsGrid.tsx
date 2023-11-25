@@ -8,6 +8,7 @@ import { Card } from './ui/card';
 import Skeleton from './Skeleton';
 import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
+import AuctionGrid from './AuctionGrid';
 
 const ListingsGrid = () => {
   const { sort, order } = useSortSearchParams();
@@ -25,13 +26,13 @@ const ListingsGrid = () => {
 
   if (isLoading) {
     return (
-      <Grid>
+      <AuctionGrid>
         {skeletonArr.map((skeleton, i) => (
           <Card key={i} className='h-96'>
             <Skeleton className='h-full' animationDelay={`0.${i}s`} />
           </Card>
         ))}
-      </Grid>
+      </AuctionGrid>
     );
   }
 
@@ -47,20 +48,12 @@ const ListingsGrid = () => {
   }
 
   return (
-    <Grid>
+    <AuctionGrid>
       {listings.map((listing) => (
         <AuctionItemCard key={listing.id} listing={listing} />
       ))}
-    </Grid>
+    </AuctionGrid>
   );
 };
 
 export default ListingsGrid;
-
-const Grid = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className='grid grid-cols-1 gap-x-4 gap-y-6 pt-8 sm:grid-cols-2 md:grid-cols-3 md:gap-x-6 lg:grid-cols-4 lg:gap-y-8 xl:grid-cols-5'>
-      {children}
-    </div>
-  );
-};

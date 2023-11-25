@@ -45,6 +45,7 @@ const AuctionItemCard = ({ listing }: Props) => {
         <p className='mt-2 line-clamp-2 max-h-[50px] text-gray-400 sm:text-sm md:text-lg'>
           {listing.description}
         </p>
+        <div className='flex-1' />
         <div className='flex items-center justify-between pb-4 sm:flex-col sm:items-start sm:justify-start'>
           <p className='mt-2 text-xl text-card-foreground'>
             ${listing?.bids?.at(-1)?.amount || '0'}
