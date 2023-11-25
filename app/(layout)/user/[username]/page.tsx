@@ -1,11 +1,13 @@
 import authOptions from '@/app/auth/authOptions';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Listing } from '@/lib/schemas/listing';
 import { getSingleUser } from '@/lib/services/getSingleUser';
 
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
+import AvatarWithEdit from './Avatar';
 
 interface Props {
   params: { username: string };
@@ -36,10 +38,12 @@ const ItemDetailsPage = async ({ params }: Props) => {
       <div className='flex items-center gap-4'>
         <div className='rounded-lg shadow-md'>
           <div className='flex items-center gap-4'>
-            <Avatar className='h-32 w-32 border-2 border-accent'>
-              <AvatarImage src={avatar || ''} />
-              <AvatarFallback>CA</AvatarFallback>
-            </Avatar>
+            <AvatarWithEdit>
+              <Avatar className='relative h-32 w-32'>
+                <AvatarImage src={avatar || ''} />
+                <AvatarFallback>CA</AvatarFallback>
+              </Avatar>
+            </AvatarWithEdit>
           </div>
         </div>
         <div>
