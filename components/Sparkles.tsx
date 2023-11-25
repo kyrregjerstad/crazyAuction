@@ -7,16 +7,20 @@ import React, { useState } from 'react';
 type Props = {
   children: React.ReactNode;
   animate?: boolean;
+  color?: string;
+  size?: number;
 };
 
-const Sparkles = ({ children, animate }: Props) => {
+const Sparkles = ({ children, animate, color, size }: Props) => {
   const [sparkles, setSparkles] = useState<Sparkle[]>([]);
 
   useRandomInterval(
     () => {
       const now = Date.now();
-      const color = `oklch(${random(60, 68)}%, 0.27, ${random(8, 12)})`;
-      const sparkle = generateSparkle(color);
+      const sparkleColor =
+        color || `oklch(${random(60, 68)}%, 0.27, ${random(8, 12)})`;
+      const sparkleSize = size ? random(size, size * 2) : random(10, 20);
+      const sparkle = generateSparkle(sparkleColor, sparkleSize);
 
       const nextSparkles = sparkles.filter((sparkle) => {
         const delta = now - sparkle.createdAt;
@@ -69,15 +73,15 @@ const SparkleInstance = ({ color, size, style }: SparkleInstanceProps) => {
 
 const defaultColor = 'oklch(60% 0.25 9)'; // hsl(335, 100%, 50%)
 type Sparkle = ReturnType<typeof generateSparkle>;
-const generateSparkle = (color = defaultColor) => {
+const generateSparkle = (color = defaultColor, size = 15) => {
   return {
     id: String(random(10000, 99999)),
     createdAt: Date.now(),
     color,
-    size: random(15, 30),
+    size: size,
     style: {
-      top: random(-150, 150) + '%',
-      left: random(-50, 100) + '%',
+      top: random(size * -6, size * 5) + '%',
+      left: random(size * -3, size * 6) + '%',
       zIndex: random(-2, 2),
     },
   };

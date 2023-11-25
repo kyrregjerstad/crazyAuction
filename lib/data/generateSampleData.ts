@@ -5,20 +5,41 @@ import { nanoid } from 'nanoid';
 import { ListingFull } from '../schemas/listing';
 dayjs.extend(relativeTime);
 
-const IN_ONE_WEEK = 1000 * 60 * 60 * 24 * 7;
-const IN_TWO_DAYS = 1000 * 60 * 60 * 24 * 2;
-const IN_ONE_DAY = 1000 * 60 * 60 * 24;
-const IN_ONE_HOUR = 1000 * 60 * 60;
-const IN_TEN_MINUTES = 1000 * 60 * 10;
-const IN_ONE_MINUTE = 1000 * 60;
+export const TimeIntervals = {
+  oneWeek: 1000 * 60 * 60 * 24 * 7,
+  twoDays: 1000 * 60 * 60 * 24 * 2,
+  oneDay: 1000 * 60 * 60 * 24,
+  oneHour: 1000 * 60 * 60,
+  tenMinutes: 1000 * 60 * 10,
+  oneMinute: 1000 * 60,
+  tenSeconds: 1000 * 10,
+  fiveSeconds: 1000 * 5,
+  oneSecond: 1000,
+} as const;
 
-export const AuctionEndsIn = {
-  oneWeek: new Date(Date.now() + IN_ONE_WEEK).toISOString(),
-  twoDays: new Date(Date.now() + IN_TWO_DAYS).toISOString(),
-  oneDay: new Date(Date.now() + IN_ONE_DAY).toISOString(),
-  oneHour: new Date(Date.now() + IN_ONE_HOUR).toISOString(),
-  tenMinutes: new Date(Date.now() + IN_TEN_MINUTES).toISOString(),
-  oneMinute: new Date(Date.now() + IN_ONE_MINUTE).toISOString(),
+export const AuctionEnds = {
+  upcoming: {
+    oneWeek: new Date(Date.now() + TimeIntervals.oneWeek).toISOString(),
+    twoDays: new Date(Date.now() + TimeIntervals.twoDays).toISOString(),
+    oneDay: new Date(Date.now() + TimeIntervals.oneDay).toISOString(),
+    oneHour: new Date(Date.now() + TimeIntervals.oneHour).toISOString(),
+    tenMinutes: new Date(Date.now() + TimeIntervals.tenMinutes).toISOString(),
+    oneMinute: new Date(Date.now() + TimeIntervals.oneMinute).toISOString(),
+    tenSeconds: new Date(Date.now() + TimeIntervals.tenSeconds).toISOString(),
+    fiveSeconds: new Date(Date.now() + TimeIntervals.fiveSeconds).toISOString(),
+    oneSecond: new Date(Date.now() + TimeIntervals.oneSecond).toISOString(),
+  },
+  past: {
+    oneWeek: new Date(Date.now() - TimeIntervals.oneWeek).toISOString(),
+    twoDays: new Date(Date.now() - TimeIntervals.twoDays).toISOString(),
+    oneDay: new Date(Date.now() - TimeIntervals.oneDay).toISOString(),
+    oneHour: new Date(Date.now() - TimeIntervals.oneHour).toISOString(),
+    tenMinutes: new Date(Date.now() - TimeIntervals.tenMinutes).toISOString(),
+    oneMinute: new Date(Date.now() - TimeIntervals.oneMinute).toISOString(),
+    tenSeconds: new Date(Date.now() - TimeIntervals.tenSeconds).toISOString(),
+    fiveSeconds: new Date(Date.now() - TimeIntervals.fiveSeconds).toISOString(),
+    oneSecond: new Date(Date.now() - TimeIntervals.oneSecond).toISOString(),
+  },
 } as const;
 
 export const generateSampleData = (overrides: Partial<ListingFull> = {}) => {
@@ -31,8 +52,8 @@ export const generateSampleData = (overrides: Partial<ListingFull> = {}) => {
       { length: 3 },
       () => 'https://source.unsplash.com/random/900x700/?painting',
     ),
-    created: new Date(IN_ONE_WEEK * -1).toISOString(),
-    updated: new Date(IN_ONE_DAY * -1).toISOString(),
+    created: new Date(TimeIntervals.oneWeek * -1).toISOString(),
+    updated: new Date(TimeIntervals.oneDay * -1).toISOString(),
     endsAt: 'in 10 days',
     seller: {
       name: faker.internet.userName(),
