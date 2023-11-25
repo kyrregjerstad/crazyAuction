@@ -1,8 +1,12 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { buttonVariants } from './ui/button';
+import Sparkles from './Sparkles';
+import { useState } from 'react';
 
 const MagicButton = () => {
+  const [animate, setAnimate] = useState(false);
+
   return (
     <motion.div
       whileHover={{
@@ -14,11 +18,13 @@ const MagicButton = () => {
           repeatType: 'mirror',
         },
       }}
+      onMouseOver={() => setAnimate(true)}
+      onMouseLeave={() => setAnimate(false)}
       whileTap={{ scale: 0.9, rotate: 0 }}
       className='relative'
     >
       <Link className={buttonVariants({ variant: 'magic' })} href='/new'>
-        New Auction
+        <Sparkles animate={animate}>New Auction</Sparkles>
       </Link>
     </motion.div>
   );
