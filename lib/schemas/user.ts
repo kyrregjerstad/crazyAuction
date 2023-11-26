@@ -7,7 +7,7 @@ export const singleUserSchema = z.object({
   avatar: z.string().nullable(),
   credits: z.number(),
   wins: z.array(z.string()),
-  listings: z.array(singleListingSchema).optional(),
+  listings: z.array(singleListingSchema),
   _count: z.object({
     listings: z.number(),
   }),
