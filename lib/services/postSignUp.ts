@@ -1,6 +1,10 @@
-import { createZodFetcher } from 'zod-fetch';
+import { createZodFetcher } from './zodFetcher';
 import { API_REGISTER_URL } from '../constants';
-import { Register, registerResponseSchema } from '../schemas/register';
+import {
+  Register,
+  RegisterResponse,
+  registerResponseSchema,
+} from '../schemas/register';
 
 const fetchWithZod = createZodFetcher();
 
@@ -14,7 +18,9 @@ type RegisterResponseError = {
   statusCode: number;
 };
 
-export const postRegisterUser = async (params: Register) => {
+export const postRegisterUser = async (
+  params: Register,
+): Promise<RegisterResponse | RegisterResponseError> => {
   const transformedParams = {
     name: params.name,
     email: params.email,
@@ -29,7 +35,6 @@ export const postRegisterUser = async (params: Register) => {
       body: JSON.stringify(transformedParams),
     });
   } catch (error) {
-    console.error(error);
     return error as RegisterResponseError;
   }
 };

@@ -41,4 +41,6 @@ export const registerResponseSchema = z.object({
   credits: z.number(),
 });
 
+export type RegisterResponse = z.infer<typeof registerResponseSchema>;
+
 export type Register = z.infer<typeof registerSchema>;
