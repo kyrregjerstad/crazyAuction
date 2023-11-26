@@ -36,6 +36,14 @@ export const getAllListings = async ({
     sortOrder,
   });
 
+  if (limit) {
+    params.append('limit', limit.toString());
+  }
+
+  if (offset) {
+    params.append('offset', offset.toString());
+  }
+
   const url = `${API_AUCTION_LISTINGS_URL}?${params.toString()}`;
 
   try {

@@ -128,8 +128,8 @@ const Graph = ({ data }: Props) => {
       if (!start || !end) return;
 
       ctx.beginPath();
-      ctx.moveTo(start.x, start.y);
-      ctx.lineTo(end.x, end.y);
+      // ctx.moveTo(start.x, start.y);
+      // ctx.lineTo(end.x, end.y);
       ctx.strokeStyle = '#ffffffa0';
       // ctx.lineWidth = Math.max(globalScale / 2, 0.5);
       ctx.lineWidth = 0.15;
