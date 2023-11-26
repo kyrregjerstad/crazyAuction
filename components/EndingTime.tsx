@@ -66,7 +66,7 @@ const FormattedTimeLeft = ({
   timeLeft: number;
   endsAt: string;
 }) => {
-  const isEndingSoon = timeLeft < TimeIntervals.oneHour && timeLeft > 0;
+  const isEndingSoon = timeLeft < TimeIntervals.twelveHours && timeLeft > 0;
   const endingTimeFormatted = dayjs(endsAt).fromNow(true);
   return (
     <span

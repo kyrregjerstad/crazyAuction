@@ -9,6 +9,7 @@ import Skeleton from './Skeleton';
 import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
 import AuctionGrid from './AuctionGrid';
+import { ListingFull } from '@/lib/schemas/listing';
 
 const ListingsGrid = () => {
   const { sort, order } = useSortSearchParams();
@@ -19,10 +20,26 @@ const ListingsGrid = () => {
     queryKey: ['allListings', sort, order],
     queryFn: () =>
       getAllListings({
-        sort,
+        sort: sort === 'endsAt' ? 'endsAt' : 'created',
         order,
       }),
   });
+
+  const getCurrentPrice = (listing: ListingFull) => {
+    if (listing.bids && listing.bids.length > 0) {
+      return Math.max(...listing.bids.map((bid) => bid.amount));
+    }
+    return 0; // or some default value
+  };
+
+  const sortListingsByPrice = (listings: ListingFull[]) => {
+    return listings.sort((a, b) => {
+      const priceA = getCurrentPrice(a);
+      const priceB = getCurrentPrice(b);
+
+      return order === 'asc' ? priceA - priceB : priceB - priceA;
+    });
+  };
 
   if (isLoading) {
     return (
@@ -47,9 +64,12 @@ const ListingsGrid = () => {
     );
   }
 
+  const sortedListings =
+    sort === 'price' ? sortListingsByPrice([...listings]) : listings;
+
   return (
     <AuctionGrid>
-      {listings.map((listing) => (
+      {sortedListings.map((listing) => (
         <AuctionItemCard key={listing.id} listing={listing} />
       ))}
     </AuctionGrid>

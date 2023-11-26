@@ -24,7 +24,7 @@ export default async function HomePage({ searchParams }: Props) {
     queryKey: ['allListings'],
     queryFn: () =>
       getAllListings({
-        sort,
+        sort: sort === 'endsAt' ? 'endsAt' : 'created',
         order,
       }),
   });
