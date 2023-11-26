@@ -50,7 +50,7 @@ const LoginForm = () => {
               <FormControl>
                 <Input
                   {...field}
-                  placeholder='@noroff.no'
+                  placeholder='your-email@stud.noroff.no'
                   type='email'
                   className='bg-foreground text-background'
                 />
