@@ -39,9 +39,14 @@ import { useState } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 import NewAuctionImageGallery from './NewAuctionImageGallery';
 import Spinner from './Spinner';
+import { ListingFull } from '@/lib/schemas/listing';
 
-const NewAuctionForm = () => {
-  const { form, postAuction } = useAuctionForm();
+type Props = {
+  mode: 'create' | 'edit';
+  listing: ListingFull | null;
+};
+const AuctionForm = ({ mode = 'create', listing }: Props) => {
+  const { form, postAuction } = useAuctionForm({ mode, listing });
   const {
     control,
     formState: { isDirty, isSubmitting, isSubmitSuccessful },
@@ -251,7 +256,13 @@ const NewAuctionForm = () => {
               {isSubmitting ? (
                 <Spinner />
               ) : isSubmitSuccessful ? (
-                'Auction Created! 🎉'
+                mode === 'edit' ? (
+                  'Auction Updated! 🎉'
+                ) : (
+                  'Auction Updated 👌'
+                )
+              ) : mode === 'edit' ? (
+                'Update Auction'
               ) : (
                 'Create Auction'
               )}
@@ -267,7 +278,7 @@ const NewAuctionForm = () => {
   );
 };
 
-export default NewAuctionForm;
+export default AuctionForm;
 
 type LinkPopoverProps = {
   images: string[];

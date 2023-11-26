@@ -1,19 +1,24 @@
 import { useToast } from '@/components/ui/use-toast';
-import { Register, registerSchema } from '@/lib/schemas/register';
-import { postRegisterUser } from '@/lib/services/postSignUp';
-import { wait } from '@/lib/utils';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn, useSession } from 'next-auth/react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useReward } from 'react-rewards';
+import emoji from '@/lib/emoji';
+import { ListingFull } from '@/lib/schemas/listing';
 import postListing, {
   AuctionForm,
   auctionFormSchema,
 } from '@/lib/services/postListing';
+import updateAuction from '@/lib/services/updateListing';
+import { wait } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import emoji from '@/lib/emoji';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useReward } from 'react-rewards';
 
-const useAuctionForm = () => {
+type Params = {
+  mode: 'create' | 'edit';
+  listing: ListingFull | null;
+};
+
+const useAuctionForm = ({ mode = 'create', listing }: Params) => {
   const router = useRouter();
   const { toast } = useToast();
   const { reward } = useReward('reward', 'emoji', {
@@ -26,11 +31,11 @@ const useAuctionForm = () => {
   const form = useForm<AuctionForm>({
     resolver: zodResolver(auctionFormSchema),
     defaultValues: {
-      title: '',
-      description: '',
+      title: listing?.title ?? '',
+      description: listing?.description ?? '',
       images: undefined,
-      imageUrls: [],
-      tags: '',
+      imageUrls: listing?.media ?? [],
+      tags: listing?.tags.join(', ') ?? '',
       date: new Date(),
       time: new Date().toLocaleTimeString().slice(0, -3), // remove seconds
     }, // set default values to empty strings to avoid uncontrolled to controlled error
@@ -38,7 +43,7 @@ const useAuctionForm = () => {
 
   const { handleSubmit } = form;
 
-  const onSubmit: SubmitHandler<AuctionForm> = async (data) => {
+  const onCreate: SubmitHandler<AuctionForm> = async (data) => {
     try {
       const res = await postListing({
         formData: data,
@@ -62,7 +67,29 @@ const useAuctionForm = () => {
     }
   };
 
-  const postAuction = handleSubmit(onSubmit);
+  const onEdit: SubmitHandler<AuctionForm> = async (data) => {
+    try {
+      const res = await updateAuction({
+        formData: data,
+        id: listing!.id,
+        jwt: session.data!.user.accessToken,
+      });
+
+      if (!res) throw new Error('Something went wrong');
+
+      router.push(`/item/${res.id}`);
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Something went wrong',
+        description: 'Please try again later',
+        variant: 'error',
+        duration: 5000,
+      });
+    }
+  };
+
+  const postAuction = handleSubmit(mode === 'create' ? onCreate : onEdit);
 
   return { form, postAuction };
 };

@@ -23,7 +23,10 @@ const MagicButton = () => {
       whileTap={{ scale: 0.9, rotate: 0 }}
       className='relative'
     >
-      <Link className={buttonVariants({ variant: 'magic' })} href='/new'>
+      <Link
+        className={buttonVariants({ variant: 'magic' })}
+        href='/auction?create'
+      >
         <Sparkles animate={animate}>New Auction</Sparkles>
       </Link>
     </motion.div>

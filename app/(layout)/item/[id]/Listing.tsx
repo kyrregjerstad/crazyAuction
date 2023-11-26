@@ -95,7 +95,7 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
         </div>
         {isLoggedInUser ? (
           <Link
-            href={`/listing/${listingId}/edit`}
+            href={`/auction/?mode=edit&id=${listingId}`}
             className={buttonVariants({ variant: 'accent' })}
           >
             Edit Listing
