@@ -1,6 +1,5 @@
 import authOptions from '@/app/auth/authOptions';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Listing } from '@/lib/schemas/listing';
 import { getSingleUser } from '@/lib/services/getSingleUser';
@@ -13,7 +12,7 @@ interface Props {
   params: { username: string };
 }
 
-const ItemDetailsPage = async ({ params }: Props) => {
+const UserPage = async ({ params }: Props) => {
   const session = await getServerSession(authOptions);
 
   const { username } = params;
@@ -36,7 +35,7 @@ const ItemDetailsPage = async ({ params }: Props) => {
   // const currentBid = auctionItem.bids.at(-1)?.amount || 0;
 
   return (
-    <div className='grid max-w-5xl gap-6 md:grid-cols-3'>
+    <div className='grid max-w-5xl gap-6 px-4 pt-6 md:grid-cols-3'>
       <div className='flex items-center gap-4'>
         <div className='rounded-lg shadow-md'>
           <div className='flex items-center gap-4'>
@@ -75,7 +74,7 @@ const ItemDetailsPage = async ({ params }: Props) => {
   );
 };
 
-export default ItemDetailsPage;
+export default UserPage;
 
 type ListingProps = {
   listing: Listing;
