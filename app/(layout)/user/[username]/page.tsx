@@ -29,6 +29,8 @@ const ItemDetailsPage = async ({ params }: Props) => {
 
   const { avatar, name, credits, listings, wins } = user;
 
+  const isLoggedInUser = session.user.name === username;
+
   // if (!auctionItem) return null;
 
   // const currentBid = auctionItem.bids.at(-1)?.amount || 0;
@@ -38,7 +40,7 @@ const ItemDetailsPage = async ({ params }: Props) => {
       <div className='flex items-center gap-4'>
         <div className='rounded-lg shadow-md'>
           <div className='flex items-center gap-4'>
-            <AvatarWithEdit>
+            <AvatarWithEdit canEdit={isLoggedInUser}>
               <Avatar className='relative h-32 w-32'>
                 <AvatarImage src={avatar || ''} />
                 <AvatarFallback>CA</AvatarFallback>

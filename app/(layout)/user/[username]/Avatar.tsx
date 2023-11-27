@@ -17,26 +17,36 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@radix-ui/react-popover';
-import { PropsWithChildren, useState } from 'react';
+import { useState } from 'react';
 
-const AvatarWithEdit = ({ children }: PropsWithChildren) => {
+type Props = {
+  children: React.ReactNode;
+  canEdit: boolean;
+};
+
+const AvatarWithEdit = ({ children, canEdit = false }: Props) => {
   const [editMode, setEditMode] = useState(false);
 
-  const handleEdit = () => {
-    console.log('edit');
-  };
   return (
-    <div className='relative rounded-full border-2 border-accent'>
-      <LinkPopover setEditMode={setEditMode} editMode={editMode} />
-      <div
-        className={cn(
-          'transition-all duration-500 peer-hover:opacity-50 peer-hover:blur-sm',
-          editMode && 'opacity-50 blur-sm',
-        )}
-      >
-        {children}
-      </div>
-    </div>
+    <>
+      {canEdit ? (
+        <div className='relative rounded-full border-2 border-accent'>
+          <LinkPopover setEditMode={setEditMode} editMode={editMode} />
+          <div
+            className={cn(
+              'transition-all duration-500 peer-hover:opacity-50 peer-hover:blur-sm',
+              editMode && 'opacity-50 blur-sm',
+            )}
+          >
+            {children}
+          </div>
+        </div>
+      ) : (
+        <div className='relative rounded-full border-2 border-accent'>
+          {children}
+        </div>
+      )}
+    </>
   );
 };
 
