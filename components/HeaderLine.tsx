@@ -30,7 +30,7 @@ const HeaderLine = () => {
     <div
       className={`${
         hasScrolled ? 'opacity-100' : 'opacity-0'
-      }  w-full border-b border-accent  transition-opacity duration-500 ease-in-out`}
+      }  border-accent-700 w-full border-b-[0.5px] transition-opacity duration-500 ease-in-out`}
     />
   );
 };

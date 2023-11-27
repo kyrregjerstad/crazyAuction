@@ -55,7 +55,7 @@ const AuctionItemCard = ({ listing }: Props) => {
           isLink
           href={`/item/${id}`}
           variant='outline'
-          className='w-full border-accent bg-transparent'
+          className='border-accent-600 w-full bg-transparent'
         >
           See more
         </AnimatedButton>

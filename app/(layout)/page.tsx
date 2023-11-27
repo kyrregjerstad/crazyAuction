@@ -30,7 +30,7 @@ export default async function HomePage({ searchParams }: Props) {
   });
 
   return (
-    <div className='w-full max-w-7xl p-2 sm:p-4 '>
+    <div className='w-full max-w-7xl p-2 sm:p-4'>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <SearchFilters sort={sort} order={order} />
         <ListingsGrid />
