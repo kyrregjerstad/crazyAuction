@@ -22,15 +22,17 @@ const bid = z.object({
   created: isoDate,
 });
 
+const seller = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  avatar: z.string().nullable(),
+});
+
 export type Bid = z.infer<typeof bid>;
 
 export const singleListingSchemaExtended = singleListingSchema.extend({
-  seller: z.object({
-    name: z.string(),
-    email: z.string().email(),
-    avatar: z.string().nullable(),
-  }),
-  bids: z.array(bid).optional(),
+  seller: seller,
+  bids: z.array(bid),
   _count: z.object({
     bids: z.number(),
   }),

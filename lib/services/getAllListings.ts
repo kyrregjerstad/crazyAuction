@@ -47,7 +47,20 @@ export const getAllListings = async ({
   const url = `${API_AUCTION_LISTINGS_URL}?${params.toString()}`;
 
   try {
-    return await fetchWithZod(allListingsSchema, url);
+    const res = await fetchWithZod(allListingsSchema, url);
+
+    const sortedRes = res.map((listing) => {
+      const bids = listing.bids.sort((a, b) => {
+        return a.amount - b.amount;
+      });
+
+      return {
+        ...listing,
+        bids,
+      };
+    });
+
+    return sortedRes;
   } catch (error) {
     console.error(error);
     throw error;
