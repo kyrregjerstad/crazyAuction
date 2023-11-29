@@ -11,20 +11,35 @@ const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
 
 const fetchWithZod = createZodFetcher();
 
-export const auctionFormSchema = z.object({
+export const auctionFormInfoSchema = z.object({
   title: z.string().min(1).max(280),
   description: z.string().min(1).max(280).optional(),
+  tags: z.string().optional(),
+});
+
+export const auctionFormMediaSchema = z.object({
   images: z.instanceof(FileList).optional(),
   imageUrls: z.array(z.string().url()),
-  tags: z.string().optional(),
+});
+
+export const auctionFormDateSchema = z.object({
   date: z.date(),
   time: z.string(),
 });
 
-export type AuctionForm = z.infer<typeof auctionFormSchema>;
+export const auctionFormSchemaComplete = z.object({
+  ...auctionFormInfoSchema.shape,
+  ...auctionFormMediaSchema.shape,
+  ...auctionFormDateSchema.shape,
+});
+
+export type AuctionFormComplete = z.infer<typeof auctionFormSchemaComplete>;
+export type AuctionFormInfo = z.infer<typeof auctionFormInfoSchema>;
+export type AuctionFormMedia = z.infer<typeof auctionFormMediaSchema>;
+export type AuctionFormDate = z.infer<typeof auctionFormDateSchema>;
 
 type Params = {
-  formData: AuctionForm;
+  formData: AuctionFormComplete;
   jwt: string;
 };
 

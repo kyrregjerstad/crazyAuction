@@ -19,7 +19,7 @@ import {
 import React from 'react';
 import { Button } from './ui/button';
 
-import { AuctionForm } from '@/lib/services/postListing';
+import { AuctionFormComplete } from '@/lib/services/postListing';
 import { cn } from '@/lib/utils';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -28,7 +28,7 @@ import { UseFormSetValue } from 'react-hook-form';
 
 type ImageGalleryProps = {
   images: string[];
-  setValue: UseFormSetValue<AuctionForm>;
+  setValue: UseFormSetValue<AuctionFormComplete>;
 };
 
 const NewAuctionImageGallery = ({ images, setValue }: ImageGalleryProps) => {

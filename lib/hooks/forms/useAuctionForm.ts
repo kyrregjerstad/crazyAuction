@@ -2,8 +2,8 @@ import { useToast } from '@/components/ui/use-toast';
 import emoji from '@/lib/emoji';
 import { ListingFull } from '@/lib/schemas/listing';
 import postListing, {
-  AuctionForm,
-  auctionFormSchema,
+  AuctionFormComplete,
+  auctionFormSchemaComplete,
 } from '@/lib/services/postListing';
 import updateAuction from '@/lib/services/updateListing';
 import { wait } from '@/lib/utils';
@@ -28,8 +28,8 @@ const useAuctionForm = ({ mode = 'create', listing }: Params) => {
   });
   const session = useSession();
 
-  const form = useForm<AuctionForm>({
-    resolver: zodResolver(auctionFormSchema),
+  const form = useForm<AuctionFormComplete>({
+    resolver: zodResolver(auctionFormSchemaComplete),
     defaultValues: {
       title: listing?.title ?? '',
       description: listing?.description ?? '',
@@ -43,7 +43,7 @@ const useAuctionForm = ({ mode = 'create', listing }: Params) => {
 
   const { handleSubmit } = form;
 
-  const onCreate: SubmitHandler<AuctionForm> = async (data) => {
+  const onCreate: SubmitHandler<AuctionFormComplete> = async (data) => {
     try {
       const res = await postListing({
         formData: data,
@@ -67,7 +67,7 @@ const useAuctionForm = ({ mode = 'create', listing }: Params) => {
     }
   };
 
-  const onEdit: SubmitHandler<AuctionForm> = async (data) => {
+  const onEdit: SubmitHandler<AuctionFormComplete> = async (data) => {
     try {
       const res = await updateAuction({
         formData: data,

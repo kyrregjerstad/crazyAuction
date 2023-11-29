@@ -58,10 +58,13 @@
     --popover: 13.71% 0.036 258.53;
     --popover-foreground: 100% 0 0;
 
-    --primary: 100% 0 0;
+    --primary: 60% 0.2704 9;
     --primary-foreground: 20.79% 0.04 265.73;
 
+    --secondary-800: 21.01% 0.032 264.66; /* #111827 */
+
     --secondary: 21.01% 0.032 264.66; /* #111827 */
+
     --secondary-foreground: 100% 0 0;
 
     --muted: 28% 0.037 259.97; /* #1e293b */

@@ -1,4 +1,5 @@
-import AuctionForm from '@/components/NewAuctionForm';
+import MultiStepForm from '@/components/MultistepForm';
+import AuctionFormComplete from '@/components/NewAuctionForm';
 import { ListingFull } from '@/lib/schemas/listing';
 import { getSingleListing } from '@/lib/services/getSingleListing';
 import { getServerSession } from 'next-auth';
@@ -48,7 +49,8 @@ export default async function NewAuctionPage({ searchParams }: Props) {
           Create a New Auction
         </h1>
 
-        <AuctionForm mode={mode} listing={listing} />
+        <MultiStepForm mode={mode} listing={listing} />
+        {/* <AuctionForm mode={mode} listing={listing} /> */}
       </div>
     </>
   );

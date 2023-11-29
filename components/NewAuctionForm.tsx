@@ -34,7 +34,7 @@ import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
 
 import useUploadImage from '@/lib/hooks/useUploadImage';
-import { AuctionForm } from '@/lib/services/postListing';
+import { AuctionFormComplete } from '@/lib/services/postListing';
 import { useState } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 import NewAuctionImageGallery from './NewAuctionImageGallery';
@@ -278,11 +278,11 @@ const AuctionForm = ({ mode = 'create', listing }: Props) => {
   );
 };
 
-export default AuctionForm;
+export default AuctionFormComplete;
 
 type LinkPopoverProps = {
   images: string[];
-  setValue: UseFormSetValue<AuctionForm>;
+  setValue: UseFormSetValue<AuctionFormComplete>;
 };
 
 const LinkPopover = ({ images, setValue }: LinkPopoverProps) => {
