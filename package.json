@@ -40,6 +40,7 @@
     "i": "^0.3.7",
     "immer": "^10.0.3",
     "lucide-react": "^0.292.0",
+    "luxon": "^3.4.4",
     "nanoid": "^5.0.3",
     "next": "14.0.3",
     "next-auth": "^4.24.5",
@@ -69,6 +70,7 @@
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",
     "@tailwindcss/typography": "^0.5.10",
+    "@types/luxon": "^3.3.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

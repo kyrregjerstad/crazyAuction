@@ -11,6 +11,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { SelectSingleEventHandler } from 'react-day-picker';
+import { DateTime } from 'luxon';
 
 import { addDays, format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
@@ -43,6 +45,10 @@ import { ListingFull } from '@/lib/schemas/listing';
 import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
 import { Card } from './ui/card';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { DateTimePicker } from './DateTimePicker';
+import { Label } from './ui/label';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 type Step = 'info' | 'media' | 'time' | 'summary';
 
@@ -148,11 +154,18 @@ const Overview = ({ currentStep }: StepsProps) => {
           <li
             key={title}
             className={cn(
-              'whitespace-nowrap text-lg',
+              'relative whitespace-nowrap text-lg',
               currentStep === step && 'font-bold',
             )}
           >
-            {title}
+            {currentStep === step && (
+              <motion.span
+                layout
+                layoutId='step-indicator'
+                className='absolute -left-3 top-2 h-2 w-2 rounded-full bg-accent-500'
+              />
+            )}
+            <Link href={`?step=${step}`}>{title}</Link>
           </li>
         ))}
       </ul>
@@ -333,6 +346,31 @@ const TimeStepForm = ({ mode = 'create', listing }: Props) => {
   const startOfDay = today.startOf('day');
   const endOfDayOneYearFromNow = oneYearFromNow.endOf('day');
 
+  const [selectedDateTime, setSelectedDateTime] = useState<DateTime>(
+    DateTime.fromJSDate(selectedDate || new Date()),
+  );
+
+  const handleSelect: SelectSingleEventHandler = (day, selected) => {
+    const selectedDay = DateTime.fromJSDate(selected);
+    const modifiedDay = selectedDay.set({
+      hour: selectedDateTime.hour,
+      minute: selectedDateTime.minute,
+    });
+
+    setSelectedDateTime(modifiedDay);
+    setSelectedDate(modifiedDay.toJSDate());
+  };
+
+  const handleTimeChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { value } = e.target;
+    const hours = Number.parseInt(value.split(':')[0] || '00', 10);
+    const minutes = Number.parseInt(value.split(':')[1] || '00', 10);
+    const modifiedDay = selectedDateTime.set({ hour: hours, minute: minutes });
+
+    setSelectedDateTime(modifiedDay);
+    setSelectedDate(modifiedDay.toJSDate());
+  };
+
   return (
     <Form {...timeForm}>
       <form className='flex w-full max-w-lg flex-col gap-5' onSubmit={saveStep}>
@@ -343,15 +381,31 @@ const TimeStepForm = ({ mode = 'create', listing }: Props) => {
             <FormItem>
               <FormLabel>End Date</FormLabel>
               <FormControl>
-                <Calendar
-                  mode='single'
-                  selected={field.value}
-                  onSelect={field.onChange}
-                  disabled={(date) =>
-                    date < startOfDay.toDate() ||
-                    date > endOfDayOneYearFromNow.toDate()
-                  }
-                />
+                <>
+                  {/* <DateTimePicker date={selectedDate} setDate={setSelectedDate} /> */}
+                  <Calendar
+                    mode='single'
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    className='flex'
+                    disabled={(date) =>
+                      date < startOfDay.toDate() ||
+                      date > endOfDayOneYearFromNow.toDate()
+                    }
+                  />
+                  <>
+                    <div className='px-4 pb-4 pt-0'>
+                      <Label>Time</Label>
+                      <Input
+                        type='time'
+                        onChange={handleTimeChange}
+                        value={selectedDateTime.toFormat('HH:mm')}
+                        className='w-fit'
+                      />
+                    </div>
+                    {!selectedDateTime && <p>Please pick a day.</p>}
+                  </>
+                </>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -359,7 +413,7 @@ const TimeStepForm = ({ mode = 'create', listing }: Props) => {
         />
         <div className='flex w-full justify-end gap-4'>
           <Button variant='outline' type='button'>
-            Cancel
+            Back
           </Button>
           <Button variant='accent' type='submit'>
             Next
