@@ -243,6 +243,7 @@ function BidHistory({
 
 function BidHistoryItem({ bid, index }: { bid: Bid; index: number }) {
   const { created, amount, bidderName } = bid;
+
   const bidDate = dayjs(created).fromNow();
   return (
     <li className='mb-3'>
