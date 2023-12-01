@@ -36,8 +36,7 @@ const useAuctionForm = ({ mode = 'create', listing }: Params) => {
       images: undefined,
       imageUrls: listing?.media ?? [],
       tags: listing?.tags.join(', ') ?? '',
-      date: new Date(),
-      time: new Date().toLocaleTimeString().slice(0, -3), // remove seconds
+      dateTime: listing?.endsAt ? new Date(listing.endsAt) : new Date(),
     }, // set default values to empty strings to avoid uncontrolled to controlled error
   });
 

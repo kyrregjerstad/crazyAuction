@@ -18,13 +18,12 @@ export const auctionFormInfoSchema = z.object({
 });
 
 export const auctionFormMediaSchema = z.object({
-  images: z.instanceof(FileList).optional(),
+  images: z.array(z.any()).optional(),
   imageUrls: z.array(z.string().url()),
 });
 
 export const auctionFormDateSchema = z.object({
-  date: z.date(),
-  time: z.string(),
+  dateTime: z.date(),
 });
 
 export const auctionFormSchemaComplete = z.object({
@@ -43,13 +42,6 @@ type Params = {
   jwt: string;
 };
 
-const formatDate = (inputDate: Date, inputTime: string) => {
-  const date = dayjs(inputDate);
-  const [hours, minutes] = inputTime.split(':').map(Number);
-  const adjustedDate = date.hour(hours).minute(minutes).utc();
-  return adjustedDate.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-};
-
 const postListing = async ({ formData, jwt }: Params) => {
   const transformedMediaLinks = formData.imageUrls.map(
     (url) => `${workerUrl}/cache/${url}`,
@@ -61,14 +53,12 @@ const postListing = async ({ formData, jwt }: Params) => {
   headers.append('Content-Type', 'application/json');
   headers.append('Authorization', `Bearer ${jwt}`);
 
-  const formattedDate = formatDate(formData.date, formData.time);
-
   const transformedFormData = {
     title: formData.title,
     description: formData.description,
     media: transformedMediaLinks,
     tags: tagsArr,
-    endsAt: formattedDate,
+    endsAt: formData.dateTime.toISOString(),
   };
 
   const requestOptions = {

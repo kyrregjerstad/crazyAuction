@@ -49,6 +49,7 @@
     "react-animated-counter": "link:react-animated-counter",
     "react-day-picker": "^8.9.1",
     "react-dom": "^18",
+    "react-dropzone": "^14.2.3",
     "react-force-graph": "^1.44.0",
     "react-force-graph-2d": "^1.25.2",
     "react-force-graph-3d": "^1.24.0",

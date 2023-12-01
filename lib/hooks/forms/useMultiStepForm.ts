@@ -1,7 +1,6 @@
 import { useToast } from '@/components/ui/use-toast';
-import emoji from '@/lib/emoji';
 import { ListingFull } from '@/lib/schemas/listing';
-import postListing, {
+import {
   AuctionFormComplete,
   AuctionFormDate,
   AuctionFormInfo,
@@ -11,15 +10,11 @@ import postListing, {
   auctionFormMediaSchema,
   auctionFormSchemaComplete,
 } from '@/lib/services/postListing';
-import updateAuction from '@/lib/services/updateListing';
-import { wait } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useReward } from 'react-rewards';
 import useAuctionFormStore from '../useAuctionFormStore';
-import { on } from 'events';
 
 type Step = 'info' | 'media' | 'time' | 'summary';
 
@@ -41,13 +36,14 @@ const useMultiStepAuctionForm = ({
 
   const session = useSession();
 
-  const { setStore, getStore, clearStore } = useAuctionFormStore();
+  const { getStore, updateStore, storedData, clearStore } =
+    useAuctionFormStore();
 
   const infoForm = useForm<AuctionFormInfo>({
     resolver: zodResolver(auctionFormInfoSchema),
     defaultValues: {
-      title: listing?.title ?? '',
-      description: listing?.description ?? '',
+      title: listing?.title ?? storedData.title ?? '',
+      description: listing?.description ?? storedData.description ?? '',
     },
   });
 
@@ -55,20 +51,16 @@ const useMultiStepAuctionForm = ({
     resolver: zodResolver(auctionFormMediaSchema),
     defaultValues: {
       images: undefined,
-      imageUrls: listing?.media ?? [],
+      imageUrls: listing?.media ?? storedData.imageUrls ?? [],
     },
   });
 
-  const timeForm = useForm<AuctionFormComplete>({
+  const dateForm = useForm<AuctionFormComplete>({
     resolver: zodResolver(auctionFormDateSchema),
     defaultValues: {
-      date: listing?.endsAt ? new Date(listing.endsAt) : new Date(),
-      time: listing?.endsAt
-        ? new Date(listing.endsAt).toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-          })
-        : '',
+      dateTime: storedData.dateTime
+        ? new Date(storedData.dateTime)
+        : new Date(),
     },
   });
 
@@ -78,55 +70,38 @@ const useMultiStepAuctionForm = ({
 
   const { handleSubmit: handleSubmitInfo } = infoForm;
   const { handleSubmit: handleSubmitMedia } = mediaForm;
-  const { handleSubmit: handleSubmitTime } = timeForm;
+  const { handleSubmit: handleSubmitTime } = dateForm;
   const { handleSubmit: handleSubmitSummary } = summaryForm;
 
   const onSaveStep: SubmitHandler<AuctionFormInfo> = async (data) => {
-    console.log('object');
-    const newState = {
-      ...getStore(),
-      ...data,
-    };
-    setStore(newState);
+    updateStore(data);
     router.push(`?step=${nextStep}`);
   };
 
   const onSaveMediaStep: SubmitHandler<AuctionFormMedia> = async (data) => {
-    const newState = {
-      ...getStore(),
-      ...data,
-    };
-    setStore(newState);
+    updateStore(data);
     router.push(`?step=${nextStep}`);
   };
 
   const onSaveTimeStep: SubmitHandler<AuctionFormDate> = async (data) => {
-    const newState = {
-      ...getStore(),
-      ...data,
-    };
-    setStore(newState);
+    updateStore(data);
     router.push(`?step=${nextStep}`);
   };
 
   const onSaveSummaryStep = async () => {
     const data = getStore();
-    const { title, description, images, imageUrls, date, time } = data;
-
-    const endsAt = new Date(date);
-    const timeArr = time.split(':');
-    endsAt.setHours(Number(timeArr[0]));
-    endsAt.setMinutes(Number(timeArr[1]));
+    const { title, description, images, imageUrls, dateTime } = data;
 
     const auctionData = {
       title,
       description,
       media: images,
-      endsAt: endsAt.toISOString(),
+      endsAt: dateTime,
     };
   };
 
-  const saveStep = async (e) => {
+  // TODO: fix type
+  const saveStep = async (e: any) => {
     e.preventDefault();
     switch (step) {
       case 'info':
@@ -146,7 +121,7 @@ const useMultiStepAuctionForm = ({
     }
   };
 
-  return { infoForm, mediaForm, timeForm, summaryForm, saveStep };
+  return { infoForm, mediaForm, dateForm, summaryForm, saveStep };
 };
 
 export default useMultiStepAuctionForm;
