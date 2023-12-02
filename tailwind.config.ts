@@ -81,6 +81,9 @@ module.exports = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      boxShadow: {
+        dropzone: 'inset 0 0 5px 2px rgba(0, 0, 0, 0.25)',
+      },
       keyframes: {
         'accordion-down': {
           from: { height: 0 },

@@ -15,9 +15,11 @@ import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
 import { NewAuctionFormProps, UploadImage } from '../types';
 import { getCloudinarySignature } from '@/lib/server/actions';
 import { nanoid } from 'nanoid';
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent, useRef } from 'react';
 import NewAuctionImageGallery from '../../NewAuctionImageGallery';
-import StepNavigation from '../StepNavigation';
+import { useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { ArrowUpFromLine } from 'lucide-react';
 
 const MediaStepForm = ({
   mode = 'create',
@@ -38,6 +40,42 @@ const MediaStepForm = ({
   } = mediaForm;
 
   const [images, setImages] = useState<UploadImage[]>([]);
+  const [rejected, setRejected] = useState<UploadImage[]>([]);
+
+  const uploadRef = useRef<HTMLFormElement>(null);
+
+  const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: File[]) => {
+    if (acceptedFiles?.length) {
+      const newImages = Array.from(acceptedFiles).map((file) => ({
+        id: nanoid(),
+        file: file,
+        previewUrl: URL.createObjectURL(file),
+        publicUrl: undefined, // initially undefined, will be updated on upload
+      }));
+
+      setImages((prevImages) => [...prevImages, ...newImages]);
+    }
+
+    if (rejectedFiles?.length) {
+      const newRejected = Array.from(rejectedFiles).map((file) => ({
+        id: nanoid(),
+        file: file,
+        previewUrl: URL.createObjectURL(file),
+        publicUrl: undefined, // initially undefined, will be updated on upload
+      }));
+
+      setRejected((prevRejected) => [...prevRejected, ...newRejected]);
+    }
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    accept: {
+      'image/*': [],
+    },
+    maxSize: 1024 * 1000,
+    maxFiles: 8,
+    onDrop,
+  });
 
   const action = async () => {
     const updatedImages = await Promise.all(
@@ -106,16 +144,19 @@ const MediaStepForm = ({
 
   return (
     <>
-      <form action={action}>
-        <input
-          type='file'
-          name='image'
-          id='image'
-          accept='image/*'
-          onChange={handleChange}
-          multiple
-        />
-        <Button type='submit'>Upload</Button>
+      <form action={action} ref={uploadRef}>
+        <div {...getRootProps()} className='cursor-pointer'>
+          <input {...getInputProps({ name: 'file' })} />
+          <div className='shadow-dropzone flex flex-col items-center justify-center gap-4 rounded-md bg-neutral-700 p-4'>
+            <ArrowUpFromLine />
+            {isDragActive ? (
+              <p>Drop the files here ...</p>
+            ) : (
+              <p>Drag & drop files here, or click to select files</p>
+            )}
+          </div>
+        </div>
+        {/* <Button type='submit'>Upload</Button> */}
       </form>
       <div>
         <NewAuctionImageGallery images={images} setImages={setImages} />
