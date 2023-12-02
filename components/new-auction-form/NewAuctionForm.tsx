@@ -10,6 +10,8 @@ import {
 } from './steps';
 import StepOverview from './StepOverview';
 import { NewAuctionFormProps, Step, validSteps } from './types';
+import StepNavigation from './StepNavigation';
+import { PropsWithChildren } from 'react';
 
 const NewAuctionForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
   const searchParams = useSearchParams();
@@ -19,18 +21,34 @@ const NewAuctionForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
     currentStep = 'info';
   }
 
-  const renderStep = () => {
+  const RenderStep = ({ children }: PropsWithChildren) => {
     switch (currentStep) {
       case 'info':
-        return <InfoStepForm mode={mode} listing={listing} />;
+        return (
+          <InfoStepForm mode={mode} listing={listing}>
+            {children}
+          </InfoStepForm>
+        );
       case 'media':
-        return <MediaStepForm mode={mode} listing={listing} />;
+        return (
+          <MediaStepForm mode={mode} listing={listing}>
+            {children}
+          </MediaStepForm>
+        );
       case 'time':
-        return <DateStepForm mode={mode} listing={listing} />;
+        return (
+          <DateStepForm mode={mode} listing={listing}>
+            {children}
+          </DateStepForm>
+        );
       case 'summary':
-        return <SummaryStepForm />;
+        return <SummaryStepForm> {children} </SummaryStepForm>;
       default:
-        return <InfoStepForm mode={mode} listing={listing} />;
+        return (
+          <InfoStepForm mode={mode} listing={listing}>
+            {children}
+          </InfoStepForm>
+        );
     }
   };
 
@@ -38,7 +56,11 @@ const NewAuctionForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
     <>
       <Card className='flex w-full max-w-xl gap-5 p-4'>
         <StepOverview currentStep={currentStep} />
-        <div className='flex w-full flex-col gap-4'>{renderStep()}</div>
+        <div className='flex w-full flex-col gap-4'>
+          <RenderStep>
+            <StepNavigation />
+          </RenderStep>
+        </div>
       </Card>
       {/* <NewAuctionImageGallery images={images} setValue={setValue} /> */}
     </>

@@ -5,12 +5,13 @@ import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
 import { Label } from '@radix-ui/react-dropdown-menu';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import Debugger from '../../Debugger';
 import useStore from '@/lib/hooks/useStore';
 import Image from '../../Image';
+import StepNavigation from '../StepNavigation';
 
-const SummaryStepForm = () => {
+const SummaryStepForm = ({ children }: PropsWithChildren) => {
   const { summaryForm, saveStep } = useMultiStepAuctionForm({
     mode: 'create',
     listing: null,
@@ -89,14 +90,8 @@ const SummaryStepForm = () => {
             </p>
           </div>
         </div>
-        <div className='flex w-full justify-end gap-4'>
-          <Button variant='outline' type='button'>
-            Back
-          </Button>
-          <Button variant='accent' type='submit'>
-            Submit
-          </Button>
-        </div>
+
+        {children}
       </div>
 
       {/* <Debugger json={JSON.stringify(formState, null, 2)} /> */}

@@ -7,6 +7,7 @@ export type Step = (typeof validSteps)[number];
 export type NewAuctionFormProps = {
   mode: 'create' | 'edit';
   listing: ListingFull | null;
+  children?: React.ReactNode;
 };
 
 export type UploadImage = {

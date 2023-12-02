@@ -17,8 +17,13 @@ import { getCloudinarySignature } from '@/lib/server/actions';
 import { nanoid } from 'nanoid';
 import { useState, useEffect, ChangeEvent } from 'react';
 import NewAuctionImageGallery from '../../NewAuctionImageGallery';
+import StepNavigation from '../StepNavigation';
 
-const MediaStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
+const MediaStepForm = ({
+  mode = 'create',
+  listing,
+  children,
+}: NewAuctionFormProps) => {
   const { mediaForm, saveStep } = useMultiStepAuctionForm({
     mode,
     listing,
@@ -135,18 +140,7 @@ const MediaStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
               );
             }}
           />
-          <div className='flex w-full justify-end gap-4'>
-            <Button variant='outline' type='button'>
-              Cancel
-            </Button>
-            <Button
-              variant='accent'
-              type='submit'
-              onClick={() => console.log(mediaForm.formState)}
-            >
-              Next
-            </Button>
-          </div>
+          {children}
         </form>
       </Form>
     </>

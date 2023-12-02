@@ -16,8 +16,13 @@ import { Label } from '@radix-ui/react-dropdown-menu';
 import dayjs from 'dayjs';
 import { ChangeEvent } from 'react';
 import { Calendar } from '../../ui/calendar';
+import StepNavigation from '../StepNavigation';
 
-const DateStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
+const DateStepForm = ({
+  mode = 'create',
+  listing,
+  children,
+}: NewAuctionFormProps) => {
   const { dateForm, saveStep } = useMultiStepAuctionForm({
     mode,
     listing,
@@ -94,14 +99,7 @@ const DateStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
             );
           }}
         />
-        <div className='flex w-full justify-end gap-4'>
-          <Button variant='outline' type='button'>
-            Back
-          </Button>
-          <Button variant='accent' type='submit'>
-            Next
-          </Button>
-        </div>
+        {children}
       </form>
     </Form>
   );

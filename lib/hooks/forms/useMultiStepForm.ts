@@ -15,6 +15,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import useAuctionFormStore from '../useAuctionFormStore';
+import useAuctionFormStep from '../useAuctionFormStep';
 
 type Step = 'info' | 'media' | 'time' | 'summary';
 
@@ -29,7 +30,6 @@ const useMultiStepAuctionForm = ({
   mode = 'create',
   listing,
   step,
-  nextStep,
 }: Params) => {
   const router = useRouter();
   const { toast } = useToast();
@@ -38,6 +38,8 @@ const useMultiStepAuctionForm = ({
 
   const { getStore, updateStore, storedData, clearStore } =
     useAuctionFormStore();
+
+  const { nextStep, prevStep } = useAuctionFormStep();
 
   const infoForm = useForm<AuctionFormInfo>({
     resolver: zodResolver(auctionFormInfoSchema),
@@ -84,17 +86,17 @@ const useMultiStepAuctionForm = ({
 
   const onSaveStep: SubmitHandler<AuctionFormInfo> = async (data) => {
     updateStore(data);
-    router.push(`?step=${nextStep}`);
+    nextStep(step);
   };
 
   const onSaveMediaStep: SubmitHandler<AuctionFormMedia> = async (data) => {
     updateStore(data);
-    router.push(`?step=${nextStep}`);
+    nextStep(step);
   };
 
   const onSaveTimeStep: SubmitHandler<AuctionFormDate> = async (data) => {
     updateStore(data);
-    router.push(`?step=${nextStep}`);
+    nextStep(step);
   };
 
   const onSaveSummaryStep = async () => {
