@@ -19,13 +19,11 @@ import {
 import React, { Dispatch, SetStateAction } from 'react';
 import { Button } from './ui/button';
 
-import { AuctionFormComplete } from '@/lib/services/postListing';
 import { cn } from '@/lib/utils';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { AnimatePresence, motion } from 'framer-motion';
-import { UseFormSetValue } from 'react-hook-form';
-import { UploadImage } from './MultistepForm';
+import { UploadImage } from './new-auction-form/types';
 
 type ImageGalleryProps = {
   images: UploadImage[];
@@ -73,7 +71,7 @@ const NewAuctionImageGallery = ({ images, setImages }: ImageGalleryProps) => {
           onDragEnd={handleDragEnd}
         >
           <SortableContext items={images} strategy={rectSortingStrategy}>
-            <div className='flex h-fit w-full max-w-lg flex-wrap gap-4 pt-8 md:max-w-xl'>
+            <div className='flex h-fit w-full flex-wrap gap-2'>
               <AnimatePresence>
                 {images.map((image, index) => (
                   <SortableItem
@@ -146,7 +144,7 @@ const SortableItem = ({
         {...attributes}
         {...listeners}
         className={cn(
-          'relative aspect-square max-w-[150px] overflow-hidden rounded-md border transition-shadow lg:max-w-[250px]',
+          'relative aspect-square max-w-[100px] overflow-hidden rounded-md border transition-shadow ',
           isDragging ? 'border border-accent shadow-md' : 'shadow-none',
         )}
       >

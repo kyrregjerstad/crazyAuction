@@ -1,4 +1,4 @@
-import MultiStepForm from '@/components/MultistepForm';
+import { NewAuctionForm } from '@/components/new-auction-form';
 import AuctionFormComplete from '@/components/NewAuctionForm';
 import { ListingFull } from '@/lib/schemas/listing';
 import { getSingleListing } from '@/lib/services/getSingleListing';
@@ -49,7 +49,7 @@ export default async function NewAuctionPage({ searchParams }: Props) {
           Create a New Auction
         </h1>
 
-        <MultiStepForm mode={mode} listing={listing} />
+        <NewAuctionForm mode={mode} listing={listing} />
         {/* <AuctionForm mode={mode} listing={listing} /> */}
       </div>
     </>

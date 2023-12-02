@@ -66,6 +66,15 @@ const useMultiStepAuctionForm = ({
 
   const summaryForm = useForm<AuctionFormComplete>({
     resolver: zodResolver(auctionFormSchemaComplete),
+    defaultValues: {
+      title: storedData.title ?? '',
+      description: storedData.description ?? '',
+      images: storedData.images ?? [],
+      imageUrls: storedData.imageUrls ?? [],
+      dateTime: storedData.dateTime
+        ? new Date(storedData.dateTime)
+        : new Date(),
+    },
   });
 
   const { handleSubmit: handleSubmitInfo } = infoForm;

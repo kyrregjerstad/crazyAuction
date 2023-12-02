@@ -29,14 +29,4 @@ const useAuctionFormStore = create<Params>()(
   ),
 );
 
-// const useAuctionFormStore = create<Params>((set, get) => ({
-//   formData: initialState,
-//   updateStore: (partialData) =>
-//     set((state) => ({
-//       formData: { ...state.formData, ...partialData },
-//     })),
-//   getStore: () => get().formData,
-//   clearStore: () => set({ formData: initialState }),
-// }));
-
 export default useAuctionFormStore;
