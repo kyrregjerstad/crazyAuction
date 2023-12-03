@@ -1,25 +1,25 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 
+import Sparkles from '@/components/Sparkles';
 import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
-import { NewAuctionFormProps, UploadImage } from '../types';
+import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
 import { getCloudinarySignature } from '@/lib/server/actions';
-import { nanoid } from 'nanoid';
-import { useState, useEffect, ChangeEvent, useRef } from 'react';
-import NewAuctionImageGallery from '../../NewAuctionImageGallery';
-import { useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
 import { ArrowUpFromLine } from 'lucide-react';
+import { nanoid } from 'nanoid';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
+import NewAuctionImageGallery from '../../NewAuctionImageGallery';
+import { NewAuctionFormProps, UploadImage } from '../types';
+import SubmitBtn from './SubmitBtn';
+import { useAuctionFormContext } from '../AuctionFormContext';
 
 const MediaStepForm = ({
   mode = 'create',
@@ -39,40 +39,51 @@ const MediaStepForm = ({
     getValues,
   } = mediaForm;
 
+  const { allImagesUploaded, setAllImagesUploaded } = useAuctionFormContext();
+
   const [images, setImages] = useState<UploadImage[]>([]);
-  const [rejected, setRejected] = useState<UploadImage[]>([]);
+  const [rejected, setRejected] = useState<FileRejection[]>([]);
+  // const [allImagesUploaded, setAllImagesUploaded] = useState(false);
 
-  const uploadRef = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    const publicUrls = images
+      .filter((image) => image.publicUrl !== undefined)
+      .map((image) => image.publicUrl!);
 
-  const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: File[]) => {
-    if (acceptedFiles?.length) {
-      const newImages = Array.from(acceptedFiles).map((file) => ({
-        id: nanoid(),
-        file: file,
-        previewUrl: URL.createObjectURL(file),
-        publicUrl: undefined, // initially undefined, will be updated on upload
-      }));
+    setValue('imageUrls', publicUrls);
+  }, [images, setValue]);
 
-      setImages((prevImages) => [...prevImages, ...newImages]);
-    }
+  useEffect(() => {
+    setAllImagesUploaded(
+      images.every((image) => image.publicUrl !== undefined),
+    );
+  }, [images, setAllImagesUploaded]);
 
-    if (rejectedFiles?.length) {
-      const newRejected = Array.from(rejectedFiles).map((file) => ({
-        id: nanoid(),
-        file: file,
-        previewUrl: URL.createObjectURL(file),
-        publicUrl: undefined, // initially undefined, will be updated on upload
-      }));
+  const onDrop = useCallback(
+    (
+      acceptedFiles: File[],
+      _fileRejections: FileRejection[],
+      _event: DropEvent,
+    ) => {
+      if (acceptedFiles?.length) {
+        const newImages = Array.from(acceptedFiles).map((file) => ({
+          id: nanoid(),
+          file: file,
+          previewUrl: URL.createObjectURL(file),
+          publicUrl: undefined, // initially undefined, will be updated on upload
+        }));
 
-      setRejected((prevRejected) => [...prevRejected, ...newRejected]);
-    }
-  }, []);
+        setImages((prevImages) => [...prevImages, ...newImages]);
+      }
+    },
+    [],
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
       'image/*': [],
     },
-    maxSize: 1024 * 1000,
+    maxSize: 1024 * 1000, // 1MB
     maxFiles: 8,
     onDrop,
   });
@@ -119,14 +130,6 @@ const MediaStepForm = ({
     setImages(updatedImages);
   };
 
-  useEffect(() => {
-    const publicUrls = images
-      .filter((image) => image.publicUrl !== undefined)
-      .map((image) => image.publicUrl!);
-
-    setValue('imageUrls', publicUrls);
-  }, [images, setValue]);
-
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newFiles = event.target.files;
     if (!newFiles) return;
@@ -138,29 +141,44 @@ const MediaStepForm = ({
       publicUrl: undefined, // initially undefined, will be updated on upload
     }));
 
-    // Combine the new images with the existing ones
     setImages((prevImages) => [...prevImages, ...newImages]);
   };
 
   return (
     <>
-      <form action={action} ref={uploadRef}>
+      <form action={action} className='flex flex-col gap-4'>
         <div {...getRootProps()} className='cursor-pointer'>
           <input {...getInputProps({ name: 'file' })} />
-          <div className='shadow-dropzone flex flex-col items-center justify-center gap-4 rounded-md bg-neutral-700 p-4'>
-            <ArrowUpFromLine />
-            {isDragActive ? (
-              <p>Drop the files here ...</p>
+          <div className='relative flex flex-col items-center justify-center gap-4 rounded-md bg-neutral-700 p-4 shadow-dropzone'>
+            {images.length === 0 ? (
+              <>
+                <ArrowUpFromLine />
+                <p>Drag & drop files here, or click to select files</p>
+                <p className='text-center text-sm text-neutral-400'>
+                  Auctions with images are more likely to sell. Add up to 8
+                  images
+                </p>
+              </>
             ) : (
-              <p>Drag & drop files here, or click to select files</p>
+              <p className='text-sm text-neutral-500'>
+                {images.length} images selected
+              </p>
+            )}
+            <NewAuctionImageGallery images={images} setImages={setImages} />
+            {isDragActive && (
+              <div className='absolute bottom-0 top-0 z-50 flex w-full items-center justify-center bg-background bg-opacity-60 text-center text-neutral-100 backdrop-blur-sm'>
+                <Sparkles animate>
+                  <p className='animate-bounce'>Drop it like it&apos;s hot</p>
+                </Sparkles>
+              </div>
             )}
           </div>
         </div>
-        {/* <Button type='submit'>Upload</Button> */}
+        <div className='flex w-full justify-end'>
+          <SubmitBtn disabled={allImagesUploaded} />
+        </div>
       </form>
-      <div>
-        <NewAuctionImageGallery images={images} setImages={setImages} />
-      </div>
+      <div></div>
       <Form {...mediaForm}>
         <form
           className='flex w-full max-w-lg flex-col gap-5'

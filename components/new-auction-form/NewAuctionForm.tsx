@@ -1,17 +1,18 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
+import { PropsWithChildren } from 'react';
 import { Card } from '../ui/card';
+import { AuctionFormContextProvider } from './AuctionFormContext';
+import StepNavigation from './StepNavigation';
+import StepOverview from './StepOverview';
 import {
   DateStepForm,
   InfoStepForm,
   MediaStepForm,
   SummaryStepForm,
 } from './steps';
-import StepOverview from './StepOverview';
 import { NewAuctionFormProps, Step, validSteps } from './types';
-import StepNavigation from './StepNavigation';
-import { PropsWithChildren } from 'react';
 
 const NewAuctionForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
   const searchParams = useSearchParams();
@@ -53,7 +54,7 @@ const NewAuctionForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
   };
 
   return (
-    <>
+    <AuctionFormContextProvider>
       <Card className='flex w-full max-w-xl gap-5 p-4'>
         <StepOverview currentStep={currentStep} />
         <div className='flex w-full flex-col gap-4'>
@@ -62,8 +63,7 @@ const NewAuctionForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
           </RenderStep>
         </div>
       </Card>
-      {/* <NewAuctionImageGallery images={images} setValue={setValue} /> */}
-    </>
+    </AuctionFormContextProvider>
   );
 };
 

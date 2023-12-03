@@ -58,13 +58,7 @@ const NewAuctionImageGallery = ({ images, setImages }: ImageGalleryProps) => {
 
   return (
     <>
-      {images.length === 0 ? (
-        <div className='flex h-full w-full max-w-lg flex-wrap items-center justify-center gap-4 pt-8 md:max-w-xl'>
-          <p className='text-sm text-neutral-500'>
-            Auctions with images are more likely to sell. Add up to 8 images
-          </p>
-        </div>
-      ) : (
+      {images.length === 0 ? null : (
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -179,7 +173,10 @@ const RemoveImageButton = ({
       'absolute right-0 top-0 z-50 p-1 opacity-100 transition-opacity duration-300',
       isSorting && 'opacity-0',
     )}
-    onClick={() => handleRemoveImage(image)}
+    onClick={(e) => {
+      e.stopPropagation(); // to prevent the upload dialog from opening
+      handleRemoveImage(image);
+    }}
   >
     <DeleteIcon className='h-4 w-4' />
   </Button>
