@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import useAuctionFormStep from '@/lib/hooks/useAuctionFormStep';
 import { Card } from '../ui/card';
 import StepOverview from './StepOverview';
 import {
@@ -9,15 +9,11 @@ import {
   MediaStepForm,
   SummaryStepForm,
 } from './steps';
-import { NewAuctionFormProps, Step, validSteps } from './types';
+import { NewAuctionFormProps } from './types';
 
 const NewAuctionForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
-  const searchParams = useSearchParams();
-  let currentStep = searchParams.get('step') as Step | undefined;
-
-  if (!currentStep || !validSteps.includes(currentStep)) {
-    currentStep = 'info';
-  }
+  const { getCurrentStep } = useAuctionFormStep();
+  const currentStep = getCurrentStep();
 
   const RenderStep = () => {
     switch (currentStep) {
@@ -35,7 +31,7 @@ const NewAuctionForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
   };
 
   return (
-    <Card className='flex w-full max-w-xl gap-5 p-4'>
+    <Card className='flex w-full max-w-2xl gap-5 p-4'>
       <StepOverview currentStep={currentStep} />
       <div className='flex w-full flex-col gap-4'>
         <RenderStep />
