@@ -13,7 +13,7 @@ const fetchWithZod = createZodFetcher();
 
 export const auctionFormInfoSchema = z.object({
   title: z.string().min(1).max(280),
-  description: z.string().min(1).max(280).optional(),
+  description: z.string().max(280).optional(),
   tags: z.string().optional(),
 });
 

@@ -1,22 +1,17 @@
 'use client';
-import { Button } from '@/components/ui/button';
 
 import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
-import { Label } from '@radix-ui/react-dropdown-menu';
-import dayjs from 'dayjs';
-import { PropsWithChildren, useState } from 'react';
-import Debugger from '../../Debugger';
 import useStore from '@/lib/hooks/useStore';
+import { Label } from '@radix-ui/react-dropdown-menu';
 import Image from '../../Image';
-import StepNavigation from '../StepNavigation';
+import StepNavigation from './StepNavigation';
 
-const SummaryStepForm = ({ children }: PropsWithChildren) => {
-  const { summaryForm, saveStep } = useMultiStepAuctionForm({
+const SummaryStepForm = () => {
+  const { summary, saveStep } = useMultiStepAuctionForm({
     mode: 'create',
     listing: null,
     step: 'summary',
-    nextStep: 'summary',
   });
 
   const auctionFormData = useStore(useAuctionFormStore, (state) =>
@@ -30,14 +25,7 @@ const SummaryStepForm = ({ children }: PropsWithChildren) => {
     formState: { isDirty, isSubmitting, isSubmitSuccessful },
     setValue,
     getValues,
-  } = summaryForm;
-
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-
-  const today = dayjs();
-  const oneYearFromNow = today.add(1, 'year');
-  const startOfDay = today.startOf('day');
-  const endOfDayOneYearFromNow = oneYearFromNow.endOf('day');
+  } = summary;
 
   return (
     <div>
@@ -58,7 +46,7 @@ const SummaryStepForm = ({ children }: PropsWithChildren) => {
           <div className='flex flex-col gap-2'>
             <Label>Images</Label>
             <div className='flex flex-col gap-2'>
-              {formState?.imageUrls.length > 0 && (
+              {formState?.imageUrls && formState.imageUrls.length > 0 && (
                 <>
                   <div className='flex max-w-full flex-wrap gap-1'>
                     {formState?.imageUrls.map((image) => (
@@ -91,7 +79,7 @@ const SummaryStepForm = ({ children }: PropsWithChildren) => {
           </div>
         </div>
 
-        {children}
+        <StepNavigation />
       </div>
 
       {/* <Debugger json={JSON.stringify(formState, null, 2)} /> */}

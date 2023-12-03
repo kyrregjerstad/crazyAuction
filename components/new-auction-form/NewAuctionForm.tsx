@@ -1,10 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { PropsWithChildren } from 'react';
 import { Card } from '../ui/card';
-import { AuctionFormContextProvider } from './AuctionFormContext';
-import StepNavigation from './StepNavigation';
 import StepOverview from './StepOverview';
 import {
   DateStepForm,
@@ -22,48 +19,28 @@ const NewAuctionForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
     currentStep = 'info';
   }
 
-  const RenderStep = ({ children }: PropsWithChildren) => {
+  const RenderStep = () => {
     switch (currentStep) {
       case 'info':
-        return (
-          <InfoStepForm mode={mode} listing={listing}>
-            {children}
-          </InfoStepForm>
-        );
+        return <InfoStepForm mode={mode} listing={listing} />;
       case 'media':
-        return (
-          <MediaStepForm mode={mode} listing={listing}>
-            {children}
-          </MediaStepForm>
-        );
+        return <MediaStepForm mode={mode} listing={listing} />;
       case 'time':
-        return (
-          <DateStepForm mode={mode} listing={listing}>
-            {children}
-          </DateStepForm>
-        );
+        return <DateStepForm mode={mode} listing={listing} />;
       case 'summary':
-        return <SummaryStepForm> {children} </SummaryStepForm>;
+        return <SummaryStepForm />;
       default:
-        return (
-          <InfoStepForm mode={mode} listing={listing}>
-            {children}
-          </InfoStepForm>
-        );
+        return <InfoStepForm mode={mode} listing={listing} />;
     }
   };
 
   return (
-    <AuctionFormContextProvider>
-      <Card className='flex w-full max-w-xl gap-5 p-4'>
-        <StepOverview currentStep={currentStep} />
-        <div className='flex w-full flex-col gap-4'>
-          <RenderStep>
-            <StepNavigation />
-          </RenderStep>
-        </div>
-      </Card>
-    </AuctionFormContextProvider>
+    <Card className='flex w-full max-w-xl gap-5 p-4'>
+      <StepOverview currentStep={currentStep} />
+      <div className='flex w-full flex-col gap-4'>
+        <RenderStep />
+      </div>
+    </Card>
   );
 };
 

@@ -19,31 +19,23 @@ import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
 import NewAuctionImageGallery from '../../NewAuctionImageGallery';
 import { NewAuctionFormProps, UploadImage } from '../types';
 import SubmitBtn from './SubmitBtn';
-import { useAuctionFormContext } from '../AuctionFormContext';
+import StepNavigation from './StepNavigation';
 
-const MediaStepForm = ({
-  mode = 'create',
-  listing,
-  children,
-}: NewAuctionFormProps) => {
-  const { mediaForm, saveStep } = useMultiStepAuctionForm({
+const MediaStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
+  const { media, saveStep } = useMultiStepAuctionForm({
     mode,
     listing,
     step: 'media',
-    nextStep: 'time',
   });
   const {
     control,
     formState: { isDirty, isSubmitting, isSubmitSuccessful },
     setValue,
-    getValues,
-  } = mediaForm;
-
-  const { allImagesUploaded, setAllImagesUploaded } = useAuctionFormContext();
+  } = media;
 
   const [images, setImages] = useState<UploadImage[]>([]);
   const [rejected, setRejected] = useState<FileRejection[]>([]);
-  // const [allImagesUploaded, setAllImagesUploaded] = useState(false);
+  const [allImagesUploaded, setAllImagesUploaded] = useState(false);
 
   useEffect(() => {
     const publicUrls = images
@@ -130,20 +122,6 @@ const MediaStepForm = ({
     setImages(updatedImages);
   };
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newFiles = event.target.files;
-    if (!newFiles) return;
-
-    const newImages = Array.from(newFiles).map((file) => ({
-      id: nanoid(),
-      file: file,
-      previewUrl: URL.createObjectURL(file),
-      publicUrl: undefined, // initially undefined, will be updated on upload
-    }));
-
-    setImages((prevImages) => [...prevImages, ...newImages]);
-  };
-
   return (
     <>
       <form action={action} className='flex flex-col gap-4'>
@@ -179,7 +157,7 @@ const MediaStepForm = ({
         </div>
       </form>
       <div></div>
-      <Form {...mediaForm}>
+      <Form {...media}>
         <form
           className='flex w-full max-w-lg flex-col gap-5'
           onSubmit={saveStep}
@@ -199,7 +177,7 @@ const MediaStepForm = ({
               );
             }}
           />
-          {children}
+          <StepNavigation disabled={!allImagesUploaded} />
         </form>
       </Form>
     </>

@@ -13,28 +13,22 @@ import { Textarea } from '@/components/ui/textarea';
 
 import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
 import { NewAuctionFormProps } from '../types';
-import StepNavigation from '../StepNavigation';
+import StepNavigation from './StepNavigation';
 
-const InfoStepForm = ({
-  mode = 'create',
-  listing,
-  children,
-}: NewAuctionFormProps) => {
-  const { infoForm, saveStep } = useMultiStepAuctionForm({
+const InfoStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
+  const { info, saveStep } = useMultiStepAuctionForm({
     mode,
     listing,
     step: 'info',
-    nextStep: 'media',
   });
+
   const {
     control,
     formState: { isDirty, isSubmitting, isSubmitSuccessful },
-    setValue,
-    getValues,
-  } = infoForm;
+  } = info;
 
   return (
-    <Form {...infoForm}>
+    <Form {...info}>
       <form className='flex w-full max-w-lg flex-col gap-5' onSubmit={saveStep}>
         <FormField
           control={control}
@@ -88,7 +82,7 @@ const InfoStepForm = ({
             </FormItem>
           )}
         />
-        {children}
+        <StepNavigation disabled={!isDirty || isSubmitting} />
       </form>
     </Form>
   );

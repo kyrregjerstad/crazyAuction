@@ -1,11 +1,11 @@
 import { Button } from '@/components/ui/button';
 import useAuctionFormStep from '@/lib/hooks/useAuctionFormStep';
-import React from 'react';
-import { useAuctionFormContext } from './AuctionFormContext';
 
-const StepNavigation = () => {
+type Props = {
+  disabled?: boolean;
+};
+const StepNavigation = ({ disabled }: Props) => {
   const { nextStep, prevStep, getCurrentStep } = useAuctionFormStep();
-  const { allImagesUploaded } = useAuctionFormContext();
 
   const currentStep = getCurrentStep();
 
@@ -14,12 +14,7 @@ const StepNavigation = () => {
       <Button variant='outline' type='button' onClick={prevStep}>
         {currentStep === 'info' ? 'Cancel' : 'Back'}
       </Button>
-      <Button
-        variant='accent'
-        type='submit'
-        onClick={nextStep}
-        disabled={currentStep === 'media' && !allImagesUploaded}
-      >
+      <Button variant='accent' type='submit' disabled={disabled}>
         {currentStep === 'summary' ? 'Submit' : 'Next'}
       </Button>
     </div>

@@ -1,4 +1,3 @@
-import { useToast } from '@/components/ui/use-toast';
 import { ListingFull } from '@/lib/schemas/listing';
 import {
   AuctionFormComplete,
@@ -11,128 +10,100 @@ import {
   auctionFormSchemaComplete,
 } from '@/lib/services/postListing';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import useAuctionFormStore from '../useAuctionFormStore';
+import {
+  DefaultValues,
+  FieldValues,
+  SubmitHandler,
+  UseFormReturn,
+  useForm,
+} from 'react-hook-form';
 import useAuctionFormStep from '../useAuctionFormStep';
+import useAuctionFormStore from '../useAuctionFormStore';
+import { ZodSchema } from 'zod';
+import { FormEvent, use } from 'react';
 
-type Step = 'info' | 'media' | 'time' | 'summary';
+type Step = 'info' | 'media' | 'dateTime' | 'summary';
+
+const useInitializeForm = <T extends FieldValues>(
+  schema: ZodSchema<T>,
+  defaultValues?: DefaultValues<T>,
+): UseFormReturn<T> => {
+  return useForm<T>({
+    resolver: zodResolver(schema),
+    defaultValues,
+  });
+};
 
 type Params = {
   mode: 'create' | 'edit';
   listing: ListingFull | null;
   step: Step;
-  nextStep: Step;
 };
-
 const useMultiStepAuctionForm = ({
   mode = 'create',
   listing,
   step,
 }: Params) => {
-  const router = useRouter();
-  const { toast } = useToast();
-
-  const session = useSession();
-
   const { getStore, updateStore, storedData, clearStore } =
     useAuctionFormStore();
 
   const { nextStep, prevStep } = useAuctionFormStep();
 
-  const infoForm = useForm<AuctionFormInfo>({
-    resolver: zodResolver(auctionFormInfoSchema),
-    defaultValues: {
+  const forms = {
+    info: useInitializeForm<AuctionFormInfo>(auctionFormInfoSchema, {
       title: listing?.title ?? storedData.title ?? '',
       description: listing?.description ?? storedData.description ?? '',
-    },
-  });
-
-  const mediaForm = useForm<AuctionFormComplete>({
-    resolver: zodResolver(auctionFormMediaSchema),
-    defaultValues: {
-      images: undefined,
-      imageUrls: listing?.media ?? storedData.imageUrls ?? [],
-    },
-  });
-
-  const dateForm = useForm<AuctionFormComplete>({
-    resolver: zodResolver(auctionFormDateSchema),
-    defaultValues: {
-      dateTime: storedData.dateTime
-        ? new Date(storedData.dateTime)
-        : new Date(),
-    },
-  });
-
-  const summaryForm = useForm<AuctionFormComplete>({
-    resolver: zodResolver(auctionFormSchemaComplete),
-    defaultValues: {
-      title: storedData.title ?? '',
-      description: storedData.description ?? '',
+    }),
+    media: useInitializeForm<AuctionFormMedia>(auctionFormMediaSchema, {
       images: storedData.images ?? [],
       imageUrls: storedData.imageUrls ?? [],
-      dateTime: storedData.dateTime
-        ? new Date(storedData.dateTime)
-        : new Date(),
-    },
-  });
-
-  const { handleSubmit: handleSubmitInfo } = infoForm;
-  const { handleSubmit: handleSubmitMedia } = mediaForm;
-  const { handleSubmit: handleSubmitTime } = dateForm;
-  const { handleSubmit: handleSubmitSummary } = summaryForm;
-
-  const onSaveStep: SubmitHandler<AuctionFormInfo> = async (data) => {
-    updateStore(data);
-    nextStep(step);
+    }),
+    dateTime: useInitializeForm<AuctionFormDate>(auctionFormDateSchema, {
+      dateTime: storedData.dateTime ?? undefined,
+    }),
+    summary: useInitializeForm<AuctionFormComplete>(auctionFormSchemaComplete, {
+      title: listing?.title ?? storedData.title ?? '',
+      description: listing?.description ?? storedData.description ?? '',
+      images: storedData.images ?? [],
+      imageUrls: storedData.imageUrls ?? [],
+      dateTime: storedData.dateTime ?? undefined,
+    }),
   };
 
-  const onSaveMediaStep: SubmitHandler<AuctionFormMedia> = async (data) => {
+  const onSaveStep: SubmitHandler<any> = async (data) => {
     updateStore(data);
-    nextStep(step);
-  };
-
-  const onSaveTimeStep: SubmitHandler<AuctionFormDate> = async (data) => {
-    updateStore(data);
-    nextStep(step);
+    nextStep();
   };
 
   const onSaveSummaryStep = async () => {
     const data = getStore();
-    const { title, description, images, imageUrls, dateTime } = data;
+    const { title, description, imageUrls, dateTime } = data;
 
     const auctionData = {
       title,
       description,
-      media: images,
+      media: imageUrls,
       endsAt: dateTime,
     };
+    clearStore();
   };
 
-  // TODO: fix type
-  const saveStep = async (e: any) => {
+  const formHandlers = {
+    info: forms.info.handleSubmit(onSaveStep),
+    media: forms.media.handleSubmit(onSaveStep),
+    dateTime: forms.dateTime.handleSubmit(onSaveStep),
+    summary: forms.summary.handleSubmit(onSaveSummaryStep),
+  };
+
+  const saveStep = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    switch (step) {
-      case 'info':
-        await handleSubmitInfo(onSaveStep)();
-        break;
-      case 'media':
-        await handleSubmitMedia(onSaveMediaStep)();
-        break;
-      case 'time':
-        await handleSubmitTime(onSaveTimeStep)();
-        break;
-      case 'summary':
-        await handleSubmitSummary(onSaveSummaryStep)();
-        break;
-      default:
-        break;
+    const handleFormSubmit = formHandlers[step];
+    if (handleFormSubmit) {
+      await handleFormSubmit();
     }
   };
 
-  return { infoForm, mediaForm, dateForm, summaryForm, saveStep };
+  return { ...forms, saveStep };
 };
 
 export default useMultiStepAuctionForm;

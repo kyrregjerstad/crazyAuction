@@ -16,27 +16,18 @@ import { Label } from '@radix-ui/react-dropdown-menu';
 import dayjs from 'dayjs';
 import { ChangeEvent } from 'react';
 import { Calendar } from '../../ui/calendar';
-import StepNavigation from '../StepNavigation';
+import StepNavigation from './StepNavigation';
 
-const DateStepForm = ({
-  mode = 'create',
-  listing,
-  children,
-}: NewAuctionFormProps) => {
-  const { dateForm, saveStep } = useMultiStepAuctionForm({
+const DateStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
+  const { dateTime, saveStep } = useMultiStepAuctionForm({
     mode,
     listing,
-    step: 'time',
-    nextStep: 'summary',
+    step: 'dateTime',
   });
   const {
     control,
     formState: { isDirty, isSubmitting, isSubmitSuccessful },
-    getFieldState,
-    watch,
-    setValue,
-    getValues,
-  } = dateForm;
+  } = dateTime;
 
   const today = dayjs();
   const oneYearFromNow = today.add(1, 'year');
@@ -44,7 +35,7 @@ const DateStepForm = ({
   const endOfDayOneYearFromNow = oneYearFromNow.endOf('day');
 
   return (
-    <Form {...dateForm}>
+    <Form {...dateTime}>
       <form className='flex w-full max-w-lg flex-col gap-5' onSubmit={saveStep}>
         <FormField
           control={control}
@@ -52,9 +43,10 @@ const DateStepForm = ({
           render={({ field }) => {
             const handleDateChange = (selectedDate: Date | undefined) => {
               if (selectedDate) {
-                const currentTime = new Date(field.value);
+                const currentTime = new Date(field.value || Date.now());
                 const hours = currentTime.getHours();
                 const minutes = currentTime.getMinutes();
+                console.log(currentTime);
 
                 selectedDate.setHours(hours, minutes);
                 field.onChange(selectedDate);
@@ -99,7 +91,7 @@ const DateStepForm = ({
             );
           }}
         />
-        {children}
+        <StepNavigation />
       </form>
     </Form>
   );
