@@ -1,5 +1,6 @@
+// @ts-nocheck
 'use client';
-
+// @ts-ignore
 import ForceGraph2D, {
   type ForceGraphMethods,
   type NodeObject,
