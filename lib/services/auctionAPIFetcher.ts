@@ -19,16 +19,20 @@ type BaseParams<TData> = {
 
 type Methods = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
-type RequestParams<TData, TMethod extends Methods> = BaseParams<TData> & {
-  method: TMethod;
-  body?: TMethod extends 'GET' | 'DELETE' ? never : any;
+type RequestParams<
+  TData,
+  TMethod extends Methods = 'GET',
+> = BaseParams<TData> & {
+  method?: TMethod;
+  body?: TMethod extends 'POST' | 'PUT' ? any : never;
   queryParams?: TMethod extends 'GET' ? Partial<QueryParams> : never;
 };
 
-async function auctionAPIFetcher<TData, TMethod extends Methods>(
+async function auctionAPIFetcher<TData, TMethod extends Methods = 'GET'>(
   params: RequestParams<TData, TMethod>,
 ): Promise<TData> {
-  const { endpoint, schema, jwt, queryParams, method, body } = params;
+  const { endpoint, schema, jwt, queryParams, body } = params;
+  const method = params.method || 'GET';
 
   const url = new URL(API_BASE_URL + endpoint);
 

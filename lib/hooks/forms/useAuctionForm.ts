@@ -33,7 +33,6 @@ const useAuctionForm = ({ mode = 'create', listing }: Params) => {
     defaultValues: {
       title: listing?.title ?? '',
       description: listing?.description ?? '',
-      images: undefined,
       imageUrls: listing?.media ?? [],
       tags: listing?.tags.join(', ') ?? '',
       dateTime: listing?.endsAt ? new Date(listing.endsAt) : new Date(),
@@ -42,11 +41,10 @@ const useAuctionForm = ({ mode = 'create', listing }: Params) => {
 
   const { handleSubmit } = form;
 
-  const onCreate: SubmitHandler<AuctionFormComplete> = async (data) => {
+  const onCreate: SubmitHandler<AuctionFormComplete> = async (formData) => {
     try {
       const res = await postListing({
-        formData: data,
-        jwt: session.data!.user.accessToken,
+        formData,
       });
 
       if (!res) throw new Error('Something went wrong');
@@ -66,10 +64,10 @@ const useAuctionForm = ({ mode = 'create', listing }: Params) => {
     }
   };
 
-  const onEdit: SubmitHandler<AuctionFormComplete> = async (data) => {
+  const onEdit: SubmitHandler<AuctionFormComplete> = async (formData) => {
     try {
       const res = await updateAuction({
-        formData: data,
+        formData,
         id: listing!.id,
         jwt: session.data!.user.accessToken,
       });

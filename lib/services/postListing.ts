@@ -66,6 +66,7 @@ const postListing = async ({ formData }: Params) => {
     const res = await auctionAPIFetcher({
       endpoint: `/listings`,
       schema: singleListingSchema,
+      method: 'POST',
       jwt,
       body: transformedFormData,
     });

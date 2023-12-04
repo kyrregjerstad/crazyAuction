@@ -7,7 +7,7 @@ const useUploadImage = () => {
   const [imagesUploading, setImagesUploading] = useState(false);
 
   type HandleUploadParams = {
-    field: ControllerRenderProps<AuctionFormComplete, 'images'>;
+    field: ControllerRenderProps<AuctionFormComplete, 'imageUrls'>;
   };
 
   const handleUploadImage = async ({ field }: HandleUploadParams) => {
@@ -40,7 +40,7 @@ const useUploadImage = () => {
 
   type HandleSelectImageParams = {
     event: React.ChangeEvent<HTMLInputElement>;
-    field: ControllerRenderProps<AuctionFormComplete, 'images'>;
+    field: ControllerRenderProps<AuctionFormComplete, 'imageUrls'>;
     images: string[];
   };
 
