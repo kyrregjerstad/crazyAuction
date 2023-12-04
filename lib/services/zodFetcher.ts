@@ -2,15 +2,13 @@
 based on https://github.com/mattpocock/zod-fetch
 */
 
-export type AnyFetcher = (...args: any[]) => any;
-
 export type Schema<TData> = {
   parse: (data: unknown) => TData;
 };
 
-export type ZodFetcher<TFetcher extends AnyFetcher> = <TData>(
+export type ZodFetcher = <TData>(
   schema: Schema<TData>,
-  ...args: Parameters<TFetcher>
+  ...args: Parameters<typeof fetch>
 ) => Promise<TData>;
 
 const defaultFetcher = async (...args: Parameters<typeof fetch>) => {
@@ -28,11 +26,12 @@ const defaultFetcher = async (...args: Parameters<typeof fetch>) => {
   return response.json();
 };
 
-export function createZodFetcher(
-  fetcher: AnyFetcher = defaultFetcher,
-): ZodFetcher<any> {
-  return async (schema, ...args) => {
-    const response = await fetcher(...args);
+export const createZodFetcher = (): ZodFetcher => {
+  return async <TData>(
+    schema: Schema<TData>,
+    ...args: Parameters<typeof fetch>
+  ): Promise<TData> => {
+    const response = await defaultFetcher(...args);
     return schema.parse(response);
   };
-}
+};

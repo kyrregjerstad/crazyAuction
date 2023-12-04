@@ -1,6 +1,7 @@
 import { API_PROFILES_URL } from '@/lib/constants';
 import { createZodFetcher } from 'zod-fetch';
 import { singleUserSchema } from '../schemas/user';
+import auctionAPIFetcher from './auctionAPIFetcher';
 
 const fetchWithZod = createZodFetcher();
 
@@ -15,20 +16,20 @@ const updateAvatarSchema = singleUserSchema.omit({
 });
 
 export const updateAvatar = async ({ avatar, name, jwt }: Params) => {
-  const url = `${API_PROFILES_URL}/${name}/media`;
-
-  const options: RequestInit = {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${jwt}`,
-    },
-    body: JSON.stringify({ avatar }),
-  };
-
   try {
-    return await fetchWithZod(updateAvatarSchema, url, options);
+    const res = await auctionAPIFetcher({
+      endpoint: `/profiles/${name}/media`,
+      schema: updateAvatarSchema,
+      jwt,
+      method: 'PUT',
+      body: {
+        avatar,
+      },
+    });
+
+    return res;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };

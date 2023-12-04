@@ -1,17 +1,10 @@
-import { API_AUCTION_LISTINGS_URL } from '@/lib/constants';
-import { singleListingSchema } from '@/lib/schemas/listing';
-import { createZodFetcher } from 'zod-fetch';
-import { z } from 'zod';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import { getServerSession } from 'next-auth';
 import authOptions from '@/app/auth/authOptions';
-
-dayjs.extend(utc);
+import { singleListingSchema } from '@/lib/schemas/listing';
+import { getServerSession } from 'next-auth';
+import { z } from 'zod';
+import auctionAPIFetcher from './auctionAPIFetcher';
 
 const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
-
-const fetchWithZod = createZodFetcher();
 
 export const auctionFormInfoSchema = z.object({
   title: z.string().min(3).max(280),
@@ -57,13 +50,9 @@ const postListing = async ({ formData }: Params) => {
   const jwt = await getJWT();
   const transformedMediaLinks = formData.imageUrls.map(
     (url) => `${workerUrl}/cache/${url}`,
-  ); // add cloud_flare worker url to cache the image, in order to reduce cloud_inary costs
+  ); // add cloudFlare worker url to cache the image, in order to reduce cloudinary costs
 
   const tagsArr = formData.tags?.split(' ').map((tag) => tag.trim()) || [];
-
-  const headers = new Headers();
-  headers.append('Content-Type', 'application/json');
-  headers.append('Authorization', `Bearer ${jwt}`);
 
   const transformedFormData = {
     title: formData.title,
@@ -73,22 +62,18 @@ const postListing = async ({ formData }: Params) => {
     endsAt: formData.dateTime.toISOString(),
   };
 
-  const requestOptions = {
-    method: 'POST',
-    headers: headers,
-    body: JSON.stringify(transformedFormData),
-  };
-
   try {
-    const res = await fetchWithZod(
-      singleListingSchema,
-      API_AUCTION_LISTINGS_URL,
-      requestOptions,
-    );
+    const res = await auctionAPIFetcher({
+      endpoint: `/listings`,
+      schema: singleListingSchema,
+      jwt,
+      body: transformedFormData,
+    });
 
     return res;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 

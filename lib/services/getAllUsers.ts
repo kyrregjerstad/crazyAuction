@@ -1,46 +1,41 @@
-import { createZodFetcher } from 'zod-fetch';
-import { API_PROFILES_URL } from '../constants';
-import { allUsersSchema, singleUserSchema } from '../schemas/user';
-
-const fetchWithZod = createZodFetcher();
+import { useClientJWT } from '../hooks/useClientJWT';
+import { allUsersSchema } from '../schemas/user';
+import auctionAPIFetcher from './auctionAPIFetcher';
 
 type Sort = 'name' | 'email' | 'avatar' | 'credits';
 type Order = 'asc' | 'desc';
 
 type Params = {
-  jwt: string;
   sort?: Sort;
   order?: Order;
   limit?: number;
   offset?: number;
 };
 
-export const getAllUsers = async ({
-  jwt,
-  sort = 'credits',
-  order: sortOrder = 'desc',
-}: Params) => {
-  const params = new URLSearchParams({
-    sort,
-    sortOrder,
-    _listing: 'true',
-  });
-
-  const url = `${API_PROFILES_URL}?${params.toString()}`;
-
-  const options = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${jwt}`,
-    },
+const useGetAllUsers = ({ jwt }: { jwt: string }) => {
+  const getAllUsers = async ({
+    sort = 'credits',
+    order: sortOrder = 'desc',
+  }: Params) => {
+    try {
+      const res = await auctionAPIFetcher({
+        endpoint: '/profiles',
+        schema: allUsersSchema,
+        jwt,
+        queryParams: {
+          _listing: true,
+          sort,
+          order: sortOrder,
+        },
+      });
+      return res;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   };
 
-  try {
-    const res = await fetchWithZod(allUsersSchema, url, options);
-    return res;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  return { getAllUsers };
 };
+
+export default useGetAllUsers;

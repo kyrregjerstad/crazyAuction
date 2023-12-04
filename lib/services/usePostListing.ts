@@ -1,13 +1,10 @@
-import { API_AUCTION_LISTINGS_URL } from '@/lib/constants';
 import { singleListingSchema } from '@/lib/schemas/listing';
-import { createZodFetcher } from 'zod-fetch';
 
 import { useClientJWT } from '../hooks/useClientJWT';
+import auctionAPIFetcher from './auctionAPIFetcher';
 import { AuctionFormComplete } from './postListing';
 
 const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
-
-const fetchWithZod = createZodFetcher();
 
 type Params = {
   formData: AuctionFormComplete;
@@ -24,10 +21,6 @@ const usePostListing = () => {
 
     const tagsArr = formData.tags?.split(' ').map((tag) => tag.trim()) || [];
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `Bearer ${jwt}`);
-
     const transformedFormData = {
       title: formData.title,
       description: formData.description,
@@ -36,22 +29,19 @@ const usePostListing = () => {
       endsAt: formData.dateTime.toISOString(),
     };
 
-    const requestOptions = {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(transformedFormData),
-    };
-
     try {
-      const res = await fetchWithZod(
-        singleListingSchema,
-        API_AUCTION_LISTINGS_URL,
-        requestOptions,
-      );
+      const res = await auctionAPIFetcher({
+        endpoint: `/listings`,
+        schema: singleListingSchema,
+        jwt,
+        method: 'POST',
+        body: transformedFormData,
+      });
 
       return res;
     } catch (error) {
       console.error(error);
+      throw error;
     }
   };
 

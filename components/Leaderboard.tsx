@@ -1,10 +1,10 @@
 'use client';
 
-import { User } from '@/lib/schemas/user';
-import { getAllUsers } from '@/lib/services/getAllUsers';
+import useGetAllUsers from '@/lib/services/getAllUsers';
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import {
   Table,
   TableBody,
@@ -13,17 +13,15 @@ import {
   TableHeader,
   TableRow,
 } from './ui/table';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 const Leaderboard = () => {
   const { data } = useSession();
 
+  const { getAllUsers } = useGetAllUsers({ jwt: data?.user?.accessToken });
+
   const { data: users, isLoading } = useQuery({
     queryKey: ['allUsers'],
-    queryFn: () =>
-      getAllUsers({
-        jwt: data!.user.accessToken,
-      }),
+    queryFn: () => getAllUsers({}),
   });
 
   if (!users) {

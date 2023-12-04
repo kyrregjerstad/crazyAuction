@@ -1,7 +1,7 @@
-import ListingsGridLoading from '@/components/ListingGridLoading';
 import ListingsGrid from '@/components/ListingsGrid';
 import SearchFilters from '@/components/SearchFilters';
-import { getAllListings, SearchParams } from '@/lib/services/getAllListings';
+import { getAllListings } from '@/lib/services/getAllListings';
+import { SearchParams } from '@/lib/services/types';
 import {
   dehydrate,
   HydrationBoundary,
@@ -21,7 +21,7 @@ export default async function HomePage({ searchParams }: Props) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['allListings'],
+    queryKey: ['allListings', sort, order],
     queryFn: () =>
       getAllListings({
         sort: sort === 'endsAt' ? 'endsAt' : 'created',

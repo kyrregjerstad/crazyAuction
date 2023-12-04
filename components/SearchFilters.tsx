@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { badgeVariants } from './ui/badge';
-import { SearchParams } from '@/lib/services/getAllListings';
+import { SearchParams } from '@/lib/services/types';
 
 export type Sorting = 'endsAt' | 'created' | 'price';
 export type SortingOrder = 'asc' | 'desc';

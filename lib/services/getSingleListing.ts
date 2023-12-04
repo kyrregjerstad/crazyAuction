@@ -1,19 +1,16 @@
-import { createZodFetcher } from 'zod-fetch';
-import { API_AUCTION_LISTINGS_URL } from '../constants';
 import { singleListingSchemaExtended } from '../schemas/listing';
-import auctionAPIFetcher from './fetcher';
-
-const fetchWithZod = createZodFetcher();
+import auctionAPIFetcher from './auctionAPIFetcher';
 
 export const getSingleListing = async (id: string) => {
-  const url = `${API_AUCTION_LISTINGS_URL}/${id}?_seller=true&_bids=true`;
-
   try {
-    auctionAPIFetcher({
+    const res = await auctionAPIFetcher({
       endpoint: `/listings/${id}`,
       schema: singleListingSchemaExtended,
+      queryParams: {
+        _bids: true,
+        _seller: true,
+      },
     });
-    const res = await fetchWithZod(singleListingSchemaExtended, url);
 
     const sortedRes = {
       ...res,

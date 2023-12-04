@@ -1,4 +1,5 @@
 import { getSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 export const useClientJWT = () => {
   const getJWT = async () => {
@@ -6,7 +7,8 @@ export const useClientJWT = () => {
     const jwt = session?.user?.accessToken;
 
     if (!jwt) {
-      throw new Error('No JWT found');
+      console.error('No JWT found, redirecting to login');
+      redirect('/login');
     }
 
     return jwt;

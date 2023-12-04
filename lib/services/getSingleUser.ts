@@ -1,8 +1,6 @@
 import { createZodFetcher } from 'zod-fetch';
-import { API_PROFILES_URL } from '../constants';
 import { singleUserSchema } from '../schemas/user';
-
-const fetchWithZod = createZodFetcher();
+import auctionAPIFetcher from './auctionAPIFetcher';
 
 type Params = {
   username: string;
@@ -11,17 +9,16 @@ type Params = {
 
 export const getSingleUser = async ({ username, jwt }: Params) => {
   try {
-    return await fetchWithZod(
-      singleUserSchema.optional(),
-      `${API_PROFILES_URL}/${username}?_listings=true`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwt}`,
-        },
+    const res = await auctionAPIFetcher({
+      endpoint: `/profiles/${username}`,
+      schema: singleUserSchema,
+      jwt,
+      queryParams: {
+        _listings: true,
       },
-    );
+    });
+
+    return res;
   } catch (error) {
     console.error(error);
     throw error;

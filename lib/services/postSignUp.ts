@@ -1,12 +1,9 @@
-import { createZodFetcher } from './zodFetcher';
-import { API_REGISTER_URL } from '../constants';
 import {
   Register,
   RegisterResponse,
   registerResponseSchema,
 } from '../schemas/register';
-
-const fetchWithZod = createZodFetcher();
+import auctionAPIFetcher from './auctionAPIFetcher';
 
 type RegisterResponseError = {
   errors: [
@@ -29,12 +26,15 @@ export const postRegisterUser = async (
   }; // remove the repeatPassword field
 
   try {
-    return await fetchWithZod(registerResponseSchema, API_REGISTER_URL, {
+    const res = await auctionAPIFetcher({
+      endpoint: `/auth/register`,
+      schema: registerResponseSchema,
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(transformedParams),
+      body: transformedParams,
     });
+    return res;
   } catch (error) {
-    return error as RegisterResponseError;
+    console.error(error);
+    throw error;
   }
 };

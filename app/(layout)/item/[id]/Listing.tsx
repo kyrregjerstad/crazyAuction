@@ -31,6 +31,8 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
     refetchInterval: 10000, // refetch every 10 seconds
   });
 
+  console.log(data);
+
   const isLoggedInUser = useIsLoggedInUser(singleListing?.seller.name);
   const isAuthenticated = session.status === 'authenticated';
 
