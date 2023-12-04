@@ -1,4 +1,3 @@
-import { createZodFetcher } from 'zod-fetch';
 import { singleUserSchema } from '../schemas/user';
 import auctionAPIFetcher from './auctionAPIFetcher';
 
@@ -12,6 +11,7 @@ export const getSingleUser = async ({ username, jwt }: Params) => {
     const res = await auctionAPIFetcher({
       endpoint: `/profiles/${username}`,
       schema: singleUserSchema,
+      method: 'GET',
       jwt,
       queryParams: {
         _listings: true,

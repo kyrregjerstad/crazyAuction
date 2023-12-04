@@ -13,6 +13,7 @@ export const placeBid = async ({ listingId, amount, jwt }: Params) => {
       endpoint: `/listings/${listingId}/bids`,
       schema: singleListingSchema,
       jwt,
+      method: 'POST',
       body: {
         amount,
       },

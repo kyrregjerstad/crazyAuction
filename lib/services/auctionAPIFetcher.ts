@@ -1,28 +1,35 @@
 import { type ZodSchema } from 'zod';
 import { API_BASE_URL } from '../constants';
+import {
+  DeleteEndpoints,
+  GetEndpoints,
+  PostEndpoints,
+  PutEndpoints,
+  QueryParams,
+} from './types';
 import { createZodFetcher } from './zodFetcher';
-import { QueryParams, ApiEndpoints } from './types';
 
 const fetchWithZod = createZodFetcher();
 
-type Params<TData> = {
-  endpoint: ApiEndpoints;
+type BaseParams<TData> = {
+  endpoint: GetEndpoints | PostEndpoints | PutEndpoints | DeleteEndpoints;
   schema: ZodSchema<TData, any, any>;
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
-  id?: string;
-  queryParams?: Partial<QueryParams>;
-  body?: any;
   jwt?: string;
 };
 
-const auctionAPIFetcher = async <TData>({
-  endpoint,
-  schema,
-  method = 'GET',
-  queryParams,
-  body,
-  jwt,
-}: Params<TData>): Promise<TData> => {
+type Methods = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
+type RequestParams<TData, TMethod extends Methods> = BaseParams<TData> & {
+  method: TMethod;
+  body?: TMethod extends 'GET' | 'DELETE' ? never : any;
+  queryParams?: TMethod extends 'GET' ? Partial<QueryParams> : never;
+};
+
+async function auctionAPIFetcher<TData, TMethod extends Methods>(
+  params: RequestParams<TData, TMethod>,
+): Promise<TData> {
+  const { endpoint, schema, jwt, queryParams, method, body } = params;
+
   const url = new URL(API_BASE_URL + endpoint);
 
   if (queryParams) {
@@ -39,15 +46,14 @@ const auctionAPIFetcher = async <TData>({
     headers.append('Authorization', `Bearer ${jwt}`);
   }
 
-  if (body) {
-    body = JSON.stringify(body);
-  }
-
-  const options = {
+  const options: RequestInit = {
     method,
     headers,
-    body,
   };
+
+  if (body && method !== 'GET' && method !== 'DELETE') {
+    options.body = JSON.stringify(body);
+  }
 
   try {
     const res = await fetchWithZod(schema, url.toString(), options);
@@ -56,6 +62,6 @@ const auctionAPIFetcher = async <TData>({
     console.error(error);
     throw error;
   }
-};
+}
 
 export default auctionAPIFetcher;
