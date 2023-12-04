@@ -28,8 +28,6 @@ const seller = z.object({
   avatar: z.string().nullable(),
 });
 
-export type Bid = z.infer<typeof bid>;
-
 export const singleListingSchemaExtended = singleListingSchema.extend({
   seller: seller,
   bids: z.array(bid),
@@ -38,6 +36,8 @@ export const singleListingSchemaExtended = singleListingSchema.extend({
   }),
 });
 
+export type Seller = z.infer<typeof seller>;
+export type Bid = z.infer<typeof bid>;
 export type Listing = z.infer<typeof singleListingSchema>;
 export type ListingFull = z.infer<typeof singleListingSchemaExtended>;
 
