@@ -69,6 +69,7 @@ const LoginForm = () => {
                 <Input
                   {...field}
                   type='password'
+                  placeholder='Password'
                   className='bg-foreground text-background'
                 />
               </FormControl>

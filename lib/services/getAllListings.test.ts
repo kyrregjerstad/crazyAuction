@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, Mock } from 'vitest';
 import { getAllListings } from './getAllListings';
 import * as auctionAPIFetcherModule from './auctionAPIFetcher';
 import { allListingsSchema } from '../schemas/listing';
 import { emptyBid, emptyListing } from '../mocks/data';
+import { Mock } from 'vitest';
 
 vi.mock('./auctionAPIFetcher', () => {
   return {
