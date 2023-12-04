@@ -1,4 +1,14 @@
 import { Bid, ListingFull, Seller } from '../schemas/listing';
+import { RegisterResponse } from '../schemas/register';
+import { User } from '../schemas/user';
+
+export const emptyRegisterResponse = {
+  id: 0,
+  name: '',
+  email: '',
+  avatar: '',
+  credits: 0,
+} as RegisterResponse;
 
 const emptySeller = {
   name: '',
