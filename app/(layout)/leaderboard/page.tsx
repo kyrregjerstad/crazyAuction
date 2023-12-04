@@ -1,14 +1,12 @@
 import Leaderboard from '@/components/Leaderboard';
-import useGetAllUsers from '@/lib/services/getAllUsers';
+import { useServerJWT } from '@/lib/hooks/useServerJWT';
+import getAllUsers from '@/lib/services/getAllUsers';
 import { SearchParams } from '@/lib/services/types';
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
-import { getServerSession } from 'next-auth';
-import authOptions from '../../auth/authOptions';
-import { useServerJWT } from '@/lib/hooks/useServerJWT';
 
 type Props = {
   searchParams?: SearchParams;
@@ -23,11 +21,9 @@ export default async function LeaderboardPage({ searchParams }: Props) {
   const queryClient = new QueryClient();
   const jwt = await useServerJWT();
 
-  const { getAllUsers } = useGetAllUsers({ jwt });
-
   await queryClient.prefetchQuery({
     queryKey: ['allUsers'],
-    queryFn: () => getAllUsers({}),
+    queryFn: () => getAllUsers({ jwt }),
   });
 
   return (

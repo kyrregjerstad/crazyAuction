@@ -1,6 +1,6 @@
 'use client';
 
-import useGetAllUsers from '@/lib/services/getAllUsers';
+import getAllUsers from '@/lib/services/getAllUsers';
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -13,15 +13,14 @@ import {
   TableHeader,
   TableRow,
 } from './ui/table';
+import { useClientJWT } from '@/lib/hooks/useClientJWT';
 
 const Leaderboard = () => {
-  const { data } = useSession();
-
-  const { getAllUsers } = useGetAllUsers({ jwt: data?.user?.accessToken });
+  const jwt = useClientJWT();
 
   const { data: users, isLoading } = useQuery({
     queryKey: ['allUsers'],
-    queryFn: () => getAllUsers({}),
+    queryFn: () => getAllUsers({ jwt }),
   });
 
   if (!users) {

@@ -11,10 +11,9 @@ type Params = {
 };
 
 const usePostListing = () => {
-  const { getJWT } = useClientJWT();
+  const jwt = useClientJWT();
 
   const postListing = async ({ formData }: Params) => {
-    const jwt = await getJWT();
     const transformedMediaLinks = formData.imageUrls.map(
       (url) => `${workerUrl}/cache/${url}`,
     ); // add cloud_flare worker url to cache the image, in order to reduce cloud_inary costs

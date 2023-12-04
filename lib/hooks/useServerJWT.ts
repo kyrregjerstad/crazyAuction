@@ -9,7 +9,7 @@ export const useServerJWT = async () => {
 
   if (!jwt) {
     console.error('No JWT found, redirecting to login');
-    redirect('/login');
+    redirect('/auth/login');
   }
 
   return jwt;
