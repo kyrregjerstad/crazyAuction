@@ -28,7 +28,7 @@ const SummaryStepForm = () => {
   } = summary;
 
   return (
-    <form className='flex flex-col gap-4'>
+    <form className='flex flex-col gap-4' onSubmit={saveStep}>
       <div className='flex gap-4'>
         <div className='flex w-full flex-col gap-2'>
           <div className='flex flex-col'>
@@ -133,7 +133,7 @@ const SummaryStepForm = () => {
         readOnly
         name='dateTime'
         id='dateTime'
-        value={formState?.dateTime.toISOString?.()}
+        value={formState?.dateTime?.toISOString?.()}
         className='hidden'
       />
 

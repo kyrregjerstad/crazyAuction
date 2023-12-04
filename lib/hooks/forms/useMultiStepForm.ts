@@ -20,7 +20,9 @@ import {
 import useAuctionFormStep from '../useAuctionFormStep';
 import useAuctionFormStore from '../useAuctionFormStore';
 import { ZodSchema } from 'zod';
-import { FormEvent, use } from 'react';
+import { FormEvent } from 'react';
+import usePostListing from '@/lib/services/usePostListing';
+import { useRouter } from 'next/navigation';
 
 type Step = 'info' | 'media' | 'dateTime' | 'summary';
 
@@ -47,7 +49,9 @@ const useMultiStepAuctionForm = ({
   const { getStore, updateStore, storedData, clearStore } =
     useAuctionFormStore();
 
-  const { nextStep, prevStep } = useAuctionFormStep();
+  const { nextStep } = useAuctionFormStep();
+  const { postListing } = usePostListing();
+  const router = useRouter();
 
   const forms = {
     info: useInitializeForm<AuctionFormInfo>(auctionFormInfoSchema, {
@@ -55,7 +59,6 @@ const useMultiStepAuctionForm = ({
       description: listing?.description ?? storedData.description ?? '',
     }),
     media: useInitializeForm<AuctionFormMedia>(auctionFormMediaSchema, {
-      images: storedData.images ?? [],
       imageUrls: storedData.imageUrls ?? [],
     }),
     dateTime: useInitializeForm<AuctionFormDate>(auctionFormDateSchema, {
@@ -64,7 +67,6 @@ const useMultiStepAuctionForm = ({
     summary: useInitializeForm<AuctionFormComplete>(auctionFormSchemaComplete, {
       title: listing?.title ?? storedData.title ?? '',
       description: listing?.description ?? storedData.description ?? '',
-      images: storedData.images ?? [],
       imageUrls: storedData.imageUrls ?? [],
       dateTime: storedData.dateTime ?? undefined,
     }),
@@ -77,15 +79,23 @@ const useMultiStepAuctionForm = ({
 
   const onSaveSummaryStep = async () => {
     const data = getStore();
-    const { title, description, imageUrls, dateTime } = data;
+    const { title, description, imageUrls, dateTime, tags } = data;
 
     const auctionData = {
       title,
       description,
-      media: imageUrls,
-      endsAt: dateTime,
+      tags,
+      imageUrls,
+      dateTime: dateTime,
     };
-    clearStore();
+
+    try {
+      const res = await postListing({ formData: auctionData });
+      clearStore();
+      router.push(`/auctions/${res?.id}`);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const formHandlers = {

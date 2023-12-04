@@ -10,7 +10,7 @@ import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
 import AuctionGrid from './AuctionGrid';
 import { ListingFull } from '@/lib/schemas/listing';
-import { Fragment } from 'react';
+import { Fragment, use } from 'react';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 
 const getCurrentPrice = (listing: ListingFull) => {
@@ -29,32 +29,35 @@ const sortListingsByPrice = (listings: ListingFull[], order: string) => {
   });
 };
 
-const ListingsGrid = () => {
+const useInfiniteListings = () => {
   const { sort, order } = useSortSearchParams();
-  const router = useRouter();
 
+  return useInfiniteQuery({
+    queryKey: ['allListings', sort, order],
+    queryFn: ({ pageParam = 0 }) =>
+      getAllListings({ sort, order, limit: 100, offset: pageParam * 100 }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, _allPages, lastPageParam) => {
+      if (lastPage.length === 0) {
+        return undefined;
+      }
+      return lastPageParam + 1;
+    },
+    getPreviousPageParam: (_firstPage, _allPages, firstPageParam) => {
+      if (firstPageParam <= 0) {
+        return undefined;
+      }
+      return firstPageParam - 1;
+    },
+  });
+};
+
+const ListingsGrid = () => {
+  const router = useRouter();
   const skeletonArr = Array.from({ length: 30 }, (_, i) => i);
 
-  const limit = 100;
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ['allListings', sort, order],
-      queryFn: ({ pageParam = 0 }) =>
-        getAllListings({ sort, order, limit, offset: pageParam * limit }),
-      initialPageParam: 0,
-      getNextPageParam: (lastPage, _allPages, lastPageParam) => {
-        if (lastPage.length === 0) {
-          return undefined;
-        }
-        return lastPageParam + 1;
-      },
-      getPreviousPageParam: (_firstPage, _allPages, firstPageParam) => {
-        if (firstPageParam <= 0) {
-          return undefined;
-        }
-        return firstPageParam - 1;
-      },
-    });
+    useInfiniteListings();
 
   const [ref] = useInfiniteScroll({
     loading: isLoading,

@@ -1,10 +1,10 @@
 import { Toaster } from '@/components/ui/toaster';
 import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
+import Script from 'next/script';
 import AuthProvider from './auth/Provider';
 import './globals.css';
 import QueryClientProvider from './providers/QueryClientProvider';
-import Script from 'next/script';
 
 export default function RootLayout({
   children,

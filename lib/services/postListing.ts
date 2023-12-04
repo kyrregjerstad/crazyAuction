@@ -4,6 +4,8 @@ import { createZodFetcher } from 'zod-fetch';
 import { z } from 'zod';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { getServerSession } from 'next-auth';
+import authOptions from '@/app/auth/authOptions';
 
 dayjs.extend(utc);
 
@@ -12,13 +14,12 @@ const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
 const fetchWithZod = createZodFetcher();
 
 export const auctionFormInfoSchema = z.object({
-  title: z.string().min(1).max(280),
+  title: z.string().min(3).max(280),
   description: z.string().max(280).optional(),
   tags: z.string().optional(),
 });
 
 export const auctionFormMediaSchema = z.object({
-  images: z.array(z.any()).optional(),
   imageUrls: z.array(z.string().url()),
 });
 
@@ -39,10 +40,21 @@ export type AuctionFormDate = z.infer<typeof auctionFormDateSchema>;
 
 type Params = {
   formData: AuctionFormComplete;
-  jwt: string;
 };
 
-const postListing = async ({ formData, jwt }: Params) => {
+const getJWT = async () => {
+  const session = await getServerSession(authOptions);
+  const jwt = session?.user?.accessToken;
+
+  if (!jwt) {
+    throw new Error('No JWT found');
+  }
+
+  return jwt;
+};
+
+const postListing = async ({ formData }: Params) => {
+  const jwt = await getJWT();
   const transformedMediaLinks = formData.imageUrls.map(
     (url) => `${workerUrl}/cache/${url}`,
   ); // add cloud_flare worker url to cache the image, in order to reduce cloud_inary costs
