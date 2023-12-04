@@ -4,6 +4,7 @@ import HeaderLinks from './HeaderLinks';
 import UserMenu from './UserMenu';
 import Image from 'next/image';
 import Logo from '@/public/CrazyAuction-no-outline-no-hammer.svg';
+import Hammer from '@/public/CrazyAuction-hammer.svg';
 
 type HeaderProps = {
   searchParams?: any;
@@ -18,7 +19,12 @@ const Header = () => {
             className='flex items-center gap-2 text-lg font-semibold text-accent'
             href='/'
           >
-            <Image src={Logo} alt='CrazyAuction' width={64} height={64} />
+            <div className='hidden sm:block'>
+              <Image src={Logo} alt='CrazyAuction' width={64} height={64} />
+            </div>
+            <div className='sm:hidden'>
+              <Image src={Hammer} alt='CrazyAuction' width={50} height={50} />
+            </div>
             <span className='sr-only'>CrazyAuction</span>
           </Link>
           <HeaderLinks />

@@ -1,16 +1,12 @@
-import Debugger from '@/components/Debugger';
 import Leaderboard from '@/components/Leaderboard';
-import ListingsGrid from '@/components/ListingsGrid';
-import SearchFilters from '@/components/SearchFilters';
-import { getAllListings, SearchParams } from '@/lib/services/getAllListings';
-import { getAllUsers } from '@/lib/services/getAllUsers';
+import { useServerJWT } from '@/lib/hooks/useServerJWT';
+import getAllUsers from '@/lib/services/getAllUsers';
+import { SearchParams } from '@/lib/services/types';
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
-import { getServerSession } from 'next-auth';
-import authOptions from '../../auth/authOptions';
 
 type Props = {
   searchParams?: SearchParams;
@@ -23,13 +19,11 @@ export default async function LeaderboardPage({ searchParams }: Props) {
   };
 
   const queryClient = new QueryClient();
-  const session = await getServerSession(authOptions);
-
-  const jwt = session?.user.accessToken;
+  const jwt = await useServerJWT();
 
   await queryClient.prefetchQuery({
     queryKey: ['allUsers'],
-    queryFn: () => getAllUsers({ jwt: session!.user!.accessToken! }),
+    queryFn: () => getAllUsers({ jwt }),
   });
 
   return (

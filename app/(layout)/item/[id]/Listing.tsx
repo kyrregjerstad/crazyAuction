@@ -31,6 +31,8 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
     refetchInterval: 10000, // refetch every 10 seconds
   });
 
+  console.log(data);
+
   const isLoggedInUser = useIsLoggedInUser(singleListing?.seller.name);
   const isAuthenticated = session.status === 'authenticated';
 
@@ -95,7 +97,7 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
         </div>
         {isLoggedInUser ? (
           <Link
-            href={`/listing/${listingId}/edit`}
+            href={`/auction/?mode=edit&id=${listingId}`}
             className={buttonVariants({ variant: 'accent' })}
           >
             Edit Listing
@@ -243,6 +245,7 @@ function BidHistory({
 
 function BidHistoryItem({ bid, index }: { bid: Bid; index: number }) {
   const { created, amount, bidderName } = bid;
+
   const bidDate = dayjs(created).fromNow();
   return (
     <li className='mb-3'>

@@ -1,8 +1,5 @@
-import { createZodFetcher } from 'zod-fetch';
-import { API_PROFILES_URL } from '../constants';
-import { allUsersSchema, singleUserSchema } from '../schemas/user';
-
-const fetchWithZod = createZodFetcher();
+import { allUsersSchema } from '../schemas/user';
+import auctionAPIFetcher from './auctionAPIFetcher';
 
 type Sort = 'name' | 'email' | 'avatar' | 'credits';
 type Order = 'asc' | 'desc';
@@ -15,32 +12,27 @@ type Params = {
   offset?: number;
 };
 
-export const getAllUsers = async ({
-  jwt,
+const getAllUsers = async ({
   sort = 'credits',
   order: sortOrder = 'desc',
+  jwt,
 }: Params) => {
-  const params = new URLSearchParams({
-    sort,
-    sortOrder,
-    _listing: 'true',
-  });
-
-  const url = `${API_PROFILES_URL}?${params.toString()}`;
-
-  const options = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${jwt}`,
-    },
-  };
-
   try {
-    const res = await fetchWithZod(allUsersSchema, url, options);
+    const res = await auctionAPIFetcher({
+      endpoint: '/profiles',
+      schema: allUsersSchema,
+      jwt,
+      queryParams: {
+        _listings: true,
+        sort,
+        order: sortOrder,
+      },
+    });
     return res;
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
+
+export default getAllUsers;

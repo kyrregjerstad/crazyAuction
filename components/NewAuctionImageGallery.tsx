@@ -16,22 +16,21 @@ import {
   rectSortingStrategy,
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Button } from './ui/button';
 
-import { AuctionForm } from '@/lib/services/postListing';
 import { cn } from '@/lib/utils';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { AnimatePresence, motion } from 'framer-motion';
-import { UseFormSetValue } from 'react-hook-form';
+import { UploadImage } from './new-auction-form/types';
 
 type ImageGalleryProps = {
-  images: string[];
-  setValue: UseFormSetValue<AuctionForm>;
+  images: UploadImage[];
+  setImages: Dispatch<SetStateAction<UploadImage[]>>;
 };
 
-const NewAuctionImageGallery = ({ images, setValue }: ImageGalleryProps) => {
+const NewAuctionImageGallery = ({ images, setImages }: ImageGalleryProps) => {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -39,43 +38,38 @@ const NewAuctionImageGallery = ({ images, setValue }: ImageGalleryProps) => {
     }),
   );
 
-  const handleRemoveImage = (clickedImg: string) => {
-    const updatedImageUrls = images.filter((img) => img !== clickedImg);
-    setValue('imageUrls', updatedImageUrls, { shouldValidate: true });
+  const handleRemoveImage = (image: UploadImage) => {
+    const newImages = images.filter((img) => img.id !== image.id);
+    setImages(newImages);
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (active.id !== over?.id) {
-      const oldIndex = images.indexOf(active.id.toString());
-      const newIndex = images.indexOf(over?.id?.toString() || '');
+      setImages((images) => {
+        const oldIndex = images.findIndex((img) => img.id === active.id);
+        const newIndex = images.findIndex((img) => img.id === over?.id);
 
-      const newImageOrder = arrayMove(images, oldIndex, newIndex);
-      setValue('imageUrls', newImageOrder, { shouldValidate: true });
+        return arrayMove(images, oldIndex, newIndex);
+      });
     }
   };
 
   return (
     <>
-      {images.length === 0 ? (
-        <div className='flex h-full w-full max-w-lg flex-wrap items-center justify-center gap-4 pt-8 md:max-w-xl'>
-          <p className='text-sm text-neutral-500'>
-            Auctions with images are more likely to sell. Add up to 8 images
-          </p>
-        </div>
-      ) : (
+      {images.length === 0 ? null : (
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
         >
           <SortableContext items={images} strategy={rectSortingStrategy}>
-            <div className='flex h-fit w-full max-w-lg flex-wrap gap-4 pt-8 md:max-w-xl'>
+            <div className='flex h-fit w-full flex-wrap gap-2'>
               <AnimatePresence>
                 {images.map((image, index) => (
                   <SortableItem
-                    key={image}
+                    key={image.id}
                     index={index}
                     image={image}
                     handleRemoveImage={handleRemoveImage}
@@ -93,9 +87,9 @@ const NewAuctionImageGallery = ({ images, setValue }: ImageGalleryProps) => {
 export default NewAuctionImageGallery;
 
 type SortableItemProps = {
-  image: string;
+  image: UploadImage;
   index: number;
-  handleRemoveImage: (image: string) => void;
+  handleRemoveImage: (image: UploadImage) => void;
 };
 
 const SortableItem = ({
@@ -103,6 +97,8 @@ const SortableItem = ({
   index,
   handleRemoveImage,
 }: SortableItemProps) => {
+  const { id, previewUrl, publicUrl } = image;
+
   const {
     attributes,
     listeners,
@@ -111,7 +107,7 @@ const SortableItem = ({
     transition,
     isDragging,
     isSorting,
-  } = useSortable({ id: image });
+  } = useSortable({ id });
 
   const style: React.CSSProperties = {
     zIndex: isDragging ? 100 : 0,
@@ -122,10 +118,12 @@ const SortableItem = ({
 
   return (
     <motion.div
+      layout
+      layoutId={id}
       className={cn('relative', isDragging && 'z-50')}
-      key={image}
+      key={id}
       initial={{ opacity: 0 }}
-      transition={{ duration: 1 }}
+      transition={{ duration: 0.4 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0, transition: { duration: 0.15 } }}
     >
@@ -140,13 +138,13 @@ const SortableItem = ({
         {...attributes}
         {...listeners}
         className={cn(
-          'relative aspect-square max-w-[150px] overflow-hidden rounded-md border transition-shadow lg:max-w-[250px]',
+          'relative aspect-square max-w-[100px] overflow-hidden rounded-md border transition-shadow ',
           isDragging ? 'border border-accent shadow-md' : 'shadow-none',
         )}
       >
         <IndexIndicator index={index} />
         <Image
-          src={image}
+          src={previewUrl}
           width={200}
           height={200}
           alt='test'
@@ -158,8 +156,8 @@ const SortableItem = ({
 };
 
 type RemoveImageButtonProps = {
-  image: string;
-  handleRemoveImage: (image: string) => void;
+  image: UploadImage;
+  handleRemoveImage: (image: UploadImage) => void;
   isSorting: boolean;
 };
 
@@ -175,7 +173,10 @@ const RemoveImageButton = ({
       'absolute right-0 top-0 z-50 p-1 opacity-100 transition-opacity duration-300',
       isSorting && 'opacity-0',
     )}
-    onClick={() => handleRemoveImage(image)}
+    onClick={(e) => {
+      e.stopPropagation(); // to prevent the upload dialog from opening
+      handleRemoveImage(image);
+    }}
   >
     <DeleteIcon className='h-4 w-4' />
   </Button>

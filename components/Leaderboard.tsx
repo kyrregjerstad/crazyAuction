@@ -1,10 +1,10 @@
 'use client';
 
-import { User } from '@/lib/schemas/user';
-import { getAllUsers } from '@/lib/services/getAllUsers';
+import getAllUsers from '@/lib/services/getAllUsers';
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import {
   Table,
   TableBody,
@@ -13,20 +13,15 @@ import {
   TableHeader,
   TableRow,
 } from './ui/table';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { useClientJWT } from '@/lib/hooks/useClientJWT';
 
 const Leaderboard = () => {
-  const { data } = useSession();
+  const jwt = useClientJWT();
 
   const { data: users, isLoading } = useQuery({
     queryKey: ['allUsers'],
-    queryFn: () =>
-      getAllUsers({
-        jwt: data!.user.accessToken,
-      }),
+    queryFn: () => getAllUsers({ jwt }),
   });
-
-  console.log(users);
 
   if (!users) {
     return null;
@@ -54,7 +49,7 @@ const Leaderboard = () => {
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <Link
-                  href={`/user/q${user.name}`}
+                  href={`/user/${user.name}`}
                   className='flex items-center justify-center gap-2'
                 >
                   {user.name}

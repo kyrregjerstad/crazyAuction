@@ -29,6 +29,19 @@ const useRegisterForm = () => {
       const res = await postRegisterUser(data);
 
       if (!res) throw new Error('Something went wrong');
+      if ('errors' in res) {
+        toast({
+          title: 'Error',
+          description: res.errors.map((error) => error.message).join(' '),
+          variant: 'error',
+          duration: 7000,
+        });
+        form.setError('root', {
+          type: 'manual',
+          message: res.errors.map((error) => error.message).join(' '),
+        });
+        return;
+      }
 
       toast({
         title: 'Account created 🎉',

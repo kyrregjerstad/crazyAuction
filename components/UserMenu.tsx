@@ -6,11 +6,13 @@ import { Button, buttonVariants } from './ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import MagicButton from './MagicButton';
+import { cn } from '@/lib/utils';
 
 const UserMenu = () => {
   const { data, status } = useSession();
@@ -29,21 +31,24 @@ const UserMenu = () => {
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
-              <DropdownMenuLabel>
-                <Link href={`/user/${data.user.name}`} className=''>
-                  My Account
+              <DropdownMenuItem asChild>
+                <Link
+                  href={`/user/${data.user.name}`}
+                  className='flex w-full items-center justify-center p-0 py-2 text-center'
+                >
+                  My Profile
                 </Link>
-              </DropdownMenuLabel>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuLabel>
+              <DropdownMenuItem asChild>
                 <Button
                   onClick={() => signOut({ redirect: true, callbackUrl: '/' })}
-                  variant={'ghost'}
-                  className='w-full'
+                  variant='text'
+                  className='w-full p-0 '
                 >
                   Log out
                 </Button>
-              </DropdownMenuLabel>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </>

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { badgeVariants } from './ui/badge';
-import { SearchParams } from '@/lib/services/getAllListings';
+import { SearchParams } from '@/lib/services/types';
 
 export type Sorting = 'endsAt' | 'created' | 'price';
 export type SortingOrder = 'asc' | 'desc';
@@ -24,7 +24,7 @@ const SearchFilters = ({ sort, order, active }: SearchParams) => {
   sort = sort || 'endsAt';
   order = order || 'asc';
   return (
-    <div className='flex w-full gap-4'>
+    <div className='flex w-full flex-col justify-center gap-4 sm:flex-row'>
       <div>
         <span className='text-xs'>Sort by</span>
         <div className='flex gap-2'>

@@ -55,6 +55,17 @@ module.exports = {
           DEFAULT: 'oklch(var(--accent) / var(--tw-bg-opacity, 1))',
           foreground: 'oklch(var(--accent-foreground))',
           hover: 'oklch(var(--accent-hover))',
+          50: 'oklch(var(--accent-50) / var(--tw-bg-opacity, 1))',
+          100: 'oklch(var(--accent-100) / var(--tw-bg-opacity, 1))',
+          200: 'oklch(var(--accent-200) / var(--tw-bg-opacity, 1))',
+          300: 'oklch(var(--accent-300) / var(--tw-bg-opacity, 1))',
+          400: 'oklch(var(--accent-400) / var(--tw-bg-opacity, 1))',
+          500: 'oklch(var(--accent-500) / var(--tw-bg-opacity, 1))',
+          600: 'oklch(var(--accent-600) / var(--tw-bg-opacity, 1))',
+          700: 'oklch(var(--accent-700) / var(--tw-bg-opacity, 1))',
+          800: 'oklch(var(--accent-800) / var(--tw-bg-opacity, 1))',
+          900: 'oklch(var(--accent-900) / var(--tw-bg-opacity, 1))',
+          950: 'oklch(var(--accent-950) / var(--tw-bg-opacity, 1))',
         },
         popover: {
           DEFAULT: 'oklch(var(--popover) / var(--tw-bg-opacity, 1))',
@@ -70,6 +81,9 @@ module.exports = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      boxShadow: {
+        dropzone: 'inset 0 0 5px 2px rgba(0, 0, 0, 0.25)',
+      },
       keyframes: {
         'accordion-down': {
           from: { height: 0 },
@@ -79,10 +93,20 @@ module.exports = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: 0 },
         },
+        'grow-and-shrink': {
+          '0%, 100%': { transform: 'scale(0)' },
+          '50%': { transform: 'scale(1)' },
+        },
+        spin: {
+          '0%': { transform: 'rotate(0deg)' },
+          '50%': { transform: 'rotate(180deg)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'grow-and-shrink': 'grow-and-shrink 2100ms ease-in-out forwards',
+        spin: 'spin 2000ms linear forwards',
       },
     },
   },

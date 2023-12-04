@@ -1,17 +1,6 @@
-import { createZodFetcher } from 'zod-fetch';
-import { API_AUCTION_LISTINGS_URL } from '../constants';
 import { allListingsSchema } from '../schemas/listing';
-
-const fetchWithZod = createZodFetcher();
-
-type Sort = 'endsAt' | 'created' | 'price';
-type Order = 'asc' | 'desc';
-
-export type SearchParams = {
-  sort?: Sort;
-  order?: Order;
-  active?: string;
-};
+import auctionAPIFetcher from './auctionAPIFetcher';
+import { Sort, Order } from './types';
 
 type Params = {
   sort?: Sort;
@@ -28,18 +17,33 @@ export const getAllListings = async ({
   limit,
   offset,
 }: Params) => {
-  const params = new URLSearchParams({
-    _seller: 'true',
-    _bids: 'true',
-    _active: active.toString(),
-    sort,
-    sortOrder,
-  });
-
-  const url = `${API_AUCTION_LISTINGS_URL}?${params.toString()}`;
-
   try {
-    return await fetchWithZod(allListingsSchema, url);
+    const res = await auctionAPIFetcher({
+      endpoint: '/listings',
+      schema: allListingsSchema,
+      queryParams: {
+        _seller: true,
+        _bids: true,
+        _active: active,
+        sort,
+        order: sortOrder,
+        limit,
+        offset,
+      },
+    });
+
+    const sortedRes = res.map((listing) => {
+      const bids = listing.bids.sort((a, b) => {
+        return a.amount - b.amount;
+      });
+
+      return {
+        ...listing,
+        bids,
+      };
+    });
+
+    return sortedRes;
   } catch (error) {
     console.error(error);
     throw error;

@@ -11,24 +11,44 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useReward } from 'react-rewards';
-import Logo from '@/public/CrazyAuction-no-outline.svg';
+import { pickRandom, rotateVariations, xVariations } from '@/lib/animation';
 
 import useRegisterForm from '@/lib/hooks/forms/useRegisterForm';
-import Image from 'next/image';
+import { useAnimation } from 'framer-motion';
+import { useEffect } from 'react';
 
 const RegisterPage = () => {
   const { form, registerUser } = useRegisterForm();
+  const animationControl = useAnimation();
 
   const {
     control,
     watch,
-    formState: { isSubmitting, isDirty, isSubmitSuccessful },
+    formState: {
+      isSubmitting,
+      isDirty,
+      isSubmitSuccessful,
+      errors,
+      isSubmitted,
+    },
   } = form;
 
   const name = watch('name');
   const avatarUrl = watch('avatar');
   const firstLetter = name && name.length > 0 ? name[0].toUpperCase() : '';
+
+  useEffect(() => {
+    if (isSubmitted && !isSubmitSuccessful) {
+      animationControl.start({
+        x: pickRandom(xVariations),
+        rotate: pickRandom(rotateVariations),
+        transition: {
+          duration: 0.5,
+          repeatType: 'mirror',
+        },
+      });
+    }
+  }, [isSubmitSuccessful, isSubmitted, animationControl]);
 
   return (
     <div className='mx-auto w-full max-w-md space-y-6 pt-8'>

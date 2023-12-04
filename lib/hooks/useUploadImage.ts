@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 import { uploadToCloudinary } from '@/lib/server/actions';
-import { AuctionForm } from '@/lib/services/postListing';
+import { AuctionFormComplete } from '@/lib/services/postListing';
 
 const useUploadImage = () => {
   const [imagesUploading, setImagesUploading] = useState(false);
 
   type HandleUploadParams = {
-    field: ControllerRenderProps<AuctionForm, 'images'>;
+    field: ControllerRenderProps<AuctionFormComplete, 'imageUrls'>;
   };
 
   const handleUploadImage = async ({ field }: HandleUploadParams) => {
@@ -40,7 +40,7 @@ const useUploadImage = () => {
 
   type HandleSelectImageParams = {
     event: React.ChangeEvent<HTMLInputElement>;
-    field: ControllerRenderProps<AuctionForm, 'images'>;
+    field: ControllerRenderProps<AuctionFormComplete, 'imageUrls'>;
     images: string[];
   };
 

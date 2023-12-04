@@ -36,6 +36,19 @@
   }
 
   .dark {
+    /* razzmatazz */
+    --accent-50: 90.82% 0.0631 10; /* #ffd4d9 */
+    --accent-100: 85.85% 0.1022 9; /* #ffbcc6 */
+    --accent-200: 80% 0.1528 9; /* #ff9dae  */
+    --accent-300: 75% 0.2007 9; /* #ff8099 */
+    --accent-400: 68% 0.2764 9; /* #ff4b7c */
+    --accent-500: 60% 0.2704 9; /* #ea0062 */
+    --accent-600: 52.64% 0.2372 8; /* #c40053 */
+    --accent-700: 43.64% 0.1969 8; /* #98003f */
+    --accent-800: 30.64% 0.1382 7; /* #5d0025 */
+    --accent-900: 20.64% 0.093 5; /* #330012 */
+    --accent-950: 13.64% 0.0614 7; /* #190005 */
+
     --background: 14.06% 0.003 69.39; /* #0a0908 */
     --foreground: 99% 0 0;
 
@@ -45,19 +58,22 @@
     --popover: 13.71% 0.036 258.53;
     --popover-foreground: 100% 0 0;
 
-    --primary: 100% 0 0;
+    --primary: 60% 0.2704 9;
     --primary-foreground: 20.79% 0.04 265.73;
 
+    --secondary-800: 21.01% 0.032 264.66; /* #111827 */
+
     --secondary: 21.01% 0.032 264.66; /* #111827 */
+
     --secondary-foreground: 100% 0 0;
 
     --muted: 28% 0.037 259.97; /* #1e293b */
     --muted-foreground: 71.07% 0.035 256.79;
 
-    --accent: 60% 0.25 9; /* #ea0062 */
+    --accent: var(--accent-500); /* #ea0062 */
     --accent-foreground: 100% 0 0;
 
-    --accent-hover: 50% 0.25 9;
+    --accent-hover: var(--accent-600);
 
     --success: 55% 0.22 145.06;
     --success-foreground: 100% 0 0;
@@ -77,6 +93,26 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: oklch(var(--accent));
+    border-radius: 5px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(var(--accent-hover));
   }
 }
 

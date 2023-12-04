@@ -21,6 +21,7 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
         magic:
           'magic-button border border-accent bg-background hover:bg-accent hover:text-accent-foreground',
+        text: 'text-primary',
       },
       size: {
         default: 'h-10 px-4 py-2',

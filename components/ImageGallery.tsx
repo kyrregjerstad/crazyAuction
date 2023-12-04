@@ -57,7 +57,7 @@ const ImageGallery = ({ images }: { images: string[] }) => {
                 src={images[currentImage] || ''}
                 width={500}
                 height={500}
-                className='aspect-square rounded-lg object-cover'
+                className='aspect-square w-full rounded-lg object-cover'
                 alt='Product Image'
               />
             </motion.div>
@@ -104,7 +104,8 @@ const NextBtn = ({ handleNext }: NextBtnProps) => {
   return (
     <Button
       onClick={handleNext}
-      className='absolute right-0 top-1/2 -translate-y-1/2 transform rounded-l-lg bg-black bg-opacity-50 p-2 text-white'
+      className='absolute right-0 top-1/2 h-20 w-20 -translate-y-1/2 transform rounded-l-lg bg-black bg-opacity-50 p-2 text-white 
+      md:h-10 md:w-10'
     >
       <svg
         className=' h-6 w-6'
@@ -132,10 +133,10 @@ const PrevBtn = ({ handlePrev }: PrevBtnProps) => {
   return (
     <Button
       onClick={handlePrev}
-      className='absolute left-0 top-1/2 -translate-y-1/2 transform rounded-r-lg bg-black bg-opacity-50 p-2 text-white'
+      className='absolute left-0 top-1/2 h-20 w-20 -translate-y-1/2 transform rounded-r-lg bg-black bg-opacity-50 p-2 text-white md:h-10 md:w-10'
     >
       <svg
-        className=' h-6 w-6'
+        className='h-6 w-6'
         fill='none'
         height='24'
         stroke='currentColor'

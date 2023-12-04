@@ -1,7 +1,7 @@
-import ListingsGridLoading from '@/components/ListingGridLoading';
-import ListingsGrid from '@/components/ListingsGrid';
+import AllListingsGrid from '@/components/ListingsGrid';
 import SearchFilters from '@/components/SearchFilters';
-import { getAllListings, SearchParams } from '@/lib/services/getAllListings';
+import { getAllListings } from '@/lib/services/getAllListings';
+import { SearchParams } from '@/lib/services/types';
 import {
   dehydrate,
   HydrationBoundary,
@@ -21,19 +21,19 @@ export default async function HomePage({ searchParams }: Props) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['allListings'],
+    queryKey: ['allListings', sort, order],
     queryFn: () =>
       getAllListings({
-        sort,
+        sort: sort === 'endsAt' ? 'endsAt' : 'created',
         order,
       }),
   });
 
   return (
-    <div className='w-full max-w-7xl p-2 sm:p-4 '>
+    <div className='w-full max-w-7xl p-2 sm:p-4'>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <SearchFilters sort={sort} order={order} />
-        <ListingsGrid />
+        <AllListingsGrid />
       </HydrationBoundary>
     </div>
   );
