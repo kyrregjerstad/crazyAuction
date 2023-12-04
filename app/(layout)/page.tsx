@@ -1,4 +1,4 @@
-import ListingsGrid from '@/components/ListingsGrid';
+import AllListingsGrid from '@/components/ListingsGrid';
 import SearchFilters from '@/components/SearchFilters';
 import { getAllListings } from '@/lib/services/getAllListings';
 import { SearchParams } from '@/lib/services/types';
@@ -33,7 +33,7 @@ export default async function HomePage({ searchParams }: Props) {
     <div className='w-full max-w-7xl p-2 sm:p-4'>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <SearchFilters sort={sort} order={order} />
-        <ListingsGrid />
+        <AllListingsGrid />
       </HydrationBoundary>
     </div>
   );

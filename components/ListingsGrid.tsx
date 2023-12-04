@@ -52,7 +52,7 @@ const useInfiniteListings = () => {
   });
 };
 
-const ListingsGrid = () => {
+const AllListingsGrid = () => {
   const router = useRouter();
   const skeletonArr = Array.from({ length: 30 }, (_, i) => i);
 
@@ -106,4 +106,4 @@ const ListingsGrid = () => {
   );
 };
 
-export default ListingsGrid;
+export default AllListingsGrid;

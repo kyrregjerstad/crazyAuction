@@ -7,6 +7,9 @@ import { getSingleUser } from '@/lib/services/getSingleUser';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import AvatarWithEdit from './Avatar';
+import AuctionItemCard from '@/components/AuctionItemCard';
+import AllListingsGrid from '@/components/ListingsGrid';
+import UserListingsGrid from '@/components/UserListingsGrid';
 
 interface Props {
   params: { username: string };
@@ -19,9 +22,11 @@ const UserPage = async ({ params }: Props) => {
 
   if (!session) return null;
 
+  const jwt = session.user.accessToken;
+
   const user = await getSingleUser({
     username: username,
-    jwt: session.user.accessToken,
+    jwt,
   });
 
   if (!user) return null;
@@ -35,8 +40,8 @@ const UserPage = async ({ params }: Props) => {
   // const currentBid = auctionItem.bids.at(-1)?.amount || 0;
 
   return (
-    <div className='grid max-w-5xl gap-6 px-4 pt-6 md:grid-cols-3'>
-      <div className='flex items-center gap-4'>
+    <div className='grid w-full max-w-5xl gap-6 px-4 pt-6 md:grid-cols-3'>
+      <div className='flex flex-col items-center gap-4 sm:flex-row'>
         <div className='rounded-lg shadow-md'>
           <div className='flex items-center gap-4'>
             <AvatarWithEdit canEdit={isLoggedInUser}>
@@ -47,24 +52,20 @@ const UserPage = async ({ params }: Props) => {
             </AvatarWithEdit>
           </div>
         </div>
-        <div>
+        <div className='flex flex-col items-center sm:items-start'>
           <h2 className='text-2xl font-bold'>{name}</h2>
           <h3>${credits} Credits</h3>
           <h3>{user._count.listings} auctions</h3>
         </div>
       </div>
 
-      <div className='rounded-lg  p-4 shadow-md md:col-span-3'>
-        <h2 className='mb-2 text-lg font-bold'>Current Auctions</h2>
-        <div className='grid gap-4'>
-          {listings ? (
-            listings.map((listing) => (
-              <Listing key={listing.id} listing={listing} />
-            ))
-          ) : (
-            <p>No auctions</p>
-          )}
-        </div>
+      <div className='rounded-lg shadow-md md:col-span-3'>
+        <h2 className='pb-4 text-lg font-bold'>Active Auctions</h2>
+        {listings ? (
+          <UserListingsGrid username={username} jwt={jwt} />
+        ) : (
+          <p>No auctions</p>
+        )}
       </div>
       <div className='rounded-lg  p-4 shadow-md md:col-span-3'>
         <h2 className='mb-2 text-lg font-bold'>Wins</h2>

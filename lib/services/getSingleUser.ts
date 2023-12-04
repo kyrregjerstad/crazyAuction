@@ -11,7 +11,6 @@ export const getSingleUser = async ({ username, jwt }: Params) => {
     const res = await auctionAPIFetcher({
       endpoint: `/profiles/${username}`,
       schema: singleUserSchema,
-      method: 'GET',
       jwt,
       queryParams: {
         _listings: true,

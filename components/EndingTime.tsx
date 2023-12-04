@@ -29,7 +29,7 @@ const EndingTime = ({ endsAt }: { endsAt: string }) => {
   }
 
   return (
-    <div className='flex gap-2 pt-2 text-gray-400'>
+    <div className='flex flex-col pt-2 text-gray-400 sm:flex-row sm:gap-2'>
       Ends in{' '}
       {isEndingSoon ? (
         <Countdown timeLeft={timeLeft} />

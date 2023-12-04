@@ -1,4 +1,4 @@
-import { ListingFull } from '@/lib/schemas/listing';
+import { Listing, ListingFull } from '@/lib/schemas/listing';
 import fallbackImg from '@/public/fallback-image.webp';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -12,11 +12,16 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 dayjs.extend(relativeTime);
 
 type Props = {
-  listing: ListingFull;
+  listing: Listing | ListingFull;
 };
 
 const AuctionItemCard = ({ listing }: Props) => {
-  const { id, title, media, description, bids, endsAt } = listing;
+  const { id, title, media, description, endsAt } = listing;
+
+  let bids;
+  if ('bids' in listing) {
+    bids = listing.bids;
+  }
 
   return (
     <Card className='relative flex flex-col overflow-hidden bg-secondary'>
@@ -55,7 +60,7 @@ const AuctionItemCard = ({ listing }: Props) => {
           isLink
           href={`/item/${id}`}
           variant='outline'
-          className='border-accent-600 w-full bg-transparent'
+          className='w-full border-accent-600 bg-transparent'
         >
           See more
         </AnimatedButton>

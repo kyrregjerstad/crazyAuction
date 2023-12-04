@@ -16,7 +16,7 @@ const usePostListing = () => {
   const postListing = async ({ formData }: Params) => {
     const transformedMediaLinks = formData.imageUrls.map(
       (url) => `${workerUrl}/cache/${url}`,
-    ); // add cloud_flare worker url to cache the image, in order to reduce cloud_inary costs
+    ); // add cloudflare worker url to cache the image, in order to reduce cloudinary costs
 
     const tagsArr = formData.tags?.split(' ').map((tag) => tag.trim()) || [];
 
