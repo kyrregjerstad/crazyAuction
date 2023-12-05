@@ -19,7 +19,6 @@ const InfoStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
   const { info, saveStep } = useMultiStepAuctionForm({
     mode,
     listing,
-    step: 'info',
   });
 
   const {

@@ -7,8 +7,14 @@ import auctionAPIFetcher from './auctionAPIFetcher';
 const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
 
 export const auctionFormInfoSchema = z.object({
-  title: z.string().min(3).max(280),
-  description: z.string().max(280).optional(),
+  title: z
+    .string()
+    .min(3, { message: 'Title can not be shorter than 3 characters' })
+    .max(280, { message: 'Title can not be longer than 280 characters' }),
+  description: z
+    .string()
+    .max(280, { message: 'Description cannot be longer than 280 characters' })
+    .optional(),
   tags: z.string().optional(),
 });
 

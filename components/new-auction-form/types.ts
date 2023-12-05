@@ -5,7 +5,7 @@ export const validSteps = ['info', 'media', 'time', 'summary'] as const;
 export type Step = (typeof validSteps)[number];
 
 export type NewAuctionFormProps = {
-  mode: 'create' | 'edit';
+  mode?: 'create' | 'edit';
   listing: ListingFull | null;
 };
 

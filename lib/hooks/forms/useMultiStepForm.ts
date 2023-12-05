@@ -24,9 +24,7 @@ import { FormEvent } from 'react';
 import usePostListing from '@/lib/services/usePostListing';
 import { useRouter } from 'next/navigation';
 
-type Step = 'info' | 'media' | 'dateTime' | 'summary';
-
-const useInitializeForm = <T extends FieldValues>(
+export const useInitializeForm = <T extends FieldValues>(
   schema: ZodSchema<T>,
   defaultValues?: DefaultValues<T>,
 ): UseFormReturn<T> => {
@@ -39,19 +37,15 @@ const useInitializeForm = <T extends FieldValues>(
 type Params = {
   mode: 'create' | 'edit';
   listing: ListingFull | null;
-  step: Step;
 };
-const useMultiStepAuctionForm = ({
-  mode = 'create',
-  listing,
-  step,
-}: Params) => {
+const useMultiStepAuctionForm = ({ mode = 'create', listing }: Params) => {
   const { getStore, updateStore, storedData, clearStore } =
     useAuctionFormStore();
 
-  const { nextStep } = useAuctionFormStep();
+  const { nextStep, getCurrentStep } = useAuctionFormStep();
   const { postListing } = usePostListing();
   const router = useRouter();
+  const currentStep = getCurrentStep();
 
   const forms = {
     info: useInitializeForm<AuctionFormInfo>(auctionFormInfoSchema, {
@@ -101,13 +95,13 @@ const useMultiStepAuctionForm = ({
   const formHandlers = {
     info: forms.info.handleSubmit(onSaveStep),
     media: forms.media.handleSubmit(onSaveStep),
-    dateTime: forms.dateTime.handleSubmit(onSaveStep),
+    time: forms.dateTime.handleSubmit(onSaveStep),
     summary: forms.summary.handleSubmit(onSaveSummaryStep),
   };
 
   const saveStep = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const handleFormSubmit = formHandlers[step];
+    const handleFormSubmit = formHandlers[currentStep];
     if (handleFormSubmit) {
       await handleFormSubmit();
     }
