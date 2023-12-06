@@ -26,7 +26,7 @@ jobs:
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
-      - run: bun install
+      - run: bun install --frozen-lockfile
       - run: bun run test
       - name: Update unit-test Badge
         uses: RubbaBoy/BYOB@v1.3.0
@@ -48,7 +48,7 @@ jobs:
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
-      - run: bun install
+      - run: bun install --frozen-lockfile
       - run: bun run build
 
       - name: Save build folder
@@ -77,7 +77,7 @@ jobs:
         with:
           bun-version: latest
 
-      - run: bun install
+      - run: bun install --frozen-lockfile
       - run: bunx playwright install --with-deps
 
       - name: Download the build folder
@@ -87,7 +87,7 @@ jobs:
           path: .next
 
       - name: Run e2e tests
-        run: bun run e2e:headless
+        run: bun run test:e2e:headless
       - uses: actions/upload-artifact@v3
         with:
           name: playwright-report
