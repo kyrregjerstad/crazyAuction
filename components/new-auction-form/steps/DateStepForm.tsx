@@ -87,7 +87,7 @@ const DateStepForm = (props: FormStepProps) => {
             );
           }}
         />
-        <StepNavigation />
+        <StepNavigation disabled={!isDirty || isSubmitting} />
       </form>
     </Form>
   );

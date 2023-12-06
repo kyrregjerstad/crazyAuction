@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import DateStepForm from './DateStepForm';
+import MediaStepForm from './MediaStepForm';
 
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
 import postListing from '@/lib/services/postListing';
@@ -31,6 +31,14 @@ vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
 }));
 
+vi.mock('react-dom', () => ({
+  useFormStatus: vi.fn(() => ({
+    pending: false,
+    data: null,
+    method: 'POST',
+  })),
+}));
+
 const StepWrapper = () => {
   const { getStore, clearStore } = useAuctionFormStore();
 
@@ -45,7 +53,7 @@ const StepWrapper = () => {
     postListing,
   };
 
-  return <DateStepForm {...props} />;
+  return <MediaStepForm {...props} />;
 };
 
 describe('InfoStepForm', () => {
@@ -56,12 +64,27 @@ describe('InfoStepForm', () => {
   it('renders form fields', () => {
     render(<StepWrapper />);
 
-    expect(screen.getByText('End Date')).toBeInTheDocument();
-    expect(screen.getByText('Time')).toBeInTheDocument();
+    expect(
+      screen.getByText('Drag & drop files here, or click to select files'),
+    ).toBeInTheDocument();
 
+    expect(screen.getByRole('button', { name: 'Upload' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument();
 
-    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Upload' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Next' })).not.toBeDisabled();
+  });
+
+  it.skip('saves the step to the store', async () => {
+    render(<StepWrapper />);
+    expect(screen.getByRole('button', { name: 'Next' })).not.toBeDisabled();
+
+    fireEvent.submit(screen.getByRole('button', { name: 'Next' }));
+
+    await waitFor(() => {
+      expect(updateStoreMock).toHaveBeenCalled();
+      expect(nextStepMock).toHaveBeenCalled();
+    });
   });
 });
