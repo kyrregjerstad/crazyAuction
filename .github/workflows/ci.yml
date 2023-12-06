@@ -71,6 +71,8 @@ jobs:
     name: e2e setup
     needs: build
     runs-on: ubuntu-latest
+    env:
+      NEXT_AUTH_SECRET: ${{ secrets.NEXT_AUTH_SECRET }}
     steps:
       - uses: actions/checkout@v4.1.1
       - uses: oven-sh/setup-bun@v1
