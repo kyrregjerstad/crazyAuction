@@ -49,6 +49,10 @@ const StepWrapper = () => {
 };
 
 describe('InfoStepForm', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders form fields', () => {
     render(<StepWrapper />);
 
