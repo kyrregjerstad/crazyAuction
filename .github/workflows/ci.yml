@@ -95,7 +95,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: playwright-report
-          path: playwright-report/
+          path: playwright/reports
           retention-days: 30
 
       - uses: RubbaBoy/BYOB@v1.3.0
