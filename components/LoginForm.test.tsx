@@ -6,7 +6,7 @@ import { ReactNode } from 'react';
 import { Mock } from 'vitest';
 
 vi.mock('next-auth/react', () => ({
-  signIn: vi.fn(),
+  signIn: vi.fn(() => Promise.resolve({ ok: true, status: 200 })),
 }));
 
 vi.mock('framer-motion', () => ({
