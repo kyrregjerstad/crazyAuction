@@ -1,8 +1,4 @@
-permissions:
-  actions: write
-  checks: write
-  statuses: write
-  contents: write
+permissions: write-all
 
 name: CI
 
