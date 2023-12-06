@@ -73,6 +73,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_AUTH_SECRET: ${{ secrets.NEXT_AUTH_SECRET }}
+      PLAYWRIGHT_USERNAME: ${{ secrets.PLAYWRIGHT_USERNAME }}
+      PLAYWRIGHT_PASSWORD: ${{ secrets.PLAYWRIGHT_PASSWORD }}
     steps:
       - uses: actions/checkout@v4.1.1
       - uses: oven-sh/setup-bun@v1
