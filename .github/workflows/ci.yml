@@ -41,6 +41,8 @@ jobs:
   build:
     needs: setup
     runs-on: ubuntu-latest
+    outputs:
+      build-artifact: build
     steps:
       - uses: actions/checkout@v4.1.1
       - uses: oven-sh/setup-bun@v1
@@ -48,6 +50,13 @@ jobs:
           bun-version: latest
       - run: bun install
       - run: bun run build
+
+      - name: Save build folder
+        uses: actions/upload-artifact@v3
+        with:
+          name: .next
+          if-no-files-found: error
+          path: .next
       - name: Update build Badge
         uses: RubbaBoy/BYOB@v1.3.0
         if: ${{ always() }}
@@ -79,7 +88,7 @@ jobs:
 
       - name: Run e2e tests
         run: bun run e2e:headless
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: playwright-report
           path: playwright-report/
