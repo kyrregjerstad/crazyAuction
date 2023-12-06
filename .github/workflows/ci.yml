@@ -1,3 +1,9 @@
+permissions:
+  actions: write
+  checks: write
+  statuses: write
+  contents: write
+
 name: CI
 
 on:
