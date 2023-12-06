@@ -72,7 +72,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     env:
-      NEXT_AUTH_SECRET: ${{ secrets.NEXT_AUTH_SECRET }}
+      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
       PLAYWRIGHT_USERNAME: ${{ secrets.PLAYWRIGHT_USERNAME }}
       PLAYWRIGHT_PASSWORD: ${{ secrets.PLAYWRIGHT_PASSWORD }}
     steps:
