@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest"
+    "test": "vitest",
+    "test:e2e": "playwright test --ui",
+    "test:e2e:headless": "playwright test"
   },
   "dependencies": {
     "@cloudinary/react": "^1.11.2",
@@ -71,6 +73,7 @@
   },
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",
+    "@playwright/test": "^1.40.1",
     "@tailwindcss/typography": "^0.5.10",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^14.1.2",
