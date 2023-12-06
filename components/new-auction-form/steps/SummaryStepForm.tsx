@@ -3,16 +3,12 @@
 import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
 import useStore from '@/lib/hooks/useStore';
-import { Label } from '@radix-ui/react-dropdown-menu';
 import Image from '../../Image';
+import { FormStepProps } from '../types';
 import StepNavigation from './StepNavigation';
 
-const SummaryStepForm = () => {
-  const { summary, saveStep } = useMultiStepAuctionForm({
-    mode: 'create',
-    listing: null,
-    step: 'summary',
-  });
+const SummaryStepForm = (props: FormStepProps) => {
+  const { summary, saveStep } = useMultiStepAuctionForm(props);
 
   const auctionFormData = useStore(useAuctionFormStore, (state) =>
     state.getStore(),

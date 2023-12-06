@@ -2,15 +2,20 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import InfoStepForm from './InfoStepForm';
 
+import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
+import useAuctionFormStep from '@/lib/hooks/useAuctionFormStep';
+import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
+import postListing from '@/lib/services/postListing';
+import { useRouter } from 'next/navigation';
+import { FormEvent } from 'react';
 import { vi } from 'vitest';
+
+const saveStepMock = vi.fn((e: FormEvent<HTMLFormElement>) =>
+  Promise.resolve(),
+);
 
 const nextStepMock = vi.fn();
 const updateStoreMock = vi.fn();
-const getStoreMock = vi.fn().mockReturnValue({
-  title: 'test',
-  description: '',
-  tags: '',
-});
 
 vi.mock('@/lib/hooks/useAuctionFormStep', () => {
   return {
@@ -21,19 +26,22 @@ vi.mock('@/lib/hooks/useAuctionFormStep', () => {
   };
 });
 
-vi.mock('@/lib/hooks/useAuctionFormStore', () => {
-  return {
-    default: vi.fn(() => ({
-      updateStore: updateStoreMock,
-      getStore: getStoreMock,
-      storedData: {
-        title: 'test',
-        description: '',
-        tags: '',
-      },
-    })),
-  };
-});
+vi.mock('@/lib/hooks/useAuctionFormStore', () => ({
+  default: vi.fn(() => ({
+    getStore: vi.fn().mockReturnValue({
+      title: 'test',
+      description: '',
+      tags: '',
+    }),
+    updateStore: updateStoreMock,
+    clearStore: vi.fn(),
+    storedData: {
+      title: 'test',
+      description: '',
+      tags: '',
+    },
+  })),
+}));
 
 vi.mock('next-auth/react', () => ({
   useSession: vi.fn(() => ({
@@ -54,9 +62,41 @@ vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
 }));
 
+const StepWrapper = () => {
+  const router = useRouter();
+  const { getCurrentStep, nextStep } = useAuctionFormStep();
+  const { getStore, updateStore, clearStore } = useAuctionFormStore();
+
+  const modifiedUpdateStore = updateStoreMock;
+
+  const hookDependencies = {
+    getStore,
+    updateStore,
+    clearStore,
+    nextStep,
+    postListing,
+    router,
+    getCurrentStep,
+  };
+
+  const { info, saveStep } = useMultiStepAuctionForm(
+    {
+      mode: 'create',
+      listing: null,
+    },
+    hookDependencies,
+  );
+
+  const modifiedSaveStep = saveStepMock;
+
+  return (
+    <InfoStepForm listing={null} form={info} saveStep={modifiedSaveStep} />
+  );
+};
+
 describe('InfoStepForm', () => {
   it('renders form fields', () => {
-    render(<InfoStepForm listing={null} />);
+    render(<StepWrapper />);
 
     expect(screen.getByPlaceholderText('Title')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Description')).toBeInTheDocument();
@@ -69,7 +109,7 @@ describe('InfoStepForm', () => {
   });
 
   it('submits the form', async () => {
-    render(<InfoStepForm listing={null} />);
+    render(<StepWrapper />);
 
     await userEvent.type(screen.getByPlaceholderText('Title'), 'Title');
     await userEvent.type(
@@ -80,29 +120,10 @@ describe('InfoStepForm', () => {
 
     expect(screen.getByRole('button', { name: 'Next' })).not.toBeDisabled();
 
-    await userEvent.click(screen.getByRole('button', { name: 'Next' }));
-
-    // fireEvent.submit(screen.getByRole('button', { name: 'Next' }));
-
-    await waitFor(() => {
-      expect(updateStoreMock).toHaveBeenCalled();
-    });
-  });
-
-  it.skip('validates form fields', async () => {
-    render(<InfoStepForm listing={null} />);
-    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
-    await userEvent.type(screen.getByPlaceholderText('Title'), '1');
-    await userEvent.type(screen.getByPlaceholderText('Description'), '123');
-
-    expect(screen.getByRole('button', { name: 'Next' })).not.toBeDisabled();
-
     fireEvent.submit(screen.getByRole('button', { name: 'Next' }));
 
     await waitFor(() => {
-      expect(
-        screen.getByText('Title can not be shorter than 3 characters'),
-      ).toBeInTheDocument();
+      expect(saveStepMock).toHaveBeenCalled();
     });
   });
 });

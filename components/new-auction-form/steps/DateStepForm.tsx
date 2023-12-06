@@ -1,5 +1,4 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -11,19 +10,16 @@ import {
 import { Input } from '@/components/ui/input';
 
 import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
-import { NewAuctionFormProps } from '../types';
 import { Label } from '@radix-ui/react-dropdown-menu';
 import dayjs from 'dayjs';
 import { ChangeEvent } from 'react';
 import { Calendar } from '../../ui/calendar';
+import { FormStepProps } from '../types';
 import StepNavigation from './StepNavigation';
 
-const DateStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
-  const { dateTime, saveStep } = useMultiStepAuctionForm({
-    mode,
-    listing,
-    step: 'dateTime',
-  });
+const DateStepForm = (props: FormStepProps) => {
+  const { dateTime, saveStep } = useMultiStepAuctionForm(props);
+
   const {
     control,
     formState: { isDirty, isSubmitting, isSubmitSuccessful },

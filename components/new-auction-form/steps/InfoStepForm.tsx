@@ -1,5 +1,4 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -12,19 +11,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
 import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
-import { NewAuctionFormProps } from '../types';
+import { FormStepProps } from '../types';
 import StepNavigation from './StepNavigation';
 
-const InfoStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
-  const { info, saveStep } = useMultiStepAuctionForm({
-    mode,
-    listing,
-  });
+const InfoStepForm = (props: FormStepProps) => {
+  const { info, saveStep } = useMultiStepAuctionForm(props);
+  const { control, formState } = info;
 
-  const {
-    control,
-    formState: { isDirty, isSubmitting, isSubmitSuccessful },
-  } = info;
+  const { isDirty, isSubmitting } = formState;
 
   return (
     <Form {...info}>

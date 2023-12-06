@@ -9,38 +9,38 @@ import {
   MediaStepForm,
   SummaryStepForm,
 } from './steps';
-import { NewAuctionFormProps } from './types';
-import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
+import { AuctionForm } from './types';
+import postListing from '@/lib/services/postListing';
+import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
 
-const NewAuctionForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
-  const { getCurrentStep } = useAuctionFormStep();
-  const { info, dateTime, media, summary, saveStep } = useMultiStepAuctionForm({
+const NewAuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
+  const { getCurrentStep, nextStep } = useAuctionFormStep();
+  const { getStore, updateStore, clearStore } = useAuctionFormStore();
+  const currentStep = getCurrentStep();
+
+  const props = {
     mode,
     listing,
-  });
-  const currentStep = getCurrentStep();
+    currentStep,
+    getStore,
+    clearStore,
+    updateStore,
+    nextStep,
+    postListing,
+  };
 
   const RenderStep = () => {
     switch (currentStep) {
       case 'info':
-        return (
-          <InfoStepForm
-            mode={mode}
-            listing={listing}
-            info={info}
-            saveStep={saveStep}
-          />
-        );
+        return <InfoStepForm {...props} />;
       case 'media':
-        return <MediaStepForm mode={mode} listing={listing} media={media} />;
+        return <MediaStepForm {...props} />;
       case 'time':
-        return (
-          <DateStepForm mode={mode} listing={listing} dateTime={dateTime} />
-        );
+        return <DateStepForm {...props} />;
       case 'summary':
-        return <SummaryStepForm />;
+        return <SummaryStepForm {...props} />;
       default:
-        return <InfoStepForm mode={mode} listing={listing} summary={summary} />;
+        return <InfoStepForm {...props} />;
     }
   };
 

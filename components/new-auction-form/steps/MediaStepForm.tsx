@@ -10,23 +10,19 @@ import { Input } from '@/components/ui/input';
 
 import Sparkles from '@/components/Sparkles';
 import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
-import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
 import { getCloudinarySignature } from '@/lib/server/actions';
 import { ArrowUpFromLine } from 'lucide-react';
 import { nanoid } from 'nanoid';
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
 import NewAuctionImageGallery from '../../NewAuctionImageGallery';
-import { NewAuctionFormProps, UploadImage } from '../types';
-import SubmitBtn from './SubmitBtn';
+import { FormStepProps, UploadImage } from '../types';
 import StepNavigation from './StepNavigation';
+import SubmitBtn from './SubmitBtn';
 
-const MediaStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
-  const { media, saveStep } = useMultiStepAuctionForm({
-    mode,
-    listing,
-    step: 'media',
-  });
+const MediaStepForm = (props: FormStepProps) => {
+  const { media, saveStep } = useMultiStepAuctionForm(props);
+
   const {
     control,
     formState: { isDirty, isSubmitting, isSubmitSuccessful },
