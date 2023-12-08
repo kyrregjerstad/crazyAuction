@@ -5,6 +5,7 @@ import Script from 'next/script';
 import AuthProvider from './auth/Provider';
 import './globals.css';
 import QueryClientProvider from './providers/QueryClientProvider';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export default function RootLayout({
   children,
@@ -32,6 +33,7 @@ export default function RootLayout({
             <AuthProvider>
               {/* <Header /> */}
               {children}
+              <SpeedInsights />
               <Toaster />
             </AuthProvider>
           </QueryClientProvider>
