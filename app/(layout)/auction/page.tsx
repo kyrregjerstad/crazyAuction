@@ -43,8 +43,8 @@ export default async function NewAuctionPage({ searchParams }: Props) {
 
   return (
     <>
-      <div className='flex w-full max-w-6xl flex-col items-center justify-center'>
-        <h1 className='my-8 text-2xl font-bold md:text-4xl lg:text-5xl'>
+      <div className='flex w-full max-w-6xl flex-col items-center justify-center p-4'>
+        <h1 className='pb-4 text-2xl font-bold sm:py-8 md:text-4xl lg:text-5xl'>
           Create a New Auction
         </h1>
 

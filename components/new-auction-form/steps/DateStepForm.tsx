@@ -59,9 +59,9 @@ const DateStepForm = (props: FormStepProps) => {
 
             return (
               <FormItem>
-                <FormLabel>End Date</FormLabel>
+                <FormLabel className='hidden'>End Date</FormLabel>
                 <FormControl>
-                  <>
+                  <div className='flex w-full flex-col items-center justify-center'>
                     <Calendar
                       mode='single'
                       selected={new Date(field.value)}
@@ -81,7 +81,7 @@ const DateStepForm = (props: FormStepProps) => {
                         className='w-fit'
                       />
                     </div>
-                  </>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
