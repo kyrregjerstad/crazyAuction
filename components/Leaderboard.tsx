@@ -1,8 +1,6 @@
 'use client';
 
-import getAllUsers from '@/lib/services/getAllUsers';
-import { useQuery } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
+import useQueryAllUsers from '@/lib/hooks/useQueryAllUsers';
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import {
@@ -13,15 +11,13 @@ import {
   TableHeader,
   TableRow,
 } from './ui/table';
-import { useClientJWT } from '@/lib/hooks/useClientJWT';
 
 const Leaderboard = () => {
-  const jwt = useClientJWT();
+  const { data: users, isLoading } = useQueryAllUsers();
 
-  const { data: users, isLoading } = useQuery({
-    queryKey: ['allUsers'],
-    queryFn: () => getAllUsers({ jwt }),
-  });
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   if (!users) {
     return null;
@@ -46,7 +42,7 @@ const Leaderboard = () => {
               <TableCell className='flex items-center space-x-2 overflow-hidden font-medium'>
                 <Avatar>
                   <AvatarImage src={user.avatar || ''} />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarFallback>CA</AvatarFallback>
                 </Avatar>
                 <Link
                   href={`/user/${user.name}`}

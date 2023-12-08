@@ -1,18 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { getSingleUser } from '../services/getSingleUser';
+import getAllUsers from '../services/getAllUsers';
 import { useClientJWT } from './useClientJWT';
 
-type Params = {
-  username: string;
-};
-const useQuerySingleUser = ({ username }: Params) => {
+const useQueryAllUsers = () => {
   const { jwt, isSessionLoading } = useClientJWT();
 
   const query = useQuery({
-    queryKey: ['userListings', username],
+    queryKey: ['allUsers'],
     queryFn: () =>
-      getSingleUser({
-        username: username,
+      getAllUsers({
         jwt: jwt || '',
       }),
     enabled: !!jwt,
@@ -23,4 +19,4 @@ const useQuerySingleUser = ({ username }: Params) => {
   return { ...query, isLoading };
 };
 
-export default useQuerySingleUser;
+export default useQueryAllUsers;
