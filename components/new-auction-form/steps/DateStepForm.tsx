@@ -42,10 +42,9 @@ const DateStepForm = (props: FormStepProps) => {
                 const currentTime = new Date(field.value || Date.now());
                 const hours = currentTime.getHours();
                 const minutes = currentTime.getMinutes();
-                console.log(currentTime);
 
                 selectedDate.setHours(hours, minutes);
-                field.onChange(selectedDate);
+                field.onChange(selectedDate.toISOString());
               }
             };
 
@@ -53,7 +52,7 @@ const DateStepForm = (props: FormStepProps) => {
               const [hours, minutes] = time.target.value.split(':');
               const newDate = new Date(field.value);
               newDate.setHours(parseInt(hours), parseInt(minutes));
-              field.onChange(newDate);
+              field.onChange(newDate.toISOString());
             };
 
             return (
@@ -63,7 +62,7 @@ const DateStepForm = (props: FormStepProps) => {
                   <>
                     <Calendar
                       mode='single'
-                      selected={field.value}
+                      selected={new Date(field.value)}
                       onSelect={handleDateChange}
                       className='flex'
                       disabled={(date) =>

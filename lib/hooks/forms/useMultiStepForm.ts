@@ -24,6 +24,7 @@ import {
 } from 'react-hook-form';
 import { ZodSchema } from 'zod';
 import useAuctionFormStore from '../useAuctionFormStore';
+import { wait } from '@/lib/utils';
 
 const useFormInitialization = <T extends FieldValues>(
   schema: ZodSchema<T>,
@@ -48,19 +49,16 @@ const useStepHandlers = ({
   router,
 }: StepHandlersParams) => {
   const onSaveStep = async (data: Partial<AuctionFormComplete>) => {
+    console.log(data);
+
     updateStore(data);
     nextStep();
   };
 
-  const onSaveSummaryStep = async (
-    formData: AuctionFormComplete,
-    currentStep: Step,
-  ) => {
-    if (currentStep === 'summary') {
-      const res = await postListing({ formData });
-      clearStore();
-      router.push(`/auctions/${res?.id}`);
-    }
+  const onSaveSummaryStep = async (formData: AuctionFormComplete) => {
+    const res = await postListing({ formData });
+    router.push(`/item/${res?.id}`);
+    clearStore();
   };
 
   return { onSaveStep, onSaveSummaryStep };
@@ -82,7 +80,7 @@ const useMultiStepAuctionForm = ({
   currentStep,
 }: Params) => {
   const router = useRouter();
-  const { updateStore, clearStore } = useAuctionFormStore();
+  const { updateStore, clearStore, storedData } = useAuctionFormStore();
 
   const forms = {
     info: useFormInitialization<AuctionFormInfo>(auctionFormInfoSchema, {
@@ -99,10 +97,10 @@ const useMultiStepAuctionForm = ({
     summary: useFormInitialization<AuctionFormComplete>(
       auctionFormSchemaComplete,
       {
-        title: listing?.title ?? '',
-        description: listing?.description ?? '',
-        imageUrls: [],
-        dateTime: undefined,
+        title: storedData.title ?? '',
+        description: storedData.description ?? '',
+        imageUrls: storedData.imageUrls ?? [],
+        dateTime: storedData.dateTime ?? undefined,
       },
     ),
   };
@@ -119,9 +117,7 @@ const useMultiStepAuctionForm = ({
     info: forms.info.handleSubmit(onSaveStep),
     media: forms.media.handleSubmit(onSaveStep),
     time: forms.dateTime.handleSubmit(onSaveStep),
-    summary: forms.summary.handleSubmit((data) =>
-      onSaveSummaryStep(data, currentStep),
-    ),
+    summary: forms.summary.handleSubmit(onSaveSummaryStep),
   };
 
   const saveStep = async (e: FormEvent<HTMLFormElement>) => {

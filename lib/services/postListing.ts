@@ -3,6 +3,7 @@ import { singleListingSchema } from '@/lib/schemas/listing';
 import { getServerSession } from 'next-auth';
 import { z } from 'zod';
 import auctionAPIFetcher from './auctionAPIFetcher';
+import { getSession } from 'next-auth/react';
 
 const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
 
@@ -23,7 +24,7 @@ export const auctionFormMediaSchema = z.object({
 });
 
 export const auctionFormDateSchema = z.object({
-  dateTime: z.date(),
+  dateTime: z.string(),
 });
 
 export const auctionFormSchemaComplete = z.object({
@@ -41,19 +42,9 @@ type Params = {
   formData: AuctionFormComplete;
 };
 
-const getJWT = async () => {
-  const session = await getServerSession(authOptions);
-  const jwt = session?.user?.accessToken;
-
-  if (!jwt) {
-    throw new Error('No JWT found');
-  }
-
-  return jwt;
-};
-
 const postListing = async ({ formData }: Params) => {
-  const jwt = await getJWT();
+  const session = await getSession();
+  const jwt = session?.user?.accessToken;
   const transformedMediaLinks = formData.imageUrls.map(
     (url) => `${workerUrl}/cache/${url}`,
   ); // add cloudFlare worker url to cache the image, in order to reduce cloudinary costs
@@ -65,7 +56,7 @@ const postListing = async ({ formData }: Params) => {
     description: formData.description,
     media: transformedMediaLinks,
     tags: tagsArr,
-    endsAt: formData.dateTime.toISOString(),
+    endsAt: formData.dateTime,
   };
 
   try {

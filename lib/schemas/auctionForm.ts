@@ -11,7 +11,7 @@ export const auctionFormMediaSchema = z.object({
 });
 
 export const auctionFormDateSchema = z.object({
-  dateTime: z.date(),
+  dateTime: z.string(),
 });
 
 export const auctionFormSchemaComplete = z.object({
