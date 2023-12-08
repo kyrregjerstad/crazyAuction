@@ -1,14 +1,18 @@
 import { Button } from '@/components/ui/button';
-import useAuctionFormStep from '@/lib/hooks/useAuctionFormStep';
+import { Step } from '../types';
 
 type Props = {
+  nextStep: () => void;
+  prevStep: () => void;
+  currentStep: Step;
   disabled?: boolean;
 };
-const StepNavigation = ({ disabled }: Props) => {
-  const { nextStep, prevStep, getCurrentStep } = useAuctionFormStep();
-
-  const currentStep = getCurrentStep();
-
+const StepNavigation = ({
+  nextStep,
+  prevStep,
+  currentStep,
+  disabled,
+}: Props) => {
   return (
     <div className='flex w-full justify-end gap-4'>
       <Button variant='outline' type='button' onClick={prevStep}>

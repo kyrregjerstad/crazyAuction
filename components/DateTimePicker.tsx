@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import { DateTime } from 'luxon';
 import { Calendar as CalendarIcon } from 'lucide-react';
 
@@ -14,17 +14,17 @@ import { SelectSingleEventHandler } from 'react-day-picker';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 
-interface DateTimePickerProps {
+type Props = {
   date: Date | null;
   setDate: (date: Date) => void;
-}
+};
 
-export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
-  const [selectedDateTime, setSelectedDateTime] = React.useState<DateTime>(
+export function DateTimePicker({ date, setDate }: Props) {
+  const [selectedDateTime, setSelectedDateTime] = useState<DateTime>(
     DateTime.fromJSDate(date || new Date()),
   );
 
-  const handleSelect: SelectSingleEventHandler = (day, selected) => {
+  const handleSelect: SelectSingleEventHandler = (_day, selected) => {
     const selectedDay = DateTime.fromJSDate(selected);
     const modifiedDay = selectedDay.set({
       hour: selectedDateTime.hour,

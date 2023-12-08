@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest",
+    "test:e2e": "playwright test --ui",
+    "test:e2e:headless": "playwright test"
   },
   "dependencies": {
     "@cloudinary/react": "^1.11.2",
@@ -30,6 +33,7 @@
     "@tanstack/react-query-next-experimental": "^5.8.4",
     "@tanstack/react-table": "^8.10.7",
     "@upstash/redis": "^1.25.1",
+    "@vercel/speed-insights": "^1.0.0",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^1.41.0",
     "clsx": "^2.0.0",
@@ -70,20 +74,29 @@
   },
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",
+    "@playwright/test": "^1.40.1",
     "@tailwindcss/typography": "^0.5.10",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/user-event": "^14.5.1",
     "@types/luxon": "^3.3.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/three": "^0.158.3",
+    "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.0.1",
+    "bun-types": "^1.0.15",
     "eslint": "^8",
     "eslint-config-next": "14.0.2",
     "eslint-config-prettier": "^9.0.0",
+    "jsdom": "^23.0.1",
     "postcss": "^8",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7",
     "tailwindcss": "^3.3.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^1.0.1"
   }
 }

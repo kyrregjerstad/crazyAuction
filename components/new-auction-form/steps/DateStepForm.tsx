@@ -1,5 +1,4 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -11,19 +10,18 @@ import {
 import { Input } from '@/components/ui/input';
 
 import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
-import { NewAuctionFormProps } from '../types';
 import { Label } from '@radix-ui/react-dropdown-menu';
 import dayjs from 'dayjs';
 import { ChangeEvent } from 'react';
 import { Calendar } from '../../ui/calendar';
+import { FormStepProps } from '../types';
 import StepNavigation from './StepNavigation';
 
-const DateStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
-  const { dateTime, saveStep } = useMultiStepAuctionForm({
-    mode,
-    listing,
-    step: 'dateTime',
-  });
+const DateStepForm = (props: FormStepProps) => {
+  const { currentStep, nextStep, prevStep } = props;
+
+  const { dateTime, saveStep } = useMultiStepAuctionForm(props);
+
   const {
     control,
     formState: { isDirty, isSubmitting, isSubmitSuccessful },
@@ -46,10 +44,9 @@ const DateStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
                 const currentTime = new Date(field.value || Date.now());
                 const hours = currentTime.getHours();
                 const minutes = currentTime.getMinutes();
-                console.log(currentTime);
 
                 selectedDate.setHours(hours, minutes);
-                field.onChange(selectedDate);
+                field.onChange(selectedDate.toISOString());
               }
             };
 
@@ -57,7 +54,7 @@ const DateStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
               const [hours, minutes] = time.target.value.split(':');
               const newDate = new Date(field.value);
               newDate.setHours(parseInt(hours), parseInt(minutes));
-              field.onChange(newDate);
+              field.onChange(newDate.toISOString());
             };
 
             return (
@@ -67,7 +64,7 @@ const DateStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
                   <>
                     <Calendar
                       mode='single'
-                      selected={field.value}
+                      selected={new Date(field.value)}
                       onSelect={handleDateChange}
                       className='flex'
                       disabled={(date) =>
@@ -91,7 +88,12 @@ const DateStepForm = ({ mode = 'create', listing }: NewAuctionFormProps) => {
             );
           }}
         />
-        <StepNavigation />
+        <StepNavigation
+          disabled={!isDirty || isSubmitting}
+          currentStep={currentStep}
+          nextStep={nextStep}
+          prevStep={prevStep}
+        />
       </form>
     </Form>
   );

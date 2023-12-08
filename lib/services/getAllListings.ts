@@ -34,7 +34,7 @@ export const getAllListings = async ({
 
     const sortedRes = res.map((listing) => {
       const bids = listing.bids.sort((a, b) => {
-        return a.amount - b.amount;
+        return b.amount - a.amount;
       });
 
       return {

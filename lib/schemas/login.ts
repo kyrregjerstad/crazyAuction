@@ -6,15 +6,15 @@ export const loginSchema = z.object({
     .email()
     .refine(
       (email) => {
-        return (
-          email.endsWith('@noroff.no') || email.endsWith('@stud.noroff.no')
-        );
+        return email.endsWith('@stud.noroff.no');
       },
       {
-        message: 'Email must end with @noroff.no or @stud.noroff.no',
+        message: 'Email must end with @stud.noroff.no',
       },
     ),
-  password: z.string().min(8),
+  password: z.string().min(8, {
+    message: 'Password must be at least 8 characters long',
+  }),
 });
 
 export type Login = z.infer<typeof loginSchema>;

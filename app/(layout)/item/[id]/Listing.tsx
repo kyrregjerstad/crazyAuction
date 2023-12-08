@@ -31,8 +31,6 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
     refetchInterval: 10000, // refetch every 10 seconds
   });
 
-  console.log(data);
-
   const isLoggedInUser = useIsLoggedInUser(singleListing?.seller.name);
   const isAuthenticated = session.status === 'authenticated';
 
@@ -225,7 +223,6 @@ function BidHistory({
       </div>
     );
   }
-  const reversedBids = bids.toReversed(); // get the most recent bids first
   return (
     <div className='w-full max-w-md rounded-lg p-6 text-foreground'>
       <h2 className='mb-6 text-lg font-semibold text-accent'>Bid History</h2>
@@ -233,7 +230,7 @@ function BidHistory({
         <div className='absolute left-[10px] top-2 h-full w-[2px]  bg-gradient-to-b from-accent' />
         <ScrollArea className='h-96'>
           <ul className='list-none'>
-            {reversedBids.map((bid, index) => (
+            {bids.map((bid, index) => (
               <BidHistoryItem key={bid.id} bid={bid} index={index} />
             ))}
           </ul>
