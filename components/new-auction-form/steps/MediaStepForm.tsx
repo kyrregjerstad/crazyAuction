@@ -21,6 +21,7 @@ import StepNavigation from './StepNavigation';
 import SubmitBtn from './SubmitBtn';
 
 const MediaStepForm = (props: FormStepProps) => {
+  const { currentStep, nextStep, prevStep } = props;
   const { media, saveStep } = useMultiStepAuctionForm(props);
 
   const {
@@ -173,7 +174,11 @@ const MediaStepForm = (props: FormStepProps) => {
               );
             }}
           />
-          <StepNavigation disabled={!allImagesUploaded} />
+          <StepNavigation
+            currentStep={currentStep}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
         </form>
       </Form>
     </>

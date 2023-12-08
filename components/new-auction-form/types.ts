@@ -22,6 +22,7 @@ export type FormStepProps = AuctionForm & {
   clearStore: () => void;
   updateStore: (data: Partial<AuctionFormComplete>) => void;
   nextStep: () => void;
+  prevStep: () => void;
   postListing: PostListing;
 };
 

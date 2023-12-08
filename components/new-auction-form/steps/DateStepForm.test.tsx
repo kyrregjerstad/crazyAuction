@@ -42,6 +42,7 @@ const StepWrapper = () => {
     clearStore,
     updateStore: updateStoreMock,
     nextStep: nextStepMock,
+    prevStep: vi.fn(),
     postListing,
   };
 

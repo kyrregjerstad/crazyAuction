@@ -1,4 +1,7 @@
-import { PostListing, Step } from '@/components/new-auction-form/types';
+import {
+  type PostListing,
+  type Step,
+} from '@/components/new-auction-form/types';
 import { ListingFull } from '@/lib/schemas/listing';
 import {
   AuctionFormComplete,
@@ -97,10 +100,10 @@ const useMultiStepAuctionForm = ({
     summary: useFormInitialization<AuctionFormComplete>(
       auctionFormSchemaComplete,
       {
-        title: storedData.title ?? '',
-        description: storedData.description ?? '',
-        imageUrls: storedData.imageUrls ?? [],
-        dateTime: storedData.dateTime ?? undefined,
+        title: storedData?.title ?? '',
+        description: storedData?.description ?? '',
+        imageUrls: storedData?.imageUrls ?? [],
+        dateTime: storedData?.dateTime ?? undefined,
       },
     ),
   };

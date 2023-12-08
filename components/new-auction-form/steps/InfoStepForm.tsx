@@ -15,6 +15,7 @@ import { FormStepProps } from '../types';
 import StepNavigation from './StepNavigation';
 
 const InfoStepForm = (props: FormStepProps) => {
+  const { currentStep, nextStep, prevStep } = props;
   const { info, saveStep } = useMultiStepAuctionForm(props);
   const { control, formState } = info;
 
@@ -75,7 +76,12 @@ const InfoStepForm = (props: FormStepProps) => {
             </FormItem>
           )}
         />
-        <StepNavigation disabled={!isDirty || isSubmitting} />
+        <StepNavigation
+          disabled={!isDirty || isSubmitting}
+          currentStep={currentStep}
+          nextStep={nextStep}
+          prevStep={prevStep}
+        />
       </form>
     </Form>
   );

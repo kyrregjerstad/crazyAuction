@@ -1,17 +1,18 @@
 'use client';
 
+import { Form, FormField } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
 import useStore from '@/lib/hooks/useStore';
+import dayjs from 'dayjs';
 import Image from '../../Image';
 import { FormStepProps } from '../types';
 import StepNavigation from './StepNavigation';
-import { Form, FormField } from '@/components/ui/form';
-import { useEffect } from 'react';
-import { Input } from '@/components/ui/input';
-import dayjs from 'dayjs';
 
 const SummaryStepForm = (props: FormStepProps) => {
+  const { currentStep, nextStep, prevStep } = props;
+
   const { summary, saveStep } = useMultiStepAuctionForm(props);
 
   const auctionFormData = useStore(useAuctionFormStore, (state) =>
@@ -26,10 +27,6 @@ const SummaryStepForm = (props: FormStepProps) => {
     setValue,
     getValues,
   } = summary;
-
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
 
   return (
     <Form {...summary}>
@@ -101,7 +98,12 @@ const SummaryStepForm = (props: FormStepProps) => {
             </div>
           </div>
         </div>
-        <StepNavigation />
+        <StepNavigation
+          disabled={isSubmitting}
+          currentStep={currentStep}
+          nextStep={nextStep}
+          prevStep={prevStep}
+        />
         <FormField
           control={control}
           name='title'

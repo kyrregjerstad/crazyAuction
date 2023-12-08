@@ -14,7 +14,7 @@ import postListing from '@/lib/services/postListing';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
 
 const NewAuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
-  const { getCurrentStep, nextStep } = useAuctionFormStep();
+  const { getCurrentStep, nextStep, prevStep } = useAuctionFormStep();
   const { getStore, updateStore, clearStore } = useAuctionFormStore();
   const currentStep = getCurrentStep();
 
@@ -26,6 +26,7 @@ const NewAuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
     clearStore,
     updateStore,
     nextStep,
+    prevStep,
     postListing,
   };
 
