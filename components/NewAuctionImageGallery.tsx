@@ -149,6 +149,7 @@ const SortableItem = ({
           height={200}
           alt='test'
           className='h-full w-full max-w-full rounded-lg object-cover'
+          data-testid='draggable-image'
         />
       </div>
     </motion.div>

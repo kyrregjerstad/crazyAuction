@@ -20,6 +20,10 @@ vi.mock('@/lib/hooks/useAuctionFormStep', () => {
 vi.mock('@/lib/hooks/useAuctionFormStore', () => ({
   default: vi.fn(() => ({
     updateStore: updateStoreMock,
+    storedData: {
+      endDate: '',
+      endTime: '',
+    },
   })),
 }));
 

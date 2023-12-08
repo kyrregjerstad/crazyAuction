@@ -9,6 +9,17 @@ import { vi } from 'vitest';
 const nextStepMock = vi.fn();
 const updateStoreMock = vi.fn();
 
+const storedDataMock = {
+  imageUrls: [],
+};
+
+vi.mock('@/lib/hooks/useAuctionFormStore', () => ({
+  default: vi.fn(() => ({
+    updateStore: updateStoreMock,
+    storedData: storedDataMock,
+  })),
+}));
+
 vi.mock('@/lib/hooks/useAuctionFormStep', () => {
   return {
     default: vi.fn(() => ({
@@ -16,12 +27,6 @@ vi.mock('@/lib/hooks/useAuctionFormStep', () => {
     })),
   };
 });
-
-vi.mock('@/lib/hooks/useAuctionFormStore', () => ({
-  default: vi.fn(() => ({
-    updateStore: updateStoreMock,
-  })),
-}));
 
 vi.mock('@/lib/hooks/usePostListing');
 
@@ -62,7 +67,7 @@ describe('InfoStepForm', () => {
     vi.clearAllMocks();
   });
 
-  it('renders form fields', () => {
+  it('renders the form fields', () => {
     render(<StepWrapper />);
 
     expect(
@@ -77,7 +82,7 @@ describe('InfoStepForm', () => {
     expect(screen.getByRole('button', { name: 'Next' })).not.toBeDisabled();
   });
 
-  it.skip('saves the step to the store', async () => {
+  it('saves the step to the store', async () => {
     render(<StepWrapper />);
     expect(screen.getByRole('button', { name: 'Next' })).not.toBeDisabled();
 
@@ -86,6 +91,28 @@ describe('InfoStepForm', () => {
     await waitFor(() => {
       expect(updateStoreMock).toHaveBeenCalled();
       expect(nextStepMock).toHaveBeenCalled();
+    });
+  });
+
+  it('retrieves the stored data', async () => {
+    const localStoredDataMock = {
+      imageUrls: ['test1.jpg', 'test2.jpg', 'test3.jpg'],
+    };
+
+    vi.mocked(useAuctionFormStore).mockImplementation(() => ({
+      updateStore: updateStoreMock,
+      storedData: localStoredDataMock,
+    }));
+
+    render(<StepWrapper />);
+
+    const images = screen.getAllByTestId(
+      'draggable-image',
+    ) as HTMLImageElement[];
+    expect(images).toHaveLength(3);
+
+    images.forEach((img, index) => {
+      expect(img.src).toContain(localStoredDataMock.imageUrls[index]);
     });
   });
 });

@@ -85,8 +85,6 @@ const useMultiStepAuctionForm = ({
   const router = useRouter();
   const { updateStore, clearStore, storedData } = useAuctionFormStore();
 
-  console.log(storedData);
-
   const forms = {
     info: useFormInitialization<AuctionFormInfo>(auctionFormInfoSchema, {
       title: storedData.title ?? '',
