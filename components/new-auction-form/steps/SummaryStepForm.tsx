@@ -104,31 +104,33 @@ const SummaryStepForm = (props: FormStepProps) => {
           nextStep={nextStep}
           prevStep={prevStep}
         />
-        <FormField
-          control={control}
-          name='title'
-          render={({ field }) => <Input {...field} readOnly />}
-        />
-        <FormField
-          control={control}
-          name='description'
-          render={({ field }) => <Input {...field} readOnly />}
-        />
-        <FormField
-          control={control}
-          name='tags'
-          render={({ field }) => <Input {...field} readOnly />}
-        />
-        <FormField
-          control={control}
-          name='dateTime'
-          render={({ field }) => <Input {...field} readOnly />}
-        />
-        <FormField
-          control={control}
-          name='imageUrls'
-          render={({ field }) => <Input {...field} readOnly />}
-        />
+        <div className='hidden'>
+          <FormField
+            control={control}
+            name='title'
+            render={({ field }) => <Input {...field} readOnly />}
+          />
+          <FormField
+            control={control}
+            name='description'
+            render={({ field }) => <Input {...field} readOnly />}
+          />
+          <FormField
+            control={control}
+            name='tags'
+            render={({ field }) => <Input {...field} readOnly />}
+          />
+          <FormField
+            control={control}
+            name='dateTime'
+            render={({ field }) => <Input {...field} readOnly />}
+          />
+          <FormField
+            control={control}
+            name='imageUrls'
+            render={({ field }) => <Input {...field} readOnly />}
+          />
+        </div>
 
         {/* <Debugger json={JSON.stringify(formState, null, 2)} /> */}
       </form>
