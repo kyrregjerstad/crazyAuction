@@ -1,17 +1,17 @@
 'use client';
 
 import useSortSearchParams from '@/lib/hooks/useSortSearchParams';
+import { ListingFull } from '@/lib/schemas/listingSchema';
 import { getAllListings } from '@/lib/services/getAllListings';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { Fragment } from 'react';
+import useInfiniteScroll from 'react-infinite-scroll-hook';
+import AuctionGrid from './AuctionGrid';
 import AuctionItemCard from './AuctionItemCard';
-import { Card } from './ui/card';
 import Skeleton from './Skeleton';
 import { Button } from './ui/button';
-import { useRouter } from 'next/navigation';
-import AuctionGrid from './AuctionGrid';
-import { ListingFull } from '@/lib/schemas/listingSchema';
-import { Fragment, use } from 'react';
-import useInfiniteScroll from 'react-infinite-scroll-hook';
+import { Card } from './ui/card';
 
 const AllListingsGrid = () => {
   const router = useRouter();

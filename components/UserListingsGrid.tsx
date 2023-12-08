@@ -1,15 +1,13 @@
 'use client';
 
-import { getSingleUser } from '@/lib/services/getSingleUser';
 import fallbackImg from '@/public/fallback-image.webp';
-import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import AuctionGrid from './AuctionGrid';
 
 import Skeleton from './Skeleton';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
+import useQuerySingleUser from '@/lib/hooks/useQuerySingleUser';
 import Link from 'next/link';
 import AnimatedButton from './AnimatedButton';
 import EndingTime from './EndingTime';
@@ -17,21 +15,13 @@ import Image from './Image';
 
 type Props = {
   username: string;
-  jwt: string;
 };
 
-const UserListingsGrid = ({ username, jwt }: Props) => {
+const UserListingsGrid = ({ username }: Props) => {
   const router = useRouter();
   const skeletonArr = Array.from({ length: 6 }, (_, i) => i);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['userListings', username],
-    queryFn: () =>
-      getSingleUser({
-        username: username,
-        jwt: jwt,
-      }),
-  });
+  const { data, isLoading } = useQuerySingleUser({ username });
 
   if (isLoading) {
     return (
