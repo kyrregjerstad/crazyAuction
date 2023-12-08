@@ -40,6 +40,7 @@ const StepWrapper = () => {
     currentStep: 'info' as 'info' | 'media' | 'time' | 'summary',
     getStore,
     clearStore,
+    prevStep: vi.fn(),
     updateStore: updateStoreMock,
     nextStep: nextStepMock,
     postListing,
@@ -61,7 +62,7 @@ describe('InfoStepForm', () => {
     expect(screen.getByPlaceholderText('Tags')).toBeInTheDocument();
 
     expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
 
     expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
   });
