@@ -11,13 +11,13 @@ export function cloudinaryLoader({ src, width, quality }: ImageLoaderProps) {
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
   if (!workerUrl) {
-    throw new Error(
+    console.warn(
       'NEXT_PUBLIC_WORKER_URL is not defined, did you forget to add it?',
     );
   }
 
   if (!cloudName) {
-    throw new Error(
+    console.warn(
       'NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME is not defined, did you forget to add it?',
     );
   }
@@ -28,7 +28,7 @@ export function cloudinaryLoader({ src, width, quality }: ImageLoaderProps) {
     'q_' + (quality || 'auto'),
   ];
 
-  if (src.startsWith(workerUrl)) {
+  if (src.startsWith(workerUrl!)) {
     return src;
   }
 
