@@ -12,11 +12,22 @@ import {
 import { AuctionForm } from './types';
 import postListing from '@/lib/services/postListing';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
+import { useEffect } from 'react';
+import { ListingFull } from '@/lib/schemas/listingSchema';
 
 const NewAuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
   const { getCurrentStep, nextStep, prevStep } = useAuctionFormStep();
   const { getStore, updateStore, clearStore } = useAuctionFormStore();
   const currentStep = getCurrentStep();
+
+  useEffect(() => {
+    if (mode === 'edit' && listing) {
+      const normalizedListing = transformListingToStore(listing);
+
+      clearStore();
+      updateStore(normalizedListing);
+    }
+  }, [mode, listing, clearStore, updateStore]);
 
   const props = {
     mode,
@@ -56,3 +67,13 @@ const NewAuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
 };
 
 export default NewAuctionForm;
+
+const transformListingToStore = (listing: ListingFull) => {
+  return {
+    title: listing.title,
+    description: listing.description,
+    tags: listing.tags,
+    imageUrls: listing.media,
+    dateTime: listing.endsAt,
+  };
+};

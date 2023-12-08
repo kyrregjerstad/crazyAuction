@@ -112,7 +112,9 @@ const SummaryStepForm = (props: FormStepProps) => {
           <FormField
             control={control}
             name='description'
-            render={({ field }) => <Input {...field} readOnly />}
+            render={({ field }) => (
+              <Input {...field} value={field.value || ''} readOnly />
+            )}
           />
           <FormField
             control={control}

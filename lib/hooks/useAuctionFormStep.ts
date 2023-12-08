@@ -1,6 +1,6 @@
 import { Step } from '@/components/new-auction-form/types';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 
 const stepsOrder: Step[] = ['info', 'media', 'time', 'summary'];
 
@@ -18,9 +18,11 @@ const useAuctionFormStep = () => {
 
   const goToStep = useCallback(
     (step: Step) => {
-      router.push(`?step=${step}`);
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.set('step', step);
+      router.push(`?${newSearchParams.toString()}`);
     },
-    [router],
+    [router, searchParams],
   );
 
   const nextStep = useCallback(() => {

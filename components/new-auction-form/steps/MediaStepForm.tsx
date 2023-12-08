@@ -21,24 +21,31 @@ import NewAuctionImageGallery from '../../NewAuctionImageGallery';
 import { FormStepProps, Step, UploadImage } from '../types';
 import StepNavigation from './StepNavigation';
 import SubmitBtn from './SubmitBtn';
+import useStore from '@/lib/hooks/useStore';
 
 const MediaStepForm = (props: FormStepProps) => {
-  const { updateStore, storedData } = useAuctionFormStore();
+  const { updateStore } = useAuctionFormStore();
+
+  const auctionFormData = useStore(useAuctionFormStore, (state) =>
+    state.getStore(),
+  );
+
   const { media, saveStep } = useMultiStepAuctionForm(props);
   const {
     formState: { isSubmitSuccessful },
     setValue,
   } = media;
 
-  const initialImages = storedData?.imageUrls?.map((url) => ({
-    id: nanoid(),
-    file: undefined,
-    previewUrl: url,
-    publicUrl: url,
-  }));
+  const initialImages = mapImagesToUrls(auctionFormData?.imageUrls);
 
   const [images, setImages] = useState<UploadImage[]>(initialImages || []);
   const [allImagesUploaded, setAllImagesUploaded] = useState(false);
+
+  useEffect(() => {
+    const initialImages = mapImagesToUrls(auctionFormData?.imageUrls);
+
+    setImages(initialImages || []);
+  }, [auctionFormData?.imageUrls]);
 
   useEffect(() => {
     const publicUrls = images
@@ -281,4 +288,15 @@ const uploadImageToCloudinary = async ({
   }
 
   return image;
+};
+
+const mapImagesToUrls = (url: string[] | undefined) => {
+  if (!url) return;
+
+  return url.map((url) => ({
+    id: nanoid(),
+    file: undefined,
+    previewUrl: url,
+    publicUrl: url,
+  }));
 };

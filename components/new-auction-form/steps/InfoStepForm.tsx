@@ -52,6 +52,7 @@ const InfoStepForm = (props: FormStepProps) => {
                   placeholder='Description'
                   maxLength={250}
                   {...field}
+                  value={field.value || ''}
                   className='bg-foreground text-background'
                 />
               </FormControl>
@@ -77,7 +78,7 @@ const InfoStepForm = (props: FormStepProps) => {
           )}
         />
         <StepNavigation
-          disabled={!isValid || isSubmitting}
+          disabled={isSubmitting}
           currentStep={currentStep}
           prevStep={prevStep}
         />

@@ -24,7 +24,7 @@ const updateStoreMock = vi.fn();
 const auctionFormData = {
   title: 'test title',
   description: 'test description',
-  tags: 'test tags',
+  tags: ['test', 'tag'],
   dateTime: '2021-08-18T17:00:00.000Z',
   imageUrls: [],
   duration: 1,
