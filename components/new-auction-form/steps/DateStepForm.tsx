@@ -24,7 +24,7 @@ const DateStepForm = (props: FormStepProps) => {
 
   const {
     control,
-    formState: { isDirty, isSubmitting, isSubmitSuccessful },
+    formState: { isDirty, isSubmitting, isSubmitSuccessful, isValid },
   } = dateTime;
 
   const today = dayjs();
@@ -89,7 +89,7 @@ const DateStepForm = (props: FormStepProps) => {
           }}
         />
         <StepNavigation
-          disabled={!isDirty || isSubmitting}
+          disabled={!isValid || isSubmitting}
           currentStep={currentStep}
           nextStep={nextStep}
           prevStep={prevStep}

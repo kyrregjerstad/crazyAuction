@@ -19,7 +19,7 @@ const InfoStepForm = (props: FormStepProps) => {
   const { info, saveStep } = useMultiStepAuctionForm(props);
   const { control, formState } = info;
 
-  const { isDirty, isSubmitting } = formState;
+  const { isDirty, isSubmitting, isValid } = formState;
 
   return (
     <Form {...info}>
@@ -77,7 +77,7 @@ const InfoStepForm = (props: FormStepProps) => {
           )}
         />
         <StepNavigation
-          disabled={!isDirty || isSubmitting}
+          disabled={!isValid || isSubmitting}
           currentStep={currentStep}
           nextStep={nextStep}
           prevStep={prevStep}

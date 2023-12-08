@@ -19,6 +19,7 @@ import NewAuctionImageGallery from '../../NewAuctionImageGallery';
 import { FormStepProps, UploadImage } from '../types';
 import StepNavigation from './StepNavigation';
 import SubmitBtn from './SubmitBtn';
+import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
 
 type CreateFormDataForImageParams = {
   image: UploadImage;
@@ -26,6 +27,7 @@ type CreateFormDataForImageParams = {
   timestamp: number;
   API_KEY: string;
 };
+
 const createFormDataForImage = ({
   image,
   signature,
@@ -50,6 +52,7 @@ type UploadImageParams = {
   endpoint: string;
   API_KEY: string;
 };
+
 const uploadImageToCloudinary = async ({
   image,
   endpoint,
@@ -83,6 +86,7 @@ const uploadImageToCloudinary = async ({
 const MediaStepForm = (props: FormStepProps) => {
   const { currentStep, nextStep, prevStep } = props;
   const { media, saveStep } = useMultiStepAuctionForm(props);
+  const { updateStore, storedData } = useAuctionFormStore();
 
   const {
     control,
@@ -90,7 +94,14 @@ const MediaStepForm = (props: FormStepProps) => {
     setValue,
   } = media;
 
-  const [images, setImages] = useState<UploadImage[]>([]);
+  const initialImages = storedData?.imageUrls?.map((url) => ({
+    id: nanoid(),
+    file: undefined,
+    previewUrl: url,
+    publicUrl: url,
+  }));
+
+  const [images, setImages] = useState<UploadImage[]>(initialImages || []);
   const [allImagesUploaded, setAllImagesUploaded] = useState(false);
 
   useEffect(() => {
@@ -100,6 +111,13 @@ const MediaStepForm = (props: FormStepProps) => {
 
     setValue('imageUrls', publicUrls);
   }, [images, setValue]);
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      const publicUrls = images.map((image) => image.publicUrl!) || [];
+      updateStore({ imageUrls: publicUrls });
+    }
+  }, [isSubmitSuccessful, updateStore, images]);
 
   useEffect(() => {
     setAllImagesUploaded(
@@ -210,6 +228,7 @@ const MediaStepForm = (props: FormStepProps) => {
             )}
           />
           <StepNavigation
+            disabled={!allImagesUploaded || isSubmitting}
             currentStep={currentStep}
             nextStep={nextStep}
             prevStep={prevStep}

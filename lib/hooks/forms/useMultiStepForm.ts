@@ -85,17 +85,19 @@ const useMultiStepAuctionForm = ({
   const router = useRouter();
   const { updateStore, clearStore, storedData } = useAuctionFormStore();
 
+  console.log(storedData);
+
   const forms = {
     info: useFormInitialization<AuctionFormInfo>(auctionFormInfoSchema, {
-      title: '',
-      description: '',
-      tags: '',
+      title: storedData.title ?? '',
+      description: storedData.description ?? '',
+      tags: storedData.tags ?? '',
     }),
     media: useFormInitialization<AuctionFormMedia>(auctionFormMediaSchema, {
-      imageUrls: [],
+      imageUrls: storedData.imageUrls ?? [],
     }),
     dateTime: useFormInitialization<AuctionFormDate>(auctionFormDateSchema, {
-      dateTime: undefined,
+      dateTime: storedData.dateTime ?? undefined,
     }),
     summary: useFormInitialization<AuctionFormComplete>(
       auctionFormSchemaComplete,
