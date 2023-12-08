@@ -20,6 +20,66 @@ import { FormStepProps, UploadImage } from '../types';
 import StepNavigation from './StepNavigation';
 import SubmitBtn from './SubmitBtn';
 
+type CreateFormDataForImageParams = {
+  image: UploadImage;
+  signature: string;
+  timestamp: number;
+  API_KEY: string;
+};
+const createFormDataForImage = ({
+  image,
+  signature,
+  timestamp,
+  API_KEY,
+}: CreateFormDataForImageParams) => {
+  if (!image.file) {
+    console.error('Missing image file');
+    return;
+  }
+  const formData = new FormData();
+  formData.append('file', image.file);
+  formData.append('api_key', API_KEY);
+  formData.append('signature', signature);
+  formData.append('timestamp', timestamp.toString());
+  formData.append('folder', 'crazy_auction');
+  return formData;
+};
+
+type UploadImageParams = {
+  image: UploadImage;
+  endpoint: string;
+  API_KEY: string;
+};
+const uploadImageToCloudinary = async ({
+  image,
+  endpoint,
+  API_KEY,
+}: UploadImageParams) => {
+  const { signature, timestamp } = await getCloudinarySignature();
+  const formData = createFormDataForImage({
+    image,
+    signature,
+    timestamp,
+    API_KEY,
+  });
+
+  try {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      body: formData,
+    });
+
+    const { public_id, secure_url } = await res.json();
+    if (public_id && secure_url) {
+      return { ...image, publicUrl: secure_url };
+    }
+  } catch (error) {
+    console.error('Upload failed for image:', image.id, error);
+  }
+
+  return image;
+};
+
 const MediaStepForm = (props: FormStepProps) => {
   const { currentStep, nextStep, prevStep } = props;
   const { media, saveStep } = useMultiStepAuctionForm(props);
@@ -31,7 +91,6 @@ const MediaStepForm = (props: FormStepProps) => {
   } = media;
 
   const [images, setImages] = useState<UploadImage[]>([]);
-  const [rejected, setRejected] = useState<FileRejection[]>([]);
   const [allImagesUploaded, setAllImagesUploaded] = useState(false);
 
   useEffect(() => {
@@ -78,51 +137,20 @@ const MediaStepForm = (props: FormStepProps) => {
   });
 
   const action = async () => {
+    const API_KEY = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
+    const endpoint = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL;
+
+    if (!API_KEY || !endpoint) {
+      console.error(
+        'Missing CLOUDINARY_API_KEY or CLOUDINARY_UPLOAD_URL env variable',
+      );
+      return;
+    }
+
     const updatedImages = await Promise.all(
       images.map(async (image) => {
         if (!image.file || image.publicUrl) return image;
-
-        const { signature, timestamp } = await getCloudinarySignature();
-
-        const API_KEY = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
-        if (!API_KEY) {
-          console.error('Missing CLOUDINARY_API_KEY env variable');
-          return image;
-        }
-
-        const formData = new FormData();
-        formData.append('file', image.file);
-        formData.append('api_key', API_KEY);
-        formData.append('signature', signature);
-        formData.append('timestamp', timestamp.toString());
-        formData.append('folder', 'crazy_auction');
-
-        const endpoint = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL;
-        if (!endpoint) {
-          console.error('Missing CLOUDINARY_UPLOAD_URL env variable');
-          return image;
-        }
-
-        try {
-          const res = await fetch(endpoint, {
-            method: 'POST',
-            body: formData,
-          });
-
-          const data = await res.json();
-          const { public_id, secure_url } = data;
-
-          if (public_id && secure_url) {
-            return {
-              ...image,
-              publicUrl: secure_url,
-            };
-          }
-        } catch (error) {
-          console.error('Upload failed for image:', image.id, error);
-        }
-
-        return image;
+        return uploadImageToCloudinary({ image, endpoint, API_KEY });
       }),
     );
 
@@ -172,16 +200,14 @@ const MediaStepForm = (props: FormStepProps) => {
           <FormField
             control={control}
             name='imageUrls'
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormControl>
-                    <Input {...field} type='hidden' />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input {...field} type='hidden' />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
           <StepNavigation
             currentStep={currentStep}
