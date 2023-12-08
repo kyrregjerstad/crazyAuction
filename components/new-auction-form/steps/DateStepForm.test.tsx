@@ -37,7 +37,7 @@ const StepWrapper = () => {
   const props = {
     mode: 'create' as 'create' | 'edit',
     listing: null,
-    currentStep: 'info' as 'info' | 'media' | 'time' | 'summary',
+    currentStep: 'time' as 'info' | 'media' | 'time' | 'summary',
     getStore,
     clearStore,
     updateStore: updateStoreMock,
