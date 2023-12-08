@@ -7,7 +7,7 @@ import {
   generateSampleData,
   TimeIntervals,
 } from '@/lib/data/generateSampleData';
-import { ListingFull } from '@/lib/schemas/listing';
+import { ListingFull } from '@/lib/schemas/listingSchema';
 
 // use this page to test components at different sizes, colors, etc.
 
@@ -24,17 +24,17 @@ const TestingPage = () => {
   return (
     <div className='w-full max-w-7xl  p-2  sm:p-4'>
       <div className='grid grid-cols-8 gap-4'>
-        <div className='bg-accent-50 aspect-[4/6] rounded-md border border-accent' />
-        <div className='bg-accent-100 aspect-[4/6] rounded-md border border-accent' />
-        <div className='bg-accent-200 aspect-[4/6] rounded-md border border-accent' />
-        <div className='bg-accent-300 aspect-[4/6] rounded-md border border-accent' />
-        <div className='bg-accent-400 aspect-[4/6] rounded-md border border-accent' />
-        <div className='bg-accent-500 aspect-[4/6] rounded-md border border-white' />
-        <div className='bg-accent-600 aspect-[4/6] rounded-md border border-accent' />
-        <div className='bg-accent-700 aspect-[4/6] rounded-md border border-accent' />
-        <div className='bg-accent-800 aspect-[4/6] rounded-md border border-accent' />
-        <div className='bg-accent-900 aspect-[4/6] rounded-md border border-accent' />
-        <div className='bg-accent-950 aspect-[4/6] rounded-md border border-accent' />
+        <div className='aspect-[4/6] rounded-md border border-accent bg-accent-50' />
+        <div className='aspect-[4/6] rounded-md border border-accent bg-accent-100' />
+        <div className='aspect-[4/6] rounded-md border border-accent bg-accent-200' />
+        <div className='aspect-[4/6] rounded-md border border-accent bg-accent-300' />
+        <div className='aspect-[4/6] rounded-md border border-accent bg-accent-400' />
+        <div className='aspect-[4/6] rounded-md border border-white bg-accent-500' />
+        <div className='aspect-[4/6] rounded-md border border-accent bg-accent-600' />
+        <div className='aspect-[4/6] rounded-md border border-accent bg-accent-700' />
+        <div className='aspect-[4/6] rounded-md border border-accent bg-accent-800' />
+        <div className='aspect-[4/6] rounded-md border border-accent bg-accent-900' />
+        <div className='aspect-[4/6] rounded-md border border-accent bg-accent-950' />
       </div>
     </div>
   );

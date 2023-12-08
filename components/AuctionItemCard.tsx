@@ -1,4 +1,4 @@
-import { Listing, ListingFull } from '@/lib/schemas/listing';
+import { Listing, ListingFull } from '@/lib/schemas/listingSchema';
 import fallbackImg from '@/public/fallback-image.webp';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';

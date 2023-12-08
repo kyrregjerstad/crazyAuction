@@ -32,28 +32,26 @@ const StepOverview = ({ currentStep }: StepsProps) => {
   ];
 
   return (
-    <div className='flex flex-col gap-2 bg-accent-950 p-4'>
-      <ul>
-        {steps.map(({ title, step }, i) => (
-          <li
-            key={title}
-            className={cn(
-              'relative whitespace-nowrap text-lg',
-              currentStep === step && 'font-bold',
-            )}
-          >
-            {currentStep === step && (
-              <motion.span
-                layout
-                layoutId='step-indicator'
-                className='absolute -left-3 top-2 h-2 w-2 rounded-full bg-accent-500'
-              />
-            )}
-            <Link href={`?step=${step}`}>{title}</Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul className='flex justify-between gap-4 bg-accent-950 p-4 sm:flex-col sm:justify-start'>
+      {steps.map(({ title, step }) => (
+        <li
+          key={title}
+          className={cn(
+            'relative whitespace-nowrap text-lg',
+            currentStep === step && 'font-bold',
+          )}
+        >
+          {currentStep === step && (
+            <motion.span
+              layout
+              layoutId='step-indicator'
+              className='absolute -bottom-1 left-1/2 h-2 w-2 rounded-full bg-accent-500 sm:-left-3 sm:top-2'
+            />
+          )}
+          <Link href={`?step=${step}`}>{title}</Link>
+        </li>
+      ))}
+    </ul>
   );
 };
 

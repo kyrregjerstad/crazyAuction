@@ -1,9 +1,7 @@
-import { AuctionFormComplete } from '@/lib/schemas/auctionForm';
-import { Listing, ListingFull } from '@/lib/schemas/listing';
+import { AuctionFormComplete } from '@/lib/schemas/auctionSchema';
+import { Listing, ListingFull } from '@/lib/schemas/listingSchema';
 
-export const validSteps = ['info', 'media', 'time', 'summary'] as const;
-
-export type Step = (typeof validSteps)[number];
+export type Step = 'info' | 'media' | 'time' | 'summary';
 
 export type AuctionForm = {
   mode?: 'create' | 'edit';

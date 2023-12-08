@@ -1,6 +1,5 @@
-import { Bid, ListingFull, Seller } from '../schemas/listing';
-import { RegisterResponse } from '../schemas/register';
-import { User } from '../schemas/user';
+import { Bid, ListingFull, Seller } from '../schemas/listingSchema';
+import { RegisterResponse } from '../schemas/registerSchema';
 
 export const emptyRegisterResponse = {
   id: 0,

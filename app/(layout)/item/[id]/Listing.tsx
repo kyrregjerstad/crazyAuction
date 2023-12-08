@@ -2,40 +2,37 @@
 
 import ImageGallery from '@/components/ImageGallery';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Bid } from '@/lib/schemas/listing';
-import { getSingleListing } from '@/lib/services/getSingleListing';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Bid } from '@/lib/schemas/listingSchema';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import AnimatedButton from '@/components/AnimatedButton';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { placeBid } from '@/lib/services/placeBid';
+import useMutateSingleListing from '@/lib/hooks/useMutateSingleListing';
+import useQuerySingleListing from '@/lib/hooks/useQuerySingleListing';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import AnimatedButton from '@/components/AnimatedButton';
 
 dayjs.extend(relativeTime);
 
 const SingleListingPage = ({ listingId }: { listingId: string }) => {
   const session = useSession();
-  const { data } = session;
 
-  const queryClient = useQueryClient();
-
-  const { data: singleListing, isLoading } = useQuery({
-    queryKey: ['singleListing', listingId],
-    queryFn: () => getSingleListing(listingId),
-    refetchInterval: 10000, // refetch every 10 seconds
+  const { data: singleListing, isLoading } = useQuerySingleListing({
+    listingId,
   });
+
+  const {
+    mutate,
+    isPending,
+    variables: pendingAmount,
+  } = useMutateSingleListing({ listingId });
 
   const isLoggedInUser = useIsLoggedInUser(singleListing?.seller.name);
   const isAuthenticated = session.status === 'authenticated';
-
-  const calculateStartingAmount = (currentBid: number) =>
-    Math.max(Math.round(currentBid * 1.1), currentBid + 1);
 
   const startingBid = calculateStartingAmount(
     singleListing?.bids?.at(-1)?.amount || 0,
@@ -43,25 +40,6 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
 
   const currentBid = singleListing?.bids?.at(-1)?.amount || 0;
   const [amount, setAmount] = useState(startingBid); // default to 10% more than the current bid (rounded), or 1 more than the current for low values
-
-  const {
-    mutate,
-    isPending,
-    variables: pendingAmount,
-  } = useMutation({
-    mutationFn: async (newAmount: number) =>
-      placeBid({
-        listingId,
-        amount: newAmount,
-        jwt: data!.user.accessToken,
-      }),
-
-    onSettled: async () => {
-      return await queryClient.invalidateQueries({
-        queryKey: ['singleListing', listingId],
-      });
-    },
-  });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -117,7 +95,9 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
               variant='magic'
               repeat={true}
               className='w-18'
-              onClick={() => mutate(amount)}
+              onClick={() => {
+                mutate(amount);
+              }}
               disabled={!isAuthenticated || isPending || amount < currentBid}
             >
               Place a bid
@@ -187,13 +167,13 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
 
 export default SingleListingPage;
 
-function BidHistory({
+const BidHistory = ({
   bids,
   isLoggedIn,
 }: {
   bids?: Bid[];
   isLoggedIn: boolean;
-}) {
+}) => {
   if (!isLoggedIn) {
     return (
       <div className='w-full max-w-md rounded-lg p-6 text-foreground'>
@@ -238,9 +218,9 @@ function BidHistory({
       </div>
     </div>
   );
-}
+};
 
-function BidHistoryItem({ bid, index }: { bid: Bid; index: number }) {
+const BidHistoryItem = ({ bid, index }: { bid: Bid; index: number }) => {
   const { created, amount, bidderName } = bid;
 
   const bidDate = dayjs(created).fromNow();
@@ -260,7 +240,7 @@ function BidHistoryItem({ bid, index }: { bid: Bid; index: number }) {
       </div>
     </li>
   );
-}
+};
 
 const useIsLoggedInUser = (username: string | undefined) => {
   const session = useSession();
@@ -270,3 +250,6 @@ const useIsLoggedInUser = (username: string | undefined) => {
   }
   return session.status === 'authenticated' && data.user.name === username;
 };
+
+const calculateStartingAmount = (currentBid: number) =>
+  Math.max(Math.round(currentBid * 1.1), currentBid + 1);

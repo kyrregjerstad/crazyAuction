@@ -1,4 +1,4 @@
-import { singleListingSchema } from '@/lib/schemas/listing';
+import { singleListingSchema } from '@/lib/schemas/listingSchema';
 import { z } from 'zod';
 import auctionAPIFetcher from './auctionAPIFetcher';
 

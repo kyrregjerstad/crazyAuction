@@ -8,6 +8,11 @@ import { vi } from 'vitest';
 
 const nextStepMock = vi.fn();
 const updateStoreMock = vi.fn();
+const storedDataMock = {
+  title: '',
+  description: '',
+  tags: '',
+};
 
 vi.mock('@/lib/hooks/useAuctionFormStep', () => {
   return {
@@ -20,6 +25,7 @@ vi.mock('@/lib/hooks/useAuctionFormStep', () => {
 vi.mock('@/lib/hooks/useAuctionFormStore', () => ({
   default: vi.fn(() => ({
     updateStore: updateStoreMock,
+    storedData: storedDataMock,
   })),
 }));
 
@@ -91,7 +97,37 @@ describe('InfoStepForm', () => {
     });
   });
 
-  it('displays error message if title is empty', async () => {
+  it('Retrieves the stored data', async () => {
+    const localStoredDataMock = {
+      title: 'Test Title',
+      description: 'Test Description',
+      tags: 'Test Tags',
+    };
+
+    vi.mocked(useAuctionFormStore).mockImplementation(() => ({
+      updateStore: updateStoreMock,
+      storedData: localStoredDataMock,
+    }));
+
+    render(<StepWrapper />);
+
+    expect(screen.getByPlaceholderText('Title')).toHaveValue('Test Title');
+    expect(screen.getByPlaceholderText('Description')).toHaveValue(
+      'Test Description',
+    );
+    expect(screen.getByPlaceholderText('Tags')).toHaveValue('Test Tags');
+  });
+
+  it('disables the next button if title is empty', async () => {
+    const localStoredDataMock = {
+      title: '',
+    };
+
+    vi.mocked(useAuctionFormStore).mockImplementation(() => ({
+      updateStore: updateStoreMock,
+      storedData: localStoredDataMock,
+    }));
+
     render(<StepWrapper />);
 
     await userEvent.type(
@@ -100,14 +136,6 @@ describe('InfoStepForm', () => {
     );
     await userEvent.type(screen.getByPlaceholderText('Tags'), 'Test Tags');
 
-    expect(screen.getByRole('button', { name: 'Next' })).not.toBeDisabled();
-
-    fireEvent.submit(screen.getByRole('button', { name: 'Next' }));
-
-    await waitFor(() => {
-      expect(
-        screen.getByText('Title can not be shorter than 3 characters'),
-      ).toBeInTheDocument();
-    });
+    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
   });
 });

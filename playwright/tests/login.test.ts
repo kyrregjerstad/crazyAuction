@@ -4,7 +4,7 @@ test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe('Login page', () => {
   test('should show invalid field errors', async ({ page, context }) => {
-    await page.goto('/auth/login');
+    await page.goto('/login');
     await expect(
       page.getByRole('heading', { name: 'Login to CrazyAuction' }),
     ).toBeVisible();
@@ -27,7 +27,7 @@ test.describe('Login page', () => {
   });
 
   test('should reject invalid credentials', async ({ page, context }) => {
-    await page.goto('/auth/login');
+    await page.goto('/login');
     await expect(
       page.getByRole('heading', { name: 'Login to CrazyAuction' }),
     ).toBeVisible();

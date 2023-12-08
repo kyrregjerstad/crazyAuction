@@ -4,10 +4,10 @@ import { API_LOGIN_URL } from '@/lib/constants';
 
 const authOptions: NextAuthOptions = {
   pages: {
-    signIn: '/auth/login',
-    signOut: '/auth/logout',
-    error: '/auth/login',
-    newUser: '/auth/register',
+    signIn: '/login',
+    signOut: '/logout',
+    error: '/login',
+    newUser: '/register',
   },
   providers: [
     CredentialsProvider({

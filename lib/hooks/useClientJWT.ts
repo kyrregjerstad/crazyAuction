@@ -1,14 +1,22 @@
 import { useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export const useClientJWT = () => {
-  const session = useSession();
-  const jwt = session?.data?.user?.accessToken;
+  const [isSessionLoading, setIsSessionLoading] = useState(true);
+  const session = useSession({
+    required: true,
+    onUnauthenticated() {
+      return { redirect: '/login' };
+    },
+  });
 
-  if (!jwt) {
-    console.error('No JWT found, redirecting to login');
-    redirect('/auth/login');
-  }
+  const jwt = session.data?.user.accessToken;
 
-  return jwt;
+  useEffect(() => {
+    if (session.data?.user.accessToken) {
+      setIsSessionLoading(false);
+    }
+  }, [session.data?.user.accessToken]);
+
+  return { jwt, isSessionLoading };
 };

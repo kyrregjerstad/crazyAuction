@@ -1,6 +1,6 @@
 import { getAllListings } from './getAllListings';
 import * as auctionAPIFetcherModule from './auctionAPIFetcher';
-import { allListingsSchema } from '../schemas/listing';
+import { allListingsSchema } from '../schemas/listingSchema';
 import { emptyBid, emptyListing } from '../mocks/data';
 import { Mock } from 'vitest';
 

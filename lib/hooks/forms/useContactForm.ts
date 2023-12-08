@@ -1,6 +1,6 @@
 import { useToast } from '@/components/ui/use-toast';
-import { ContactForm, contactSchema } from '@/lib/schemas/contact';
-import { Login } from '@/lib/schemas/login';
+import { ContactForm, contactSchema } from '@/lib/schemas/contactSchema';
+import { Login } from '@/lib/schemas/loginSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';

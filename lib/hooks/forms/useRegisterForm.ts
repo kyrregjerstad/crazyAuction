@@ -1,5 +1,5 @@
 import { useToast } from '@/components/ui/use-toast';
-import { Register, registerSchema } from '@/lib/schemas/register';
+import { Register, registerSchema } from '@/lib/schemas/registerSchema';
 import { postRegisterUser } from '@/lib/services/postSignUp';
 import { wait } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';

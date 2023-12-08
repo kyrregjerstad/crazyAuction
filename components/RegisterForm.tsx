@@ -46,15 +46,15 @@ const RegisterForm = () => {
 
   return (
     <>
-      <div className='flex w-full justify-center'>
-        <Avatar className='h-28 w-28 border-2 border-accent text-5xl'>
+      <div className='flex w-full items-center justify-start gap-4 sm:flex-col'>
+        <Avatar className='h-16 w-16 border-2 border-accent text-5xl sm:h-28 sm:w-28'>
           <AvatarImage src={avatarUrl} />
           <AvatarFallback>{firstLetter}</AvatarFallback>
         </Avatar>
+        <h1 className='text-center  text-3xl font-bold'>Register</h1>
       </div>
-      <h1 className='text-center text-3xl font-bold'>Register</h1>
       <Form {...form}>
-        <form className='space-y-4' onSubmit={registerUser}>
+        <form className='space-y-4 pb-16' onSubmit={registerUser}>
           <FormField
             control={control}
             name='name'

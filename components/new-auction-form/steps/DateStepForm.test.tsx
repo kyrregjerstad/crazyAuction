@@ -1,5 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen } from '@testing-library/react';
 import DateStepForm from './DateStepForm';
 
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
@@ -20,6 +19,10 @@ vi.mock('@/lib/hooks/useAuctionFormStep', () => {
 vi.mock('@/lib/hooks/useAuctionFormStore', () => ({
   default: vi.fn(() => ({
     updateStore: updateStoreMock,
+    storedData: {
+      endDate: '',
+      endTime: '',
+    },
   })),
 }));
 

@@ -46,7 +46,7 @@ const NewAuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
   };
 
   return (
-    <Card className='flex w-full max-w-2xl gap-5 p-4'>
+    <Card className='flex w-full max-w-2xl flex-col gap-5 p-4 sm:flex-row'>
       <StepOverview currentStep={currentStep} />
       <div className='flex w-full flex-col gap-4'>
         <RenderStep />

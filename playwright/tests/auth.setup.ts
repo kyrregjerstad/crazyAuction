@@ -16,7 +16,7 @@ setup('authenticate', async ({ page, context }) => {
     console.log(reason);
     return expect(true).toBe(true);
   }
-  await page.goto('/auth/login');
+  await page.goto('/login');
   await page
     .getByPlaceholder('your-email@stud.noroff.no')
     .fill(process.env.PLAYWRIGHT_USERNAME!);

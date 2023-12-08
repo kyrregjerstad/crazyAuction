@@ -1,12 +1,11 @@
 'use client';
 
 import { placeBid } from '@/lib/services/placeBid';
-import { use, useState } from 'react';
+import { QueryClient, useMutation } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
+import { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { getServerSession } from 'next-auth';
-import { useSession } from 'next-auth/react';
-import { QueryClient, useMutation } from '@tanstack/react-query';
 
 type BidBoxProps = {
   listingId: string;

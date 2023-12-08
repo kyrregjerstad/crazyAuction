@@ -109,9 +109,14 @@ export async function getCloudinarySignature() {
     folder: 'crazy_auction',
   };
 
+  const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
+  if (!CLOUDINARY_API_SECRET) {
+    console.error('Missing CLOUDINARY_API_SECRET');
+  }
+
   const signature = cloudinary.utils.api_sign_request(
     params,
-    process.env.CLOUDINARY_API_SECRET!,
+    CLOUDINARY_API_SECRET!,
   );
 
   console.log('timestamp ', timestamp);

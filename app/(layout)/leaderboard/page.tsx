@@ -27,7 +27,7 @@ export default async function LeaderboardPage({ searchParams }: Props) {
   });
 
   return (
-    <div className='max-w-7xl p-2 sm:p-4 '>
+    <div className='max-w-7xl p-2 sm:p-4'>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Leaderboard />
       </HydrationBoundary>

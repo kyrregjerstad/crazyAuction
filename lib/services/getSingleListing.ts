@@ -1,4 +1,4 @@
-import { singleListingSchemaExtended } from '../schemas/listing';
+import { singleListingSchemaExtended } from '../schemas/listingSchema';
 import auctionAPIFetcher from './auctionAPIFetcher';
 
 export const getSingleListing = async (id: string) => {

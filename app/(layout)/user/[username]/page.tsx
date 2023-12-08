@@ -1,7 +1,7 @@
-import authOptions from '@/app/auth/authOptions';
+import authOptions from '@/app/(auth)/authOptions';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Listing } from '@/lib/schemas/listing';
+import { Listing } from '@/lib/schemas/listingSchema';
 import { getSingleUser } from '@/lib/services/getSingleUser';
 
 import { getServerSession } from 'next-auth';
@@ -62,7 +62,7 @@ const UserPage = async ({ params }: Props) => {
       <div className='rounded-lg shadow-md md:col-span-3'>
         <h2 className='pb-4 text-lg font-bold'>Active Auctions</h2>
         {listings ? (
-          <UserListingsGrid username={username} jwt={jwt} />
+          <UserListingsGrid username={username} />
         ) : (
           <p>No auctions</p>
         )}
