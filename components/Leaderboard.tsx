@@ -36,14 +36,14 @@ const Leaderboard = () => {
             <TableHead className='w-1/4'>User</TableHead>
             <TableHead className='w-1/4'>Credits</TableHead>
             <TableHead className='w-1/4'>Auctions</TableHead>
-            <TableHead className='w-1/4'>Winning Auctions</TableHead>
+            <TableHead className='w-1/4'>Winnings</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {users.map((user, index) => (
             <TableRow key={user.name}>
               <TableCell className='text-neutral-400'>#{index + 1}</TableCell>
-              <TableCell className='flex items-center space-x-2 font-medium'>
+              <TableCell className='flex items-center space-x-2 overflow-hidden font-medium'>
                 <Avatar>
                   <AvatarImage src={user.avatar || ''} />
                   <AvatarFallback>CN</AvatarFallback>
