@@ -101,7 +101,6 @@ const SummaryStepForm = (props: FormStepProps) => {
         <StepNavigation
           disabled={isSubmitting}
           currentStep={currentStep}
-          nextStep={nextStep}
           prevStep={prevStep}
         />
         <div className='hidden'>

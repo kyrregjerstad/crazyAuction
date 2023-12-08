@@ -1,4 +1,4 @@
-import { allListingsSchema } from '../schemas/listing';
+import { allListingsSchema } from '../schemas/listingSchema';
 import auctionAPIFetcher from './auctionAPIFetcher';
 import { Sort, Order } from './types';
 

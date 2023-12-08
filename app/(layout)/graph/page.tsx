@@ -1,7 +1,7 @@
 import Graph from './Graph';
 
-import { ListingFull } from '@/lib/schemas/listing';
-import { User } from '@/lib/schemas/user';
+import { ListingFull } from '@/lib/schemas/listingSchema';
+import { User } from '@/lib/schemas/userSchema';
 import { promises as fs } from 'fs';
 
 // const redis = Redis.fromEnv();

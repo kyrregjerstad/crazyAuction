@@ -1,5 +1,5 @@
 import { NewAuctionForm } from '@/components/new-auction-form';
-import { ListingFull } from '@/lib/schemas/listing';
+import { ListingFull } from '@/lib/schemas/listingSchema';
 import { getSingleListing } from '@/lib/services/getSingleListing';
 import { getServerSession } from 'next-auth';
 

@@ -2,24 +2,6 @@ import Link from 'next/link';
 import { badgeVariants } from './ui/badge';
 import { SearchParams } from '@/lib/services/types';
 
-export type Sorting = 'endsAt' | 'created' | 'price';
-export type SortingOrder = 'asc' | 'desc';
-
-export const sortOptions: {
-  value: Sorting;
-  label: string;
-  default?: boolean;
-}[] = [
-  { value: 'endsAt', label: 'Ending Time', default: true },
-  { value: 'created', label: 'Creation Date' },
-  { value: 'price', label: 'Price' },
-];
-
-export const orderOptions: { value: SortingOrder; label: string }[] = [
-  { value: 'asc', label: 'Ascending' },
-  { value: 'desc', label: 'Descending' },
-];
-
 const SearchFilters = ({ sort, order, active }: SearchParams) => {
   sort = sort || 'endsAt';
   order = order || 'asc';
@@ -65,3 +47,21 @@ const SearchFilters = ({ sort, order, active }: SearchParams) => {
 };
 
 export default SearchFilters;
+
+export type Sorting = 'endsAt' | 'created' | 'price';
+export type SortingOrder = 'asc' | 'desc';
+
+export const sortOptions: {
+  value: Sorting;
+  label: string;
+  default?: boolean;
+}[] = [
+  { value: 'endsAt', label: 'Ending Time', default: true },
+  { value: 'created', label: 'Creation Date' },
+  { value: 'price', label: 'Price' },
+];
+
+export const orderOptions: { value: SortingOrder; label: string }[] = [
+  { value: 'asc', label: 'Ascending' },
+  { value: 'desc', label: 'Descending' },
+];

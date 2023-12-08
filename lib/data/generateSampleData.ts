@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { nanoid } from 'nanoid';
-import { ListingFull } from '../schemas/listing';
+import { ListingFull } from '../schemas/listingSchema';
 dayjs.extend(relativeTime);
 
 export const TimeIntervals = {

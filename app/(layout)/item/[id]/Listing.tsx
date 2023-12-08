@@ -2,7 +2,7 @@
 
 import ImageGallery from '@/components/ImageGallery';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Bid } from '@/lib/schemas/listing';
+import { Bid } from '@/lib/schemas/listingSchema';
 import { getSingleListing } from '@/lib/services/getSingleListing';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';

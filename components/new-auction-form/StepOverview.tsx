@@ -33,7 +33,7 @@ const StepOverview = ({ currentStep }: StepsProps) => {
 
   return (
     <ul className='flex justify-between gap-4 bg-accent-950 p-4 sm:flex-col sm:justify-start'>
-      {steps.map(({ title, step }, i) => (
+      {steps.map(({ title, step }) => (
         <li
           key={title}
           className={cn(

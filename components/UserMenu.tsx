@@ -1,18 +1,16 @@
 'use client';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import MagicButton from './MagicButton';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button, buttonVariants } from './ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import MagicButton from './MagicButton';
-import { cn } from '@/lib/utils';
 
 const UserMenu = () => {
   const { data, status } = useSession();

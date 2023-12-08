@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { AuctionFormComplete } from '../services/postListing';
+import { AuctionFormComplete } from '@/lib/schemas/auctionSchema';
+
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 type Params = {

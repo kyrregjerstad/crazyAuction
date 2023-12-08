@@ -1,7 +1,7 @@
 import authOptions from '@/app/(auth)/authOptions';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Listing } from '@/lib/schemas/listing';
+import { Listing } from '@/lib/schemas/listingSchema';
 import { getSingleUser } from '@/lib/services/getSingleUser';
 
 import { getServerSession } from 'next-auth';

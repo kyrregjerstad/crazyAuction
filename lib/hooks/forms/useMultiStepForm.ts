@@ -2,7 +2,11 @@ import {
   type PostListing,
   type Step,
 } from '@/components/new-auction-form/types';
-import { ListingFull } from '@/lib/schemas/listing';
+import { ListingFull } from '@/lib/schemas/listingSchema';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+
 import {
   AuctionFormComplete,
   AuctionFormDate,
@@ -12,11 +16,7 @@ import {
   auctionFormInfoSchema,
   auctionFormMediaSchema,
   auctionFormSchemaComplete,
-} from '@/lib/services/postListing';
-
-import { zodResolver } from '@hookform/resolvers/zod';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-
+} from '@/lib/schemas/auctionSchema';
 import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
 import {
@@ -27,7 +27,6 @@ import {
 } from 'react-hook-form';
 import { ZodSchema } from 'zod';
 import useAuctionFormStore from '../useAuctionFormStore';
-import { wait } from '@/lib/utils';
 
 const useFormInitialization = <T extends FieldValues>(
   schema: ZodSchema<T>,

@@ -1,4 +1,4 @@
-import { Login, loginSchema } from '@/lib/schemas/login';
+import { Login, loginSchema } from '@/lib/schemas/loginSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';

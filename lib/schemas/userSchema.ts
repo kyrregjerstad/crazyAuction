@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { singleListingSchema } from './listing';
+import { singleListingSchema } from './listingSchema';
 
 export const singleUserSchema = z.object({
   name: z.string(),

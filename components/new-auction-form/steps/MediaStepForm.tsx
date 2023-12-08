@@ -214,7 +214,6 @@ const ImageForm = ({
         <StepNavigation
           disabled={!allImagesUploaded || isSubmitting}
           currentStep={currentStep}
-          nextStep={nextStep}
           prevStep={prevStep}
         />
       </form>

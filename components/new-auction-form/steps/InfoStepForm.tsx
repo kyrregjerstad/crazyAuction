@@ -79,7 +79,6 @@ const InfoStepForm = (props: FormStepProps) => {
         <StepNavigation
           disabled={!isValid || isSubmitting}
           currentStep={currentStep}
-          nextStep={nextStep}
           prevStep={prevStep}
         />
       </form>
