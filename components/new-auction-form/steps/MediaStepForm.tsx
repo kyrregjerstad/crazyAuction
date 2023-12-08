@@ -84,14 +84,24 @@ const MediaStepForm = (props: FormStepProps) => {
 
         const { signature, timestamp } = await getCloudinarySignature();
 
+        const API_KEY = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
+        if (!API_KEY) {
+          console.error('Missing CLOUDINARY_API_KEY env variable');
+          return image;
+        }
+
         const formData = new FormData();
         formData.append('file', image.file);
-        formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!);
+        formData.append('api_key', API_KEY);
         formData.append('signature', signature);
         formData.append('timestamp', timestamp.toString());
         formData.append('folder', 'crazy_auction');
 
-        const endpoint = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL!;
+        const endpoint = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL;
+        if (!endpoint) {
+          console.error('Missing CLOUDINARY_UPLOAD_URL env variable');
+          return image;
+        }
 
         try {
           const res = await fetch(endpoint, {
@@ -163,7 +173,6 @@ const MediaStepForm = (props: FormStepProps) => {
             control={control}
             name='imageUrls'
             render={({ field }) => {
-              console.log(field.value);
               return (
                 <FormItem>
                   <FormControl>
