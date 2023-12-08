@@ -4,7 +4,7 @@ test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe('Register page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/auth/register');
+    await page.goto('/register');
     await expect(page.getByRole('heading', { name: 'Register' })).toBeVisible();
   });
 
