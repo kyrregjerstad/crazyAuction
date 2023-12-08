@@ -7,7 +7,7 @@ export const useClientJWT = () => {
 
   if (!jwt) {
     console.error('No JWT found, redirecting to login');
-    redirect('/auth/login');
+    redirect('/login');
   }
 
   return jwt;

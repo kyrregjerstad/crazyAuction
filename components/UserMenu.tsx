@@ -55,13 +55,13 @@ const UserMenu = () => {
       ) : (
         <>
           <Link
-            href='/auth/login'
+            href='/login'
             className={buttonVariants({ variant: 'outline' })}
           >
             Login
           </Link>
           <Link
-            href='/auth/register'
+            href='/register'
             className={buttonVariants({ variant: 'accent' })}
           >
             Register

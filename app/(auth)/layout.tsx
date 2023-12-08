@@ -33,8 +33,8 @@ const Header = () => {
           </Link>
         </nav>
         <div className='flex gap-4'>
-          <Link href='/auth/login'>Login</Link>
-          <Link href='/auth/register'>Register</Link>
+          <Link href='/login'>Login</Link>
+          <Link href='/register'>Register</Link>
         </div>
       </div>
     </header>

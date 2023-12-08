@@ -1,4 +1,4 @@
-import authOptions from '@/app/auth/authOptions';
+import authOptions from '@/app/(auth)/authOptions';
 import { singleListingSchema } from '@/lib/schemas/listing';
 import { getServerSession } from 'next-auth';
 import { z } from 'zod';

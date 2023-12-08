@@ -1,4 +1,4 @@
-import authOptions from '@/app/auth/authOptions';
+import authOptions from '@/app/(auth)/authOptions';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Listing } from '@/lib/schemas/listing';
