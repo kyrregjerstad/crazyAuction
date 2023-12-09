@@ -11,13 +11,16 @@ import { FormStepProps } from '../types';
 import StepNavigation from './StepNavigation';
 
 const SummaryStepForm = (props: FormStepProps) => {
-  const { currentStep, nextStep, prevStep } = props;
-
-  const { summary, saveStep } = useMultiStepAuctionForm(props);
+  const { currentStep, prevStep, mode } = props;
 
   const auctionFormData = useStore(useAuctionFormStore, (state) =>
     state.getStore(),
   );
+  const auctionId = auctionFormData?.id;
+  const { summary, saveStep } = useMultiStepAuctionForm({
+    ...props,
+    auctionId,
+  });
 
   const formState = auctionFormData;
 
@@ -27,6 +30,8 @@ const SummaryStepForm = (props: FormStepProps) => {
     setValue,
     getValues,
   } = summary;
+
+  console.log(getValues());
 
   return (
     <Form {...summary}>
@@ -102,8 +107,9 @@ const SummaryStepForm = (props: FormStepProps) => {
           disabled={isSubmitting}
           currentStep={currentStep}
           prevStep={prevStep}
+          nextBtnLabel={mode === 'edit' ? 'Update' : 'Submit'}
         />
-        <div className='hidden'>
+        <div>
           <FormField
             control={control}
             name='title'
@@ -119,7 +125,10 @@ const SummaryStepForm = (props: FormStepProps) => {
           <FormField
             control={control}
             name='tags'
-            render={({ field }) => <Input {...field} readOnly />}
+            render={({ field }) => {
+              console.log(field);
+              return <Input {...field} readOnly />;
+            }}
           />
           <FormField
             control={control}

@@ -1,4 +1,5 @@
 import { NewAuctionForm } from '@/components/new-auction-form';
+import EditAuctionForm from '@/components/new-auction-form/EditAuctionForm';
 import { ListingFull } from '@/lib/schemas/listingSchema';
 import { getSingleListing } from '@/lib/services/getSingleListing';
 import { getServerSession } from 'next-auth';
@@ -8,6 +9,7 @@ type Mode = 'create' | 'edit';
 type SearchParams = {
   mode?: Mode;
   id?: string;
+  step?: string;
 };
 
 type Props = {
@@ -16,9 +18,10 @@ type Props = {
 export default async function NewAuctionPage({ searchParams }: Props) {
   const session = await getServerSession();
 
-  let { mode, id } = searchParams || {
+  let { mode, id, step } = searchParams || {
     mode: 'create',
     id: null,
+    step: 'info',
   };
 
   if (!mode) {
@@ -29,9 +32,13 @@ export default async function NewAuctionPage({ searchParams }: Props) {
     mode = 'create';
   }
 
+  if (!step) {
+    step = 'info';
+  }
+
   let listing: ListingFull | null = null;
 
-  if (id && mode === 'edit') {
+  if (id && mode === 'edit' && step === 'info') {
     const requestedListing = await getSingleListing(id);
 
     if (session?.user.name === requestedListing.seller.name) {
@@ -54,7 +61,7 @@ export default async function NewAuctionPage({ searchParams }: Props) {
           </h1>
         )}
 
-        <NewAuctionForm mode={mode} listing={listing} />
+        <NewAuctionForm listing={listing} mode={mode} />
       </div>
     </>
   );

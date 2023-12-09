@@ -1,5 +1,6 @@
 import { AuctionFormComplete } from '@/lib/schemas/auctionSchema';
 import { Listing, ListingFull } from '@/lib/schemas/listingSchema';
+import { UpdateAuction } from '@/lib/services/updateListing';
 
 export type Step = 'info' | 'media' | 'time' | 'summary';
 
@@ -22,6 +23,7 @@ export type FormStepProps = AuctionForm & {
   nextStep: () => void;
   prevStep: () => void;
   postListing: PostListing;
+  updateAuction: UpdateAuction;
 };
 
 export type UploadImage = {

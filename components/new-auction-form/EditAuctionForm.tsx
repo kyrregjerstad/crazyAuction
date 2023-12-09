@@ -1,26 +1,28 @@
 'use client';
 
-import { useEffect } from 'react';
-import { isEqual } from 'lodash';
-import StepOverview from './StepOverview';
-import postListing from '@/lib/services/postListing';
 import useAuctionFormStep from '@/lib/hooks/useAuctionFormStep';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
-import updateAuction from '@/lib/services/updateListing';
 import { ListingFull } from '@/lib/schemas/listingSchema';
-import { AuctionForm, FormStepProps, Step } from './types';
-
+import postListing from '@/lib/services/postListing';
+import { useEffect } from 'react';
 import { Card } from '../ui/card';
+import StepOverview from './StepOverview';
 import {
   DateStepForm,
   InfoStepForm,
   MediaStepForm,
   SummaryStepForm,
 } from './steps';
+import { FormStepProps } from './types';
+import { isEqual } from 'lodash';
 
-const NewAuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
-  const { getCurrentStep, nextStep, prevStep, steps } = useAuctionFormStep({
-    mode,
+type EditAuctionFormProps = {
+  listing: ListingFull | null;
+};
+
+const EditAuctionForm = ({ listing }: EditAuctionFormProps) => {
+  const { getCurrentStep, nextStep, prevStep } = useAuctionFormStep({
+    mode: 'edit',
   });
   const { getStore, updateStore, clearStore, storedData } =
     useAuctionFormStore();
@@ -40,7 +42,6 @@ const NewAuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
   }, []); // we only want to run this once when the component mounts, to clear the store
 
   const props = {
-    mode,
     listing,
     currentStep,
     getStore,
@@ -49,7 +50,7 @@ const NewAuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
     nextStep,
     prevStep,
     postListing,
-    updateAuction,
+    id: listing?.id,
   } satisfies FormStepProps;
 
   const RenderStep = () => {
@@ -69,7 +70,7 @@ const NewAuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
 
   return (
     <Card className='flex w-full max-w-2xl flex-col gap-5 p-4 sm:flex-row'>
-      <StepOverview currentStep={currentStep} steps={steps} />
+      <StepOverview currentStep={currentStep} />
       <div className='flex w-full flex-col gap-4'>
         <RenderStep />
       </div>
@@ -77,7 +78,7 @@ const NewAuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
   );
 };
 
-export default NewAuctionForm;
+export default EditAuctionForm;
 
 const transformListingToStore = (listing: ListingFull | null) => {
   if (!listing) {
@@ -89,6 +90,5 @@ const transformListingToStore = (listing: ListingFull | null) => {
     tags: listing.tags,
     imageUrls: listing.media,
     dateTime: listing.endsAt,
-    id: listing.id,
   };
 };

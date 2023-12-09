@@ -5,34 +5,12 @@ import { cn } from '@/lib/utils';
 
 type StepsProps = {
   currentStep: Step;
+  steps: { title: string; step: Step; description: string }[];
 };
 
-const StepOverview = ({ currentStep }: StepsProps) => {
-  const steps: { title: string; step: Step; description: string }[] = [
-    {
-      title: 'Info',
-      step: 'info',
-      description: 'Enter the title, description, and tags for your auction.',
-    },
-    {
-      title: 'Media',
-      step: 'media',
-      description: 'Upload images for your auction.',
-    },
-    {
-      title: 'End Date',
-      step: 'time',
-      description: 'Set the end time for your auction.',
-    },
-    {
-      title: 'Summary',
-      step: 'summary',
-      description: 'Review your auction details and submit.',
-    },
-  ];
-
+const StepOverview = ({ currentStep, steps }: StepsProps) => {
   return (
-    <ul className='flex justify-between gap-4 bg-accent-950 p-4 sm:flex-col sm:justify-start'>
+    <ul className='flex justify-between gap-2 bg-accent-950 p-4 sm:flex-col sm:justify-start'>
       {steps.map(({ title, step }) => (
         <li
           key={title}
@@ -48,7 +26,7 @@ const StepOverview = ({ currentStep }: StepsProps) => {
               className='absolute -bottom-1 left-1/2 h-2 w-2 rounded-full bg-accent-500 sm:-left-3 sm:top-2'
             />
           )}
-          <Link href={`?step=${step}`}>{title}</Link>
+          <span>{title}</span>
         </li>
       ))}
     </ul>

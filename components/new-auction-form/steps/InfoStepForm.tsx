@@ -17,9 +17,16 @@ import StepNavigation from './StepNavigation';
 const InfoStepForm = (props: FormStepProps) => {
   const { currentStep, nextStep, prevStep } = props;
   const { info, saveStep } = useMultiStepAuctionForm(props);
-  const { control, formState } = info;
+  const { control, formState, setValue } = info;
 
   const { isDirty, isSubmitting, isValid } = formState;
+
+  const handleTagsChange = (event) => {
+    // Transform the input value into an array
+    const tags = event.target.value.split(',').map((tag) => tag.trim());
+    // Update the form control with the new array
+    setValue('tags', tags, { shouldValidate: true });
+  };
 
   return (
     <Form {...info}>
@@ -70,6 +77,7 @@ const InfoStepForm = (props: FormStepProps) => {
                 <Input
                   placeholder='Tags'
                   {...field}
+                  onChange={handleTagsChange}
                   className='bg-foreground text-background'
                 />
               </FormControl>

@@ -1,12 +1,61 @@
 import { Step } from '@/components/new-auction-form/types';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
-const stepsOrder: Step[] = ['info', 'media', 'time', 'summary'];
-
-const useAuctionFormStep = () => {
+type Params = {
+  mode: 'create' | 'edit';
+};
+const useAuctionFormStep = ({ mode }: Params) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const steps: { title: string; step: Step; description: string }[] = useMemo(
+    () =>
+      mode === 'create'
+        ? [
+            {
+              title: 'Info',
+              step: 'info',
+              description:
+                'Enter the title, description, and tags for your auction.',
+            },
+            {
+              title: 'Media',
+              step: 'media',
+              description: 'Upload images for your auction.',
+            },
+            {
+              title: 'Summary',
+              step: 'summary',
+              description: 'Review your auction details and submit.',
+            },
+          ]
+        : [
+            {
+              title: 'Info',
+              step: 'info',
+              description:
+                'Enter the title, description, and tags for your auction.',
+            },
+            {
+              title: 'Media',
+              step: 'media',
+              description: 'Upload images for your auction.',
+            },
+            {
+              title: 'Summary',
+              step: 'summary',
+              description: 'Review your auction details and submit.',
+            },
+          ],
+    [mode],
+  );
+
+  const stepsOrder: Step[] = useMemo(() => {
+    return mode === 'create'
+      ? ['info', 'media', 'time', 'summary']
+      : ['info', 'media', 'summary'];
+  }, [mode]);
 
   const getCurrentStep = useCallback(() => {
     let currentStep = searchParams.get('step') as Step | undefined;
@@ -14,13 +63,13 @@ const useAuctionFormStep = () => {
       currentStep = 'info';
     }
     return currentStep;
-  }, [searchParams]);
+  }, [searchParams, stepsOrder]);
 
   const goToStep = useCallback(
     (step: Step) => {
       const newSearchParams = new URLSearchParams(searchParams);
       newSearchParams.set('step', step);
-      router.push(`?${newSearchParams.toString()}`);
+      router.replace(`?${newSearchParams.toString()}`);
     },
     [router, searchParams],
   );
@@ -32,7 +81,7 @@ const useAuctionFormStep = () => {
     if (nextIndex < stepsOrder.length) {
       goToStep(stepsOrder[nextIndex]);
     }
-  }, [getCurrentStep, goToStep]);
+  }, [getCurrentStep, goToStep, stepsOrder]);
 
   const prevStep = useCallback(() => {
     const currentIndex = stepsOrder.indexOf(getCurrentStep());
@@ -41,9 +90,9 @@ const useAuctionFormStep = () => {
     if (prevIndex >= 0) {
       goToStep(stepsOrder[prevIndex]);
     }
-  }, [getCurrentStep, goToStep]);
+  }, [getCurrentStep, goToStep, stepsOrder]);
 
-  return { goToStep, nextStep, prevStep, getCurrentStep };
+  return { goToStep, nextStep, prevStep, getCurrentStep, steps };
 };
 
 export default useAuctionFormStep;
