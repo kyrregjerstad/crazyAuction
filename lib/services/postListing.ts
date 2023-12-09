@@ -16,13 +16,11 @@ const postListing = async ({ formData }: Params) => {
     (url) => `${workerUrl}/cache/${url}`,
   ); // add cloudFlare worker url to cache the image, in order to reduce cloudinary costs
 
-  const tagsArr = formData.tags?.split(' ').map((tag) => tag.trim()) || [];
-
   const transformedFormData = {
     title: formData.title,
     description: formData.description,
     media: transformedMediaLinks,
-    tags: tagsArr,
+    tags: formData.tags,
     endsAt: formData.dateTime,
   };
 

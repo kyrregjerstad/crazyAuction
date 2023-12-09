@@ -6,7 +6,7 @@ import StepOverview from './StepOverview';
 import postListing from '@/lib/services/postListing';
 import useAuctionFormStep from '@/lib/hooks/useAuctionFormStep';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
-import updateAuction from '@/lib/services/updateListing';
+import updateAuction from '@/lib/services/updateAuction';
 import { ListingFull } from '@/lib/schemas/listingSchema';
 import { AuctionForm, FormStepProps, Step } from './types';
 

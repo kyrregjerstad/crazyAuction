@@ -5,6 +5,7 @@ import InfoStepForm from './InfoStepForm';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
 import { vi } from 'vitest';
 import { FormStepProps } from '../types';
+import { emptyListing } from '@/lib/mocks/data';
 
 const nextStepMock = vi.fn();
 const updateStoreMock = vi.fn();
@@ -37,7 +38,7 @@ vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
 }));
 
-const StepWrapper = () => {
+const StepCreateWrapper = () => {
   const { getStore, clearStore } = useAuctionFormStore();
 
   const props = {
@@ -56,13 +57,13 @@ const StepWrapper = () => {
   return <InfoStepForm {...props} />;
 };
 
-describe('InfoStepForm', () => {
+describe('InfoStepForm CREATE', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
   it('renders form fields', () => {
-    render(<StepWrapper />);
+    render(<StepCreateWrapper />);
 
     expect(screen.getByPlaceholderText('Title')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Description')).toBeInTheDocument();
@@ -73,7 +74,7 @@ describe('InfoStepForm', () => {
   });
 
   it('saves the step to the store', async () => {
-    render(<StepWrapper />);
+    render(<StepCreateWrapper />);
 
     await userEvent.type(screen.getByPlaceholderText('Title'), 'Test Title');
     await userEvent.type(
@@ -108,7 +109,7 @@ describe('InfoStepForm', () => {
       storedData: localStoredDataMock,
     }));
 
-    render(<StepWrapper />);
+    render(<StepCreateWrapper />);
 
     expect(screen.getByPlaceholderText('Title')).toHaveValue('Test Title');
     expect(screen.getByPlaceholderText('Description')).toHaveValue(
@@ -127,7 +128,7 @@ describe('InfoStepForm', () => {
       storedData: localStoredDataMock,
     }));
 
-    render(<StepWrapper />);
+    render(<StepCreateWrapper />);
 
     fireEvent.submit(screen.getByRole('button', { name: 'Next' }));
 
@@ -135,6 +136,80 @@ describe('InfoStepForm', () => {
       expect(
         screen.getByText('Title can not be shorter than 3 characters'),
       ).toBeInTheDocument();
+    });
+  });
+});
+
+const fetchedListingMock = {
+  ...emptyListing,
+  title: 'Test Title',
+  description: 'Test Description',
+  tags: ['tag1', 'tag2'],
+};
+
+const StepEditWrapper = () => {
+  const { getStore, clearStore } = useAuctionFormStore();
+  const props = {
+    mode: 'edit' as 'create' | 'edit',
+    listing: fetchedListingMock,
+    currentStep: 'info' as 'info' | 'media' | 'time' | 'summary',
+    getStore,
+    clearStore,
+    prevStep: vi.fn(),
+    updateStore: updateStoreMock,
+    nextStep: nextStepMock,
+    postListing: vi.fn(),
+    updateAuction: vi.fn(),
+  } satisfies FormStepProps;
+
+  return <InfoStepForm {...props} />;
+};
+
+describe('InfoStepForm EDIT', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('renders form fields', () => {
+    render(<StepEditWrapper />);
+
+    expect(screen.getByPlaceholderText('Title')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Description')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Tags')).toBeInTheDocument();
+
+    expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+  });
+
+  it('populates the correct fields', async () => {
+    const localStoredDataMock = {
+      title: 'Test Title',
+      description: undefined,
+      tags: [],
+    };
+
+    vi.mocked(useAuctionFormStore).mockImplementation(() => ({
+      updateStore: updateStoreMock,
+      storedData: localStoredDataMock,
+    }));
+
+    render(<StepEditWrapper />);
+
+    expect(screen.getByPlaceholderText('Title')).toHaveValue('Test Title');
+    expect(screen.getByPlaceholderText('Description')).toHaveValue('');
+    expect(screen.getByPlaceholderText('Tags')).toHaveValue('');
+
+    expect(screen.getByRole('button', { name: 'Next' })).not.toBeDisabled();
+
+    fireEvent.submit(screen.getByRole('button', { name: 'Next' }));
+
+    await waitFor(() => {
+      expect(nextStepMock).toHaveBeenCalled();
+      expect(updateStoreMock).toHaveBeenCalledWith({
+        title: 'Test Title',
+        description: '',
+        tags: [],
+      });
     });
   });
 });

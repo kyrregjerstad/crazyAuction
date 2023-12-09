@@ -1,6 +1,6 @@
 import { AuctionFormComplete } from '@/lib/schemas/auctionSchema';
 import { Listing, ListingFull } from '@/lib/schemas/listingSchema';
-import { UpdateAuction } from '@/lib/services/updateListing';
+import { UpdateAuction } from '@/lib/services/updateAuction';
 
 export type Step = 'info' | 'media' | 'time' | 'summary';
 

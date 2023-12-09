@@ -21,7 +21,7 @@ import {
   UpdateAuction,
   UpdateAuctionForm,
   updateAuctionSchema,
-} from '@/lib/services/updateListing';
+} from '@/lib/services/updateAuction';
 import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
 import {

@@ -114,7 +114,7 @@ const ImageDropzone = ({
         setImages((prevImages) => [...prevImages, ...newImages]);
       }
     },
-    [],
+    [setImages],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
