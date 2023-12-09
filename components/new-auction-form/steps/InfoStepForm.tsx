@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
 import { FormStepProps } from '../types';
 import StepNavigation from './StepNavigation';
+import { ChangeEvent, ChangeEventHandler } from 'react';
 
 const InfoStepForm = (props: FormStepProps) => {
   const { currentStep, nextStep, prevStep } = props;
@@ -21,7 +22,7 @@ const InfoStepForm = (props: FormStepProps) => {
 
   const { isDirty, isSubmitting, isValid } = formState;
 
-  const handleTagsChange = (event) => {
+  const handleTagsChange = (event: ChangeEvent<HTMLInputElement>) => {
     // Transform the input value into an array
     const tags = event.target.value.split(',').map((tag) => tag.trim());
     // Update the form control with the new array
@@ -89,6 +90,7 @@ const InfoStepForm = (props: FormStepProps) => {
           disabled={isSubmitting}
           currentStep={currentStep}
           prevStep={prevStep}
+          prevBtnLabel='Cancel'
         />
       </form>
     </Form>

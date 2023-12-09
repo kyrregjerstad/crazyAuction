@@ -3,15 +3,15 @@ import userEvent from '@testing-library/user-event';
 import InfoStepForm from './InfoStepForm';
 
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
-import postListing from '@/lib/services/postListing';
 import { vi } from 'vitest';
+import { FormStepProps } from '../types';
 
 const nextStepMock = vi.fn();
 const updateStoreMock = vi.fn();
 const storedDataMock = {
   title: '',
   description: '',
-  tags: '',
+  tags: [],
 };
 
 vi.mock('@/lib/hooks/useAuctionFormStep', () => {
@@ -49,8 +49,9 @@ const StepWrapper = () => {
     prevStep: vi.fn(),
     updateStore: updateStoreMock,
     nextStep: nextStepMock,
-    postListing,
-  };
+    postListing: vi.fn(),
+    updateAuction: vi.fn(),
+  } satisfies FormStepProps;
 
   return <InfoStepForm {...props} />;
 };
@@ -69,8 +70,6 @@ describe('InfoStepForm', () => {
 
     expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
-
-    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
   });
 
   it('saves the step to the store', async () => {
@@ -81,7 +80,7 @@ describe('InfoStepForm', () => {
       screen.getByPlaceholderText('Description'),
       'Test Description',
     );
-    await userEvent.type(screen.getByPlaceholderText('Tags'), 'Test Tags');
+    await userEvent.type(screen.getByPlaceholderText('Tags'), 'tag1, tag2');
 
     expect(screen.getByRole('button', { name: 'Next' })).not.toBeDisabled();
 
@@ -92,7 +91,7 @@ describe('InfoStepForm', () => {
       expect(updateStoreMock).toHaveBeenCalledWith({
         title: 'Test Title',
         description: 'Test Description',
-        tags: 'Test Tags',
+        tags: ['tag1', 'tag2'],
       });
     });
   });
@@ -118,7 +117,7 @@ describe('InfoStepForm', () => {
     expect(screen.getByPlaceholderText('Tags')).toHaveValue('Test Tags');
   });
 
-  it('disables the next button if title is empty', async () => {
+  it('shows errors when the title field is empty', async () => {
     const localStoredDataMock = {
       title: '',
     };
@@ -130,12 +129,12 @@ describe('InfoStepForm', () => {
 
     render(<StepWrapper />);
 
-    await userEvent.type(
-      screen.getByPlaceholderText('Description'),
-      'Test Description',
-    );
-    await userEvent.type(screen.getByPlaceholderText('Tags'), 'Test Tags');
+    fireEvent.submit(screen.getByRole('button', { name: 'Next' }));
 
-    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
+    await waitFor(() => {
+      expect(
+        screen.getByText('Title can not be shorter than 3 characters'),
+      ).toBeInTheDocument();
+    });
   });
 });

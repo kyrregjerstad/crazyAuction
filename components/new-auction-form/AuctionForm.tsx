@@ -18,7 +18,7 @@ import {
   SummaryStepForm,
 } from './steps';
 
-const NewAuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
+const AuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
   const { getCurrentStep, nextStep, prevStep, steps } = useAuctionFormStep({
     mode,
   });
@@ -77,7 +77,7 @@ const NewAuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
   );
 };
 
-export default NewAuctionForm;
+export default AuctionForm;
 
 const transformListingToStore = (listing: ListingFull | null) => {
   if (!listing) {

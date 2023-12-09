@@ -1,5 +1,4 @@
-import { NewAuctionForm } from '@/components/new-auction-form';
-import EditAuctionForm from '@/components/new-auction-form/EditAuctionForm';
+import { AuctionForm } from '@/components/new-auction-form';
 import { ListingFull } from '@/lib/schemas/listingSchema';
 import { getSingleListing } from '@/lib/services/getSingleListing';
 import { getServerSession } from 'next-auth';
@@ -61,7 +60,7 @@ export default async function NewAuctionPage({ searchParams }: Props) {
           </h1>
         )}
 
-        <NewAuctionForm listing={listing} mode={mode} />
+        <AuctionForm listing={listing} mode={mode} />
       </div>
     </>
   );

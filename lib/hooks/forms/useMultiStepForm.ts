@@ -120,7 +120,7 @@ const useMultiStepAuctionForm = ({
     info: useFormInitialization<AuctionFormInfo>(auctionFormInfoSchema, {
       title: storedData.title ?? '',
       description: storedData.description ?? '',
-      tags: storedData.tags ?? '',
+      tags: storedData.tags ?? [],
     }),
     media: useFormInitialization<AuctionFormMedia>(auctionFormMediaSchema, {
       imageUrls: storedData.imageUrls ?? [],
