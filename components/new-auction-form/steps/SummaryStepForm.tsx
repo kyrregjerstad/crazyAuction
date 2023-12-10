@@ -9,9 +9,14 @@ import dayjs from 'dayjs';
 import Image from '../../Image';
 import { FormStepProps } from '../types';
 import StepNavigation from './StepNavigation';
+import useDevMode from '@/lib/hooks/useDevMode';
+import { cn } from '@/lib/utils';
+import { useEffect } from 'react';
 
 const SummaryStepForm = (props: FormStepProps) => {
   const { currentStep, prevStep, mode } = props;
+
+  const isDevMode = useDevMode();
 
   const auctionFormData = useStore(useAuctionFormStore, (state) =>
     state.getStore(),
@@ -31,6 +36,10 @@ const SummaryStepForm = (props: FormStepProps) => {
     getValues,
   } = summary;
 
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
+
   console.log(getValues());
 
   return (
@@ -41,20 +50,37 @@ const SummaryStepForm = (props: FormStepProps) => {
             <div className='flex flex-col'>
               <span className='text-sm'>Title</span>
               <span className='rounded-md bg-foreground p-2 text-background'>
-                {formState?.title}
+                {formState?.title ? (
+                  formState?.title
+                ) : (
+                  <span className='text-neutral-400'>No title</span>
+                )}
               </span>
             </div>
             <div className='flex flex-1 flex-col'>
               <span className='text-sm'>Description</span>
               <span className='h-full rounded-md bg-foreground p-2 text-background'>
-                {formState?.description}
+                {formState?.description ? (
+                  formState?.description
+                ) : (
+                  <span className='text-neutral-400'>No description</span>
+                )}
               </span>
             </div>
             <div className='flex flex-col'>
               <span className='text-sm'>Tags</span>
               <span className='min-h-[40px] rounded-md bg-foreground p-2 text-background'>
-                {formState?.tags ? (
-                  <>{formState?.tags}</>
+                {formState?.tags && formState.tags.length > 0 ? (
+                  <div className='flex flex-wrap gap-2'>
+                    {formState?.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className='rounded-md bg-neutral-200 p-2 text-neutral-800'
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 ) : (
                   <span className='text-neutral-400'>No tags</span>
                 )}
@@ -66,24 +92,32 @@ const SummaryStepForm = (props: FormStepProps) => {
               <div className='flex flex-1 flex-col'>
                 <span className='text-sm'>Date</span>
                 <span className='flex-1 rounded-md bg-foreground p-2 text-background'>
-                  {formState?.dateTime
-                    ? dayjs(formState.dateTime).format('DD/MM/YYYY')
-                    : ''}
+                  {formState?.dateTime ? (
+                    <span className={cn(mode === 'edit' && 'text-neutral-500')}>
+                      {dayjs(formState.dateTime).format('DD/MM/YYYY')}
+                    </span>
+                  ) : (
+                    <span className='text-neutral-400'>No date</span>
+                  )}
                 </span>
               </div>
               <div className='flex flex-col'>
                 <span className='text-sm'>Time</span>
                 <span className='rounded-md bg-foreground p-2 pr-12 text-background'>
-                  {formState?.dateTime
-                    ? dayjs(formState.dateTime).format('HH:mm')
-                    : ''}
+                  {formState?.dateTime ? (
+                    <span className={cn(mode === 'edit' && 'text-neutral-500')}>
+                      {dayjs(formState.dateTime).format('HH:mm')}
+                    </span>
+                  ) : (
+                    <span className='text-neutral-400'>No time</span>
+                  )}
                 </span>
               </div>
             </div>
             <div className='flex flex-col'>
               <span className='text-sm'>Images</span>
               <div className='flex flex-col rounded-md bg-foreground p-2'>
-                {formState?.imageUrls && formState.imageUrls.length > 0 && (
+                {formState?.imageUrls && formState.imageUrls.length > 0 ? (
                   <>
                     <div className='grid grid-cols-3 gap-2'>
                       {formState?.imageUrls.map((image) => (
@@ -98,6 +132,8 @@ const SummaryStepForm = (props: FormStepProps) => {
                       ))}
                     </div>
                   </>
+                ) : (
+                  <span className='text-neutral-400'>No images</span>
                 )}
               </div>
             </div>
@@ -109,7 +145,7 @@ const SummaryStepForm = (props: FormStepProps) => {
           prevStep={prevStep}
           nextBtnLabel={mode === 'edit' ? 'Update' : 'Submit'}
         />
-        <div>
+        <div className={cn(!isDevMode && 'hidden')}>
           <FormField
             control={control}
             name='title'
@@ -119,22 +155,23 @@ const SummaryStepForm = (props: FormStepProps) => {
             control={control}
             name='description'
             render={({ field }) => (
-              <Input {...field} value={field.value || ''} readOnly />
+              <Input {...field} value={field.value} readOnly />
             )}
           />
           <FormField
             control={control}
             name='tags'
             render={({ field }) => {
-              console.log(field);
               return <Input {...field} readOnly />;
             }}
           />
-          <FormField
-            control={control}
-            name='dateTime'
-            render={({ field }) => <Input {...field} readOnly />}
-          />
+          {mode === 'create' && (
+            <FormField
+              control={control}
+              name='dateTime'
+              render={({ field }) => <Input {...field} readOnly />}
+            />
+          )}
           <FormField
             control={control}
             name='imageUrls'

@@ -88,7 +88,6 @@ const transformListingToStore = (listing: ListingFull | null) => {
     description: listing.description,
     tags: listing.tags,
     imageUrls: listing.media,
-    dateTime: listing.endsAt,
     id: listing.id,
   };
 };

@@ -25,6 +25,11 @@ const useAuctionFormStep = ({ mode }: Params) => {
               description: 'Upload images for your auction.',
             },
             {
+              title: 'Time',
+              step: 'time',
+              description: 'Set the start and end time for your auction.',
+            },
+            {
               title: 'Summary',
               step: 'summary',
               description: 'Review your auction details and submit.',

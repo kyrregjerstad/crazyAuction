@@ -73,6 +73,7 @@ const useStepHandlers = ({
   };
 
   const onUpdateAuction = async (formData: UpdateAuctionForm) => {
+    console.log('formData');
     const transformedFormData = {
       title: formData.title || undefined,
       description: formData.description || undefined,
@@ -89,8 +90,11 @@ const useStepHandlers = ({
       formData: transformedFormData,
       id: auctionId,
     });
+
+    console.log(res);
     router.push(`/item/${res?.id}`);
     clearStore();
+    return res;
   };
 
   return { onSaveStep, onSaveSummaryStep, onUpdateAuction };
@@ -162,12 +166,13 @@ const useMultiStepAuctionForm = ({
     media: forms.media.handleSubmit(onSaveStep),
     time: forms.dateTime.handleSubmit(onSaveStep),
     summary: forms.summary.handleSubmit(onSaveSummaryStep),
-    update: forms.update.handleSubmit(onUpdateAuction),
+    update: forms.update.handleSubmit((e) => console.log(e)),
   };
 
   const saveStep = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (mode === 'edit' && currentStep === 'summary') {
+      console.log(storedData);
       await formHandlers.update();
       return;
     }
