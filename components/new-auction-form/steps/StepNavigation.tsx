@@ -5,15 +5,23 @@ type Props = {
   prevStep: () => void;
   currentStep: Step;
   disabled?: boolean;
+  prevBtnLabel?: string;
+  nextBtnLabel?: string;
 };
-const StepNavigation = ({ prevStep, currentStep, disabled }: Props) => {
+const StepNavigation = ({
+  prevStep,
+  currentStep,
+  disabled,
+  prevBtnLabel,
+  nextBtnLabel,
+}: Props) => {
   return (
     <div className='flex w-full justify-end gap-4'>
       <Button variant='outline' type='button' onClick={prevStep}>
-        {currentStep === 'info' ? 'Cancel' : 'Back'}
+        {prevBtnLabel || 'Back'}
       </Button>
       <Button variant='accent' type='submit' disabled={disabled}>
-        {currentStep === 'summary' ? 'Submit' : 'Next'}
+        {nextBtnLabel || 'Next'}
       </Button>
     </div>
   );

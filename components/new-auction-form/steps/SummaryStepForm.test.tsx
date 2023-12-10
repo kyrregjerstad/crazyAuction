@@ -1,11 +1,10 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import SummaryStepForm from './SummaryStepForm';
-import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
-import useStore from '@/lib/hooks/useStore';
 
-import postListing from '@/lib/services/postListing';
 import { vi } from 'vitest';
+import { FormStepProps } from '../types';
+import { StoredData } from '@/lib/hooks/useAuctionFormStore';
+import { createStoredDataMock } from '@/lib/mocks/data';
 
 const mockPostListing = vi.fn(() =>
   Promise.resolve({
@@ -19,12 +18,26 @@ const mockPostListing = vi.fn(() =>
     endsAt: 'test endsAt',
   }),
 );
+
+const mockUpdateAuction = vi.fn(() =>
+  Promise.resolve({
+    id: 'test-id',
+    title: 'test title',
+    description: 'test description',
+    tags: ['test', 'tag'],
+    media: [],
+    created: 'test created',
+    updated: 'test updated',
+    endsAt: 'test endsAt',
+  }),
+);
+
 const nextStepMock = vi.fn();
 const updateStoreMock = vi.fn();
 const auctionFormData = {
   title: 'test title',
   description: 'test description',
-  tags: 'test tags',
+  tags: ['test', 'tag'],
   dateTime: '2021-08-18T17:00:00.000Z',
   imageUrls: [],
   duration: 1,
@@ -62,8 +75,7 @@ vi.mock('@/lib/hooks/useAuctionFormStep', () => {
 
 vi.mock('@/lib/hooks/useStore', () => {
   return {
-    default: vi.fn((store, callback) => {
-      // Simulate the behavior of calling the store with a callback
+    default: vi.fn((_store, callback) => {
       const state = { getStore: () => auctionFormData };
       return callback(state);
     }),
@@ -90,25 +102,33 @@ vi.mock('next/navigation', () => ({
   })),
 }));
 
-const StepWrapper = () => {
-  // const { getStore, clearStore } = useAuctionFormStore();
+type Props = {
+  storedDataProp?: StoredData;
+  mode?: 'create' | 'edit';
+};
 
+const StepWrapper = ({
+  storedDataProp = createStoredDataMock(),
+  mode = 'create',
+}: Props) => {
   const props = {
-    mode: 'create' as 'create' | 'edit',
+    mode,
     listing: null,
     currentStep: 'summary' as 'info' | 'media' | 'time' | 'summary',
     getStore: mockGetStore,
     clearStore: mockClearStore,
+    prevStep: vi.fn(),
+    storedData: storedDataProp,
     updateStore: updateStoreMock,
     nextStep: nextStepMock,
-    prevStep: vi.fn(),
     postListing: mockPostListing,
-  };
+    updateAuction: mockUpdateAuction,
+  } satisfies FormStepProps;
 
   return <SummaryStepForm {...props} />;
 };
 
-describe('SummaryStepForm', () => {
+describe('SummaryStepForm CREATE', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -130,7 +150,14 @@ describe('SummaryStepForm', () => {
   });
 
   it('calls postListing on submit', async () => {
-    render(<StepWrapper />);
+    const storedDataMock = createStoredDataMock({
+      title: 'test title',
+      description: 'test description',
+      tags: ['test', 'tag'],
+      dateTime: '2021-08-18T17:00:00.000Z',
+      imageUrls: [],
+    });
+    render(<StepWrapper storedDataProp={storedDataMock} />);
 
     const submitBtn = screen.getByRole('button', { name: 'Submit' });
 
@@ -138,23 +165,40 @@ describe('SummaryStepForm', () => {
 
     await waitFor(() => {
       expect(mockPostListing).toHaveBeenCalledTimes(1);
-      // expect(mockPostListing).toHaveBeenCalledWith(auctionFormData);
     });
   });
+});
 
-  // it('redirects to the listing page on submit', async () => {
-  //   render(<StepWrapper />);
+describe('SummaryStepForm EDIT', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
 
-  //   const submitBtn = screen.getByRole('button', { name: 'Submit' });
+  it('renders the summary', () => {
+    render(<StepWrapper mode='edit' />);
 
-  //   await userEvent.click(submitBtn);
+    expect(screen.getByText('Title')).toBeInTheDocument();
+    expect(screen.getByText('Description')).toBeInTheDocument();
+    expect(screen.getByText('Tags')).toBeInTheDocument();
+    expect(screen.getByText('Date')).toBeInTheDocument();
+    expect(screen.getByText('Time')).toBeInTheDocument();
+    expect(screen.getByText('Images')).toBeInTheDocument();
 
-  //   fireEvent.submit(submitBtn);
+    expect(screen.getByRole('button', { name: 'Update' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Back' })).toBeInTheDocument();
 
-  //   await waitFor(() => {
-  //     expect(mockPostListing).toHaveBeenCalled();
-  //     expect(mockRouterPush).toHaveBeenCalledTimes(1);
-  //     expect(mockRouterPush).toHaveBeenCalledWith('/listings/test-id');
-  //   });
-  // });
+    expect(screen.getByRole('button', { name: 'Update' })).not.toBeDisabled();
+  });
+
+  it.skip('calls updateAuction on submit', async () => {
+    render(<StepWrapper mode='edit' />);
+
+    const submitBtn = screen.getByRole('button', { name: 'Update' });
+
+    fireEvent.submit(submitBtn);
+
+    await waitFor(() => {
+      expect(mockUpdateAuction).toHaveBeenCalledTimes(1);
+    });
+  });
 });

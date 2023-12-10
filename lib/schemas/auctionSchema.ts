@@ -8,8 +8,8 @@ export const auctionFormInfoSchema = z.object({
   description: z
     .string()
     .max(280, { message: 'Description cannot be longer than 280 characters' })
-    .optional(),
-  tags: z.string().optional(),
+    .nullable(),
+  tags: z.array(z.string()).max(8, 'A maximum of 8 tags are allowed'),
 });
 
 export const auctionFormMediaSchema = z.object({

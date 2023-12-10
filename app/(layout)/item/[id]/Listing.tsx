@@ -18,9 +18,11 @@ import { useState } from 'react';
 
 dayjs.extend(relativeTime);
 
-const SingleListingPage = ({ listingId }: { listingId: string }) => {
-  const session = useSession();
-
+type Props = {
+  listingId: string;
+  isAuthenticated: boolean;
+};
+const SingleListingPage = ({ listingId, isAuthenticated }: Props) => {
   const { data: singleListing, isLoading } = useQuerySingleListing({
     listingId,
   });
@@ -32,7 +34,6 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
   } = useMutateSingleListing({ listingId });
 
   const isLoggedInUser = useIsLoggedInUser(singleListing?.seller.name);
-  const isAuthenticated = session.status === 'authenticated';
 
   const startingBid = calculateStartingAmount(
     singleListing?.bids?.at(-1)?.amount || 0,
@@ -80,29 +81,34 @@ const SingleListingPage = ({ listingId }: { listingId: string }) => {
           </Link>
         ) : (
           <div className='flex w-full max-w-sm items-center space-x-2'>
-            <Input
-              type='number'
-              placeholder={`${Math.round(currentBid * 1.1)}`}
-              className='w-24'
-              min={currentBid + 1}
-              onChange={(e) => setAmount(Number(e.target.value))}
-              value={amount}
-              disabled={!isAuthenticated || isPending}
-            />
+            {isAuthenticated ? (
+              <>
+                <Input
+                  type='number'
+                  placeholder={`${Math.round(currentBid * 1.1)}`}
+                  className='w-24'
+                  min={currentBid + 1}
+                  onChange={(e) => setAmount(Number(e.target.value))}
+                  value={amount}
+                  disabled={!isAuthenticated || isPending}
+                />
 
-            <AnimatedButton
-              isLink={false}
-              variant='magic'
-              repeat={true}
-              className='w-18'
-              onClick={() => {
-                mutate(amount);
-              }}
-              disabled={!isAuthenticated || isPending || amount < currentBid}
-            >
-              Place a bid
-            </AnimatedButton>
-            {!isAuthenticated && (
+                <AnimatedButton
+                  isLink={false}
+                  variant='magic'
+                  repeat={true}
+                  className='w-18'
+                  onClick={() => {
+                    mutate(amount);
+                  }}
+                  disabled={
+                    !isAuthenticated || isPending || amount < currentBid
+                  }
+                >
+                  Place a bid
+                </AnimatedButton>
+              </>
+            ) : (
               <p className='text-sm text-gray-400'>
                 You must be logged in to place a bid
               </p>

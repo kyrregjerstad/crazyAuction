@@ -2,17 +2,15 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import InfoStepForm from './InfoStepForm';
 
-import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
-import postListing from '@/lib/services/postListing';
+import useAuctionFormStore, {
+  StoredData,
+} from '@/lib/hooks/useAuctionFormStore';
 import { vi } from 'vitest';
+import { FormStepProps } from '../types';
+import { createStoredDataMock } from '@/lib/mocks/data';
 
 const nextStepMock = vi.fn();
 const updateStoreMock = vi.fn();
-const storedDataMock = {
-  title: '',
-  description: '',
-  tags: '',
-};
 
 vi.mock('@/lib/hooks/useAuctionFormStep', () => {
   return {
@@ -25,7 +23,6 @@ vi.mock('@/lib/hooks/useAuctionFormStep', () => {
 vi.mock('@/lib/hooks/useAuctionFormStore', () => ({
   default: vi.fn(() => ({
     updateStore: updateStoreMock,
-    storedData: storedDataMock,
   })),
 }));
 
@@ -37,25 +34,34 @@ vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
 }));
 
-const StepWrapper = () => {
+type Props = {
+  storedDataProp?: StoredData;
+  mode?: 'create' | 'edit';
+};
+const StepWrapper = ({
+  storedDataProp = createStoredDataMock(),
+  mode = 'create',
+}: Props) => {
   const { getStore, clearStore } = useAuctionFormStore();
 
   const props = {
-    mode: 'create' as 'create' | 'edit',
+    mode,
     listing: null,
     currentStep: 'info' as 'info' | 'media' | 'time' | 'summary',
     getStore,
     clearStore,
     prevStep: vi.fn(),
+    storedData: storedDataProp,
     updateStore: updateStoreMock,
     nextStep: nextStepMock,
-    postListing,
-  };
+    postListing: vi.fn(),
+    updateAuction: vi.fn(),
+  } satisfies FormStepProps;
 
   return <InfoStepForm {...props} />;
 };
 
-describe('InfoStepForm', () => {
+describe('InfoStepForm CREATE', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -69,8 +75,6 @@ describe('InfoStepForm', () => {
 
     expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
-
-    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
   });
 
   it('saves the step to the store', async () => {
@@ -81,7 +85,7 @@ describe('InfoStepForm', () => {
       screen.getByPlaceholderText('Description'),
       'Test Description',
     );
-    await userEvent.type(screen.getByPlaceholderText('Tags'), 'Test Tags');
+    await userEvent.type(screen.getByPlaceholderText('Tags'), 'tag1, tag2');
 
     expect(screen.getByRole('button', { name: 'Next' })).not.toBeDisabled();
 
@@ -92,50 +96,78 @@ describe('InfoStepForm', () => {
       expect(updateStoreMock).toHaveBeenCalledWith({
         title: 'Test Title',
         description: 'Test Description',
-        tags: 'Test Tags',
+        tags: ['tag1', 'tag2'],
       });
     });
   });
 
   it('Retrieves the stored data', async () => {
-    const localStoredDataMock = {
+    const storedDataMock = createStoredDataMock({
       title: 'Test Title',
       description: 'Test Description',
-      tags: 'Test Tags',
-    };
+      tags: ['tag1', 'tag2'],
+    });
 
-    vi.mocked(useAuctionFormStore).mockImplementation(() => ({
-      updateStore: updateStoreMock,
-      storedData: localStoredDataMock,
-    }));
-
-    render(<StepWrapper />);
+    render(<StepWrapper storedDataProp={storedDataMock} />);
 
     expect(screen.getByPlaceholderText('Title')).toHaveValue('Test Title');
     expect(screen.getByPlaceholderText('Description')).toHaveValue(
       'Test Description',
     );
-    expect(screen.getByPlaceholderText('Tags')).toHaveValue('Test Tags');
+    expect(screen.getByPlaceholderText('Tags')).toHaveValue('tag1,tag2');
   });
 
-  it('disables the next button if title is empty', async () => {
-    const localStoredDataMock = {
-      title: '',
-    };
-
-    vi.mocked(useAuctionFormStore).mockImplementation(() => ({
-      updateStore: updateStoreMock,
-      storedData: localStoredDataMock,
-    }));
-
+  it('shows errors when the title field is empty', async () => {
     render(<StepWrapper />);
 
-    await userEvent.type(
-      screen.getByPlaceholderText('Description'),
-      'Test Description',
-    );
-    await userEvent.type(screen.getByPlaceholderText('Tags'), 'Test Tags');
+    fireEvent.submit(screen.getByRole('button', { name: 'Next' }));
 
-    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
+    await waitFor(() => {
+      expect(
+        screen.getByText('Title can not be shorter than 3 characters'),
+      ).toBeInTheDocument();
+    });
+  });
+});
+
+describe('InfoStepForm EDIT', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('renders form fields', () => {
+    render(<StepWrapper mode='create' />);
+
+    expect(screen.getByPlaceholderText('Title')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Description')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Tags')).toBeInTheDocument();
+
+    expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+  });
+
+  it('populates the correct fields', async () => {
+    const storedDataMock = createStoredDataMock({
+      title: 'Test Title',
+    });
+
+    render(<StepWrapper mode='create' storedDataProp={storedDataMock} />);
+
+    expect(screen.getByPlaceholderText('Title')).toHaveValue('Test Title');
+    expect(screen.getByPlaceholderText('Description')).toHaveValue('');
+    expect(screen.getByPlaceholderText('Tags')).toHaveValue('');
+
+    expect(screen.getByRole('button', { name: 'Next' })).not.toBeDisabled();
+
+    fireEvent.submit(screen.getByRole('button', { name: 'Next' }));
+
+    await waitFor(() => {
+      expect(nextStepMock).toHaveBeenCalled();
+      expect(updateStoreMock).toHaveBeenCalledWith({
+        title: 'Test Title',
+        description: '',
+        tags: [],
+      });
+    });
   });
 });

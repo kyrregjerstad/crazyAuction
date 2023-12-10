@@ -7,7 +7,6 @@ afterEach(() => {
 
 const customRender = (ui: React.ReactElement, options = {}) =>
   render(ui, {
-    // wrap provider(s) here if needed
     wrapper: ({ children }) => children,
     ...options,
   });

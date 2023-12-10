@@ -10,20 +10,50 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
-import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
+import {
+  AuctionFormInfo,
+  auctionFormInfoSchema,
+} from '@/lib/schemas/auctionSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ChangeEvent } from 'react';
+import { useForm } from 'react-hook-form';
 import { FormStepProps } from '../types';
 import StepNavigation from './StepNavigation';
 
 const InfoStepForm = (props: FormStepProps) => {
-  const { currentStep, nextStep, prevStep } = props;
-  const { info, saveStep } = useMultiStepAuctionForm(props);
-  const { control, formState } = info;
+  const { currentStep, nextStep, prevStep, updateStore, storedData } = props;
 
-  const { isDirty, isSubmitting, isValid } = formState;
+  const saveStep = async (data: AuctionFormInfo) => {
+    updateStore(data);
+    nextStep();
+  };
+
+  const infoForm = useForm({
+    resolver: zodResolver(auctionFormInfoSchema),
+    defaultValues: {
+      title: storedData.title ?? '',
+      description: storedData.description ?? '',
+      tags: storedData.tags ?? [],
+    },
+  });
+
+  const { control, formState, setValue, handleSubmit } = infoForm;
+
+  const { isSubmitting } = formState;
+
+  const handleTagsChange = (event: ChangeEvent<HTMLInputElement>) => {
+    // Transform the input value into an array
+    const tags = event.target.value.split(',').map((tag) => tag.trim());
+    // Update the form control with the new array
+    setValue('tags', tags, { shouldValidate: true });
+  };
 
   return (
-    <Form {...info}>
-      <form className='flex w-full max-w-lg flex-col gap-5' onSubmit={saveStep}>
+    <Form {...infoForm}>
+      <form
+        className='flex w-full max-w-lg flex-col gap-5'
+        onSubmit={handleSubmit(saveStep)}
+      >
         <FormField
           control={control}
           name='title'
@@ -52,6 +82,7 @@ const InfoStepForm = (props: FormStepProps) => {
                   placeholder='Description'
                   maxLength={250}
                   {...field}
+                  value={field.value || ''}
                   className='bg-foreground text-background'
                 />
               </FormControl>
@@ -69,6 +100,7 @@ const InfoStepForm = (props: FormStepProps) => {
                 <Input
                   placeholder='Tags'
                   {...field}
+                  onChange={handleTagsChange}
                   className='bg-foreground text-background'
                 />
               </FormControl>
@@ -77,9 +109,10 @@ const InfoStepForm = (props: FormStepProps) => {
           )}
         />
         <StepNavigation
-          disabled={!isValid || isSubmitting}
+          disabled={isSubmitting}
           currentStep={currentStep}
           prevStep={prevStep}
+          prevBtnLabel='Cancel'
         />
       </form>
     </Form>

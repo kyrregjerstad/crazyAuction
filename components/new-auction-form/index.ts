@@ -1,1 +1,1 @@
-export { default as NewAuctionForm } from './NewAuctionForm';
+export { default as AuctionForm } from './AuctionForm';

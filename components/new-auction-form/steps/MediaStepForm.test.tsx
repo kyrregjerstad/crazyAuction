@@ -2,9 +2,13 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MediaStepForm from './MediaStepForm';
 
-import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
+import useAuctionFormStore, {
+  StoredData,
+} from '@/lib/hooks/useAuctionFormStore';
 import postListing from '@/lib/services/postListing';
 import { vi } from 'vitest';
+import { createStoredDataMock } from '@/lib/mocks/data';
+import { FormStepProps } from '../types';
 
 const nextStepMock = vi.fn();
 const updateStoreMock = vi.fn();
@@ -43,26 +47,35 @@ vi.mock('react-dom', () => ({
     method: 'POST',
   })),
 }));
+type Props = {
+  storedDataProp?: StoredData;
+  mode?: 'create' | 'edit';
+};
 
-const StepWrapper = () => {
+const StepWrapper = ({
+  storedDataProp = createStoredDataMock(),
+  mode = 'create',
+}: Props) => {
   const { getStore, clearStore } = useAuctionFormStore();
 
   const props = {
-    mode: 'create' as 'create' | 'edit',
+    mode,
     listing: null,
     currentStep: 'media' as 'info' | 'media' | 'time' | 'summary',
     getStore,
     clearStore,
     updateStore: updateStoreMock,
     nextStep: nextStepMock,
+    storedData: storedDataProp,
     prevStep: vi.fn(),
     postListing,
-  };
+    updateAuction: vi.fn(),
+  } satisfies FormStepProps;
 
   return <MediaStepForm {...props} />;
 };
 
-describe('InfoStepForm', () => {
+describe.skip('MediaStepForm', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });

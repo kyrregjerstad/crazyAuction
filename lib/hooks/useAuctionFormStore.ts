@@ -3,14 +3,16 @@ import { AuctionFormComplete } from '@/lib/schemas/auctionSchema';
 
 import { persist, createJSONStorage } from 'zustand/middleware';
 
+export type StoredData = Partial<AuctionFormComplete & { id: string }>;
+
 type Params = {
-  storedData: AuctionFormComplete;
-  updateStore: (partialData: Partial<AuctionFormComplete>) => void;
-  getStore: () => AuctionFormComplete;
+  storedData: StoredData;
+  updateStore: (partialData: Partial<StoredData>) => void;
+  getStore: () => StoredData;
   clearStore: () => void;
 };
 
-const initialState = {} as AuctionFormComplete;
+const initialState = {} as StoredData;
 
 const useAuctionFormStore = create<Params>()(
   persist(

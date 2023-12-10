@@ -1,4 +1,4 @@
-import { NewAuctionForm } from '@/components/new-auction-form';
+import { AuctionForm } from '@/components/new-auction-form';
 import { ListingFull } from '@/lib/schemas/listingSchema';
 import { getSingleListing } from '@/lib/services/getSingleListing';
 import { getServerSession } from 'next-auth';
@@ -8,6 +8,7 @@ type Mode = 'create' | 'edit';
 type SearchParams = {
   mode?: Mode;
   id?: string;
+  step?: string;
 };
 
 type Props = {
@@ -16,9 +17,10 @@ type Props = {
 export default async function NewAuctionPage({ searchParams }: Props) {
   const session = await getServerSession();
 
-  let { mode, id } = searchParams || {
+  let { mode, id, step } = searchParams || {
     mode: 'create',
     id: null,
+    step: 'info',
   };
 
   if (!mode) {
@@ -29,9 +31,13 @@ export default async function NewAuctionPage({ searchParams }: Props) {
     mode = 'create';
   }
 
+  if (!step) {
+    step = 'info';
+  }
+
   let listing: ListingFull | null = null;
 
-  if (id && mode === 'edit') {
+  if (id && mode === 'edit' && step === 'info') {
     const requestedListing = await getSingleListing(id);
 
     if (session?.user.name === requestedListing.seller.name) {
@@ -44,11 +50,17 @@ export default async function NewAuctionPage({ searchParams }: Props) {
   return (
     <>
       <div className='flex w-full max-w-6xl flex-col items-center justify-center p-4'>
-        <h1 className='pb-4 text-2xl font-bold sm:py-8 md:text-4xl lg:text-5xl'>
-          Create a New Auction
-        </h1>
+        {mode === 'edit' ? (
+          <h1 className='pb-4 text-2xl font-bold sm:py-8 md:text-4xl lg:text-5xl'>
+            Edit Auction
+          </h1>
+        ) : (
+          <h1 className='pb-4 text-2xl font-bold sm:py-8 md:text-4xl lg:text-5xl'>
+            Create a New Auction
+          </h1>
+        )}
 
-        <NewAuctionForm mode={mode} listing={listing} />
+        <AuctionForm listing={listing} mode={mode} />
       </div>
     </>
   );

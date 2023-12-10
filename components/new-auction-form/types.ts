@@ -1,5 +1,7 @@
+import { StoredData } from '@/lib/hooks/useAuctionFormStore';
 import { AuctionFormComplete } from '@/lib/schemas/auctionSchema';
 import { Listing, ListingFull } from '@/lib/schemas/listingSchema';
+import { UpdateAuction } from '@/lib/services/updateAuction';
 
 export type Step = 'info' | 'media' | 'time' | 'summary';
 
@@ -16,12 +18,14 @@ export type PostListing = ({
 
 export type FormStepProps = AuctionForm & {
   currentStep: Step;
-  getStore: () => AuctionFormComplete;
+  getStore: () => StoredData;
   clearStore: () => void;
-  updateStore: (data: Partial<AuctionFormComplete>) => void;
+  updateStore: (data: StoredData) => void;
+  storedData: StoredData;
   nextStep: () => void;
   prevStep: () => void;
   postListing: PostListing;
+  updateAuction: UpdateAuction;
 };
 
 export type UploadImage = {
