@@ -15,7 +15,7 @@ export const getSingleListing = async (id: string) => {
     const sortedRes = {
       ...res,
       bids: res.bids.sort((a, b) => {
-        return a.amount - b.amount;
+        return b.amount - a.amount;
       }),
     };
 
