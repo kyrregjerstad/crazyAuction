@@ -9,19 +9,23 @@ import {
 import { Input } from '@/components/ui/input';
 
 import Sparkles from '@/components/Sparkles';
-import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
+import useStore from '@/lib/hooks/useStore';
+import {
+  AuctionFormMedia,
+  auctionFormMediaSchema,
+} from '@/lib/schemas/auctionSchema';
 import { getCloudinarySignature } from '@/lib/server/actions';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowUpFromLine } from 'lucide-react';
 import { nanoid } from 'nanoid';
-import { FormEvent, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
-import { UseFormReturn } from 'react-hook-form';
+import { UseFormReturn, useForm } from 'react-hook-form';
 import NewAuctionImageGallery from '../../NewAuctionImageGallery';
 import { FormStepProps, Step, UploadImage } from '../types';
 import StepNavigation from './StepNavigation';
 import SubmitBtn from './SubmitBtn';
-import useStore from '@/lib/hooks/useStore';
 
 const MediaStepForm = (props: FormStepProps) => {
   const { updateStore } = useAuctionFormStore();
@@ -30,11 +34,23 @@ const MediaStepForm = (props: FormStepProps) => {
     state.getStore(),
   );
 
-  const { media, saveStep } = useMultiStepAuctionForm(props);
-  const {
-    formState: { isSubmitSuccessful },
-    setValue,
-  } = media;
+  const { nextStep } = props;
+
+  const saveStep = async (data: AuctionFormMedia) => {
+    updateStore(data);
+    nextStep();
+  };
+
+  const mediaForm = useForm({
+    resolver: zodResolver(auctionFormMediaSchema),
+    defaultValues: {
+      imageUrls: auctionFormData?.imageUrls ?? [],
+    },
+  });
+
+  const { formState, setValue } = mediaForm;
+
+  const { isSubmitSuccessful } = formState;
 
   const initialImages = mapImagesToUrls(auctionFormData?.imageUrls);
 
@@ -75,7 +91,7 @@ const MediaStepForm = (props: FormStepProps) => {
 
       <ImageForm
         {...{
-          media,
+          mediaForm,
           saveStep,
           allImagesUploaded,
           ...props,
@@ -182,17 +198,17 @@ const ImageDropzone = ({
 };
 
 type ImageFormProps = {
-  media: UseFormReturn<{
+  mediaForm: UseFormReturn<{
     imageUrls: string[];
   }>;
-  saveStep: (e: FormEvent<HTMLFormElement>) => Promise<void>;
+  saveStep: (data: AuctionFormMedia) => Promise<void>;
   allImagesUploaded: boolean;
   currentStep: Step;
   nextStep: () => void;
   prevStep: () => void;
 };
 const ImageForm = ({
-  media,
+  mediaForm,
   saveStep,
   allImagesUploaded,
   currentStep,
@@ -202,10 +218,15 @@ const ImageForm = ({
   const {
     control,
     formState: { isSubmitting },
-  } = media;
+    handleSubmit,
+  } = mediaForm;
+
   return (
-    <Form {...media}>
-      <form className='flex w-full max-w-lg flex-col gap-5' onSubmit={saveStep}>
+    <Form {...mediaForm}>
+      <form
+        className='flex w-full max-w-lg flex-col gap-5'
+        onSubmit={handleSubmit(saveStep)}
+      >
         <FormField
           control={control}
           name='imageUrls'

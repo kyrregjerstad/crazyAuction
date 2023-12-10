@@ -1,3 +1,4 @@
+import { StoredData } from '../hooks/useAuctionFormStore';
 import { Bid, ListingFull, Seller } from '../schemas/listingSchema';
 import { RegisterResponse } from '../schemas/registerSchema';
 
@@ -37,3 +38,14 @@ export const emptyListing = {
     bids: 0,
   },
 } as ListingFull;
+
+export const createStoredDataMock = (params?: StoredData): StoredData => {
+  return {
+    id: params?.id,
+    title: params?.title || '',
+    description: params?.description || '',
+    tags: params?.tags || [],
+    imageUrls: params?.imageUrls || [],
+    dateTime: params?.dateTime || '',
+  };
+};

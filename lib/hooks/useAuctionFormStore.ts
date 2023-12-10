@@ -3,7 +3,7 @@ import { AuctionFormComplete } from '@/lib/schemas/auctionSchema';
 
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-type StoredData = AuctionFormComplete & { id?: string };
+export type StoredData = Partial<AuctionFormComplete & { id: string }>;
 
 type Params = {
   storedData: StoredData;

@@ -1,7 +1,6 @@
-import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { Step } from './types';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import { Step } from './types';
 
 type StepsProps = {
   currentStep: Step;

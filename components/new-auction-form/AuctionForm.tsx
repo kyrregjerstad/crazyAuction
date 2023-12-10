@@ -17,13 +17,18 @@ import {
   MediaStepForm,
   SummaryStepForm,
 } from './steps';
+import { useStore } from 'zustand';
 
 const AuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
   const { getCurrentStep, nextStep, prevStep, steps } = useAuctionFormStep({
     mode,
   });
-  const { getStore, updateStore, clearStore, storedData } =
-    useAuctionFormStore();
+  const { getStore, updateStore, clearStore } = useAuctionFormStore();
+
+  const auctionFormData = useStore(useAuctionFormStore, (state) =>
+    state.getStore(),
+  ); // this is an extra store wrapper around the zustand store to fix the hydration issue
+
   const currentStep = getCurrentStep();
 
   useEffect(() => {
@@ -32,7 +37,7 @@ const AuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
       return;
     }
 
-    if (!isEqual(normalizedListing, storedData)) {
+    if (!isEqual(normalizedListing, auctionFormData)) {
       clearStore();
       updateStore(normalizedListing);
     }
@@ -46,6 +51,7 @@ const AuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
     getStore,
     clearStore,
     updateStore,
+    storedData: auctionFormData,
     nextStep,
     prevStep,
     postListing,
@@ -88,7 +94,7 @@ const transformListingToStore = (listing: ListingFull | null) => {
     description: listing.description,
     tags: listing.tags,
     imageUrls: listing.media,
-    dateTime: listing.endsAt,
     id: listing.id,
+    dateTime: listing.endsAt,
   };
 };

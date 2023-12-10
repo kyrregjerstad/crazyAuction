@@ -1,9 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import DateStepForm from './DateStepForm';
 
-import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
+import useAuctionFormStore, {
+  StoredData,
+} from '@/lib/hooks/useAuctionFormStore';
 import postListing from '@/lib/services/postListing';
 import { vi } from 'vitest';
+import { createStoredDataMock } from '@/lib/mocks/data';
+import { FormStepProps } from '../types';
 
 const nextStepMock = vi.fn();
 const updateStoreMock = vi.fn();
@@ -34,20 +38,30 @@ vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
 }));
 
-const StepWrapper = () => {
+type Props = {
+  storedDataProp?: StoredData;
+  mode?: 'create' | 'edit';
+};
+
+const StepWrapper = ({
+  storedDataProp = createStoredDataMock(),
+  mode = 'create',
+}: Props) => {
   const { getStore, clearStore } = useAuctionFormStore();
 
   const props = {
-    mode: 'create' as 'create' | 'edit',
+    mode,
     listing: null,
-    currentStep: 'time' as 'info' | 'media' | 'time' | 'summary',
+    currentStep: 'info' as 'info' | 'media' | 'time' | 'summary',
     getStore,
     clearStore,
+    prevStep: vi.fn(),
+    storedData: storedDataProp,
     updateStore: updateStoreMock,
     nextStep: nextStepMock,
-    prevStep: vi.fn(),
-    postListing,
-  };
+    postListing: vi.fn(),
+    updateAuction: vi.fn(),
+  } satisfies FormStepProps;
 
   return <DateStepForm {...props} />;
 };

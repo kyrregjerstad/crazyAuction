@@ -38,6 +38,7 @@ async function auctionAPIFetcher<TData, TMethod extends Methods = 'GET'>(
 
   if (queryParams) {
     Object.entries(queryParams).forEach(([key, value]) => {
+      if (!value) return;
       url.searchParams.append(key, value.toString());
     });
   }

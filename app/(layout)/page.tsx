@@ -13,20 +13,20 @@ type Props = {
 };
 
 export default async function HomePage({ searchParams }: Props) {
-  const { sort, order } = searchParams || {
-    sort: 'endsAt',
-    order: 'asc',
-  };
+  const { sort = 'endsAt', order = 'asc' } = searchParams || {};
 
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
+  await queryClient.prefetchInfiniteQuery({
     queryKey: ['allListings', sort, order],
     queryFn: () =>
       getAllListings({
         sort: sort === 'endsAt' ? 'endsAt' : 'created',
         order,
+        limit: 100,
+        offset: 0,
       }),
+    initialPageParam: 0,
   });
 
   return (
