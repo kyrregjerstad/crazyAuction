@@ -9,23 +9,37 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
+import {
+  AuctionFormDate,
+  auctionFormDateSchema,
+} from '@/lib/schemas/auctionSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Label } from '@radix-ui/react-dropdown-menu';
 import dayjs from 'dayjs';
 import { ChangeEvent } from 'react';
+import { useForm } from 'react-hook-form';
 import { Calendar } from '../../ui/calendar';
 import { FormStepProps } from '../types';
 import StepNavigation from './StepNavigation';
 
 const DateStepForm = (props: FormStepProps) => {
-  const { currentStep, nextStep, prevStep } = props;
+  const { currentStep, nextStep, prevStep, updateStore, storedData } = props;
 
-  const { dateTime, saveStep } = useMultiStepAuctionForm(props);
+  const dateTimeForm = useForm({
+    resolver: zodResolver(auctionFormDateSchema),
+    defaultValues: {
+      dateTime: storedData.dateTime ?? '',
+    },
+  });
 
-  const {
-    control,
-    formState: { isDirty, isSubmitting, isSubmitSuccessful, isValid },
-  } = dateTime;
+  const { control, formState, handleSubmit } = dateTimeForm;
+
+  const { isSubmitting, isValid } = formState;
+
+  const saveStep = async (data: AuctionFormDate) => {
+    updateStore(data);
+    nextStep();
+  };
 
   const today = dayjs();
   const oneYearFromNow = today.add(1, 'year');
@@ -33,8 +47,11 @@ const DateStepForm = (props: FormStepProps) => {
   const endOfDayOneYearFromNow = oneYearFromNow.endOf('day');
 
   return (
-    <Form {...dateTime}>
-      <form className='flex w-full max-w-lg flex-col gap-5' onSubmit={saveStep}>
+    <Form {...dateTimeForm}>
+      <form
+        className='flex w-full max-w-lg flex-col gap-5'
+        onSubmit={handleSubmit(saveStep)}
+      >
         <FormField
           control={control}
           name='dateTime'

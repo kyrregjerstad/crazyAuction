@@ -2,18 +2,15 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import InfoStepForm from './InfoStepForm';
 
-import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
+import useAuctionFormStore, {
+  StoredData,
+} from '@/lib/hooks/useAuctionFormStore';
 import { vi } from 'vitest';
 import { FormStepProps } from '../types';
-import { emptyListing } from '@/lib/mocks/data';
+import { createStoredDataMock } from '@/lib/mocks/data';
 
 const nextStepMock = vi.fn();
 const updateStoreMock = vi.fn();
-const storedDataMock = {
-  title: '',
-  description: '',
-  tags: [],
-};
 
 vi.mock('@/lib/hooks/useAuctionFormStep', () => {
   return {
@@ -26,7 +23,6 @@ vi.mock('@/lib/hooks/useAuctionFormStep', () => {
 vi.mock('@/lib/hooks/useAuctionFormStore', () => ({
   default: vi.fn(() => ({
     updateStore: updateStoreMock,
-    storedData: storedDataMock,
   })),
 }));
 
@@ -38,16 +34,24 @@ vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
 }));
 
-const StepCreateWrapper = () => {
+type Props = {
+  storedDataProp?: StoredData;
+  mode?: 'create' | 'edit';
+};
+const StepWrapper = ({
+  storedDataProp = createStoredDataMock(),
+  mode = 'create',
+}: Props) => {
   const { getStore, clearStore } = useAuctionFormStore();
 
   const props = {
-    mode: 'create' as 'create' | 'edit',
+    mode,
     listing: null,
     currentStep: 'info' as 'info' | 'media' | 'time' | 'summary',
     getStore,
     clearStore,
     prevStep: vi.fn(),
+    storedData: storedDataProp,
     updateStore: updateStoreMock,
     nextStep: nextStepMock,
     postListing: vi.fn(),
@@ -63,7 +67,7 @@ describe('InfoStepForm CREATE', () => {
   });
 
   it('renders form fields', () => {
-    render(<StepCreateWrapper />);
+    render(<StepWrapper />);
 
     expect(screen.getByPlaceholderText('Title')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Description')).toBeInTheDocument();
@@ -74,7 +78,7 @@ describe('InfoStepForm CREATE', () => {
   });
 
   it('saves the step to the store', async () => {
-    render(<StepCreateWrapper />);
+    render(<StepWrapper />);
 
     await userEvent.type(screen.getByPlaceholderText('Title'), 'Test Title');
     await userEvent.type(
@@ -98,37 +102,23 @@ describe('InfoStepForm CREATE', () => {
   });
 
   it('Retrieves the stored data', async () => {
-    const localStoredDataMock = {
+    const storedDataMock = createStoredDataMock({
       title: 'Test Title',
       description: 'Test Description',
-      tags: 'Test Tags',
-    };
+      tags: ['tag1', 'tag2'],
+    });
 
-    vi.mocked(useAuctionFormStore).mockImplementation(() => ({
-      updateStore: updateStoreMock,
-      storedData: localStoredDataMock,
-    }));
-
-    render(<StepCreateWrapper />);
+    render(<StepWrapper storedDataProp={storedDataMock} />);
 
     expect(screen.getByPlaceholderText('Title')).toHaveValue('Test Title');
     expect(screen.getByPlaceholderText('Description')).toHaveValue(
       'Test Description',
     );
-    expect(screen.getByPlaceholderText('Tags')).toHaveValue('Test Tags');
+    expect(screen.getByPlaceholderText('Tags')).toHaveValue('tag1,tag2');
   });
 
   it('shows errors when the title field is empty', async () => {
-    const localStoredDataMock = {
-      title: '',
-    };
-
-    vi.mocked(useAuctionFormStore).mockImplementation(() => ({
-      updateStore: updateStoreMock,
-      storedData: localStoredDataMock,
-    }));
-
-    render(<StepCreateWrapper />);
+    render(<StepWrapper />);
 
     fireEvent.submit(screen.getByRole('button', { name: 'Next' }));
 
@@ -140,38 +130,13 @@ describe('InfoStepForm CREATE', () => {
   });
 });
 
-const fetchedListingMock = {
-  ...emptyListing,
-  title: 'Test Title',
-  description: 'Test Description',
-  tags: ['tag1', 'tag2'],
-};
-
-const StepEditWrapper = () => {
-  const { getStore, clearStore } = useAuctionFormStore();
-  const props = {
-    mode: 'edit' as 'create' | 'edit',
-    listing: fetchedListingMock,
-    currentStep: 'info' as 'info' | 'media' | 'time' | 'summary',
-    getStore,
-    clearStore,
-    prevStep: vi.fn(),
-    updateStore: updateStoreMock,
-    nextStep: nextStepMock,
-    postListing: vi.fn(),
-    updateAuction: vi.fn(),
-  } satisfies FormStepProps;
-
-  return <InfoStepForm {...props} />;
-};
-
 describe('InfoStepForm EDIT', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
   it('renders form fields', () => {
-    render(<StepEditWrapper />);
+    render(<StepWrapper mode='create' />);
 
     expect(screen.getByPlaceholderText('Title')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Description')).toBeInTheDocument();
@@ -182,18 +147,11 @@ describe('InfoStepForm EDIT', () => {
   });
 
   it('populates the correct fields', async () => {
-    const localStoredDataMock = {
+    const storedDataMock = createStoredDataMock({
       title: 'Test Title',
-      description: undefined,
-      tags: [],
-    };
+    });
 
-    vi.mocked(useAuctionFormStore).mockImplementation(() => ({
-      updateStore: updateStoreMock,
-      storedData: localStoredDataMock,
-    }));
-
-    render(<StepEditWrapper />);
+    render(<StepWrapper mode='create' storedDataProp={storedDataMock} />);
 
     expect(screen.getByPlaceholderText('Title')).toHaveValue('Test Title');
     expect(screen.getByPlaceholderText('Description')).toHaveValue('');

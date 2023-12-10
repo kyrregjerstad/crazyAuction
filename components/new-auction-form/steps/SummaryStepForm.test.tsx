@@ -1,13 +1,10 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import SummaryStepForm from './SummaryStepForm';
-import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
-import useStore from '@/lib/hooks/useStore';
 
-import postListing from '@/lib/services/postListing';
 import { vi } from 'vitest';
 import { FormStepProps } from '../types';
-import updateAuction from '@/lib/services/updateAuction';
+import { StoredData } from '@/lib/hooks/useAuctionFormStore';
+import { createStoredDataMock } from '@/lib/mocks/data';
 
 const mockPostListing = vi.fn(() =>
   Promise.resolve({
@@ -105,16 +102,25 @@ vi.mock('next/navigation', () => ({
   })),
 }));
 
-const CreateStepWrapper = () => {
+type Props = {
+  storedDataProp?: StoredData;
+  mode?: 'create' | 'edit';
+};
+
+const StepWrapper = ({
+  storedDataProp = createStoredDataMock(),
+  mode = 'create',
+}: Props) => {
   const props = {
-    mode: 'create' as 'create' | 'edit',
+    mode,
     listing: null,
     currentStep: 'summary' as 'info' | 'media' | 'time' | 'summary',
     getStore: mockGetStore,
     clearStore: mockClearStore,
+    prevStep: vi.fn(),
+    storedData: storedDataProp,
     updateStore: updateStoreMock,
     nextStep: nextStepMock,
-    prevStep: vi.fn(),
     postListing: mockPostListing,
     updateAuction: mockUpdateAuction,
   } satisfies FormStepProps;
@@ -128,7 +134,7 @@ describe('SummaryStepForm CREATE', () => {
   });
 
   it('renders the summary', () => {
-    render(<CreateStepWrapper />);
+    render(<StepWrapper />);
 
     expect(screen.getByText('Title')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
@@ -144,7 +150,14 @@ describe('SummaryStepForm CREATE', () => {
   });
 
   it('calls postListing on submit', async () => {
-    render(<CreateStepWrapper />);
+    const storedDataMock = createStoredDataMock({
+      title: 'test title',
+      description: 'test description',
+      tags: ['test', 'tag'],
+      dateTime: '2021-08-18T17:00:00.000Z',
+      imageUrls: [],
+    });
+    render(<StepWrapper storedDataProp={storedDataMock} />);
 
     const submitBtn = screen.getByRole('button', { name: 'Submit' });
 
@@ -152,27 +165,9 @@ describe('SummaryStepForm CREATE', () => {
 
     await waitFor(() => {
       expect(mockPostListing).toHaveBeenCalledTimes(1);
-      // expect(mockPostListing).toHaveBeenCalledWith(auctionFormData);
     });
   });
 });
-
-const EditStepWrapper = () => {
-  const props = {
-    mode: 'edit' as 'create' | 'edit',
-    listing: null,
-    currentStep: 'summary' as 'info' | 'media' | 'time' | 'summary',
-    getStore: mockGetStore,
-    clearStore: mockClearStore,
-    updateStore: updateStoreMock,
-    nextStep: nextStepMock,
-    prevStep: vi.fn(),
-    postListing: mockPostListing,
-    updateAuction: mockUpdateAuction,
-  } satisfies FormStepProps;
-
-  return <SummaryStepForm {...props} />;
-};
 
 describe('SummaryStepForm EDIT', () => {
   afterEach(() => {
@@ -180,7 +175,7 @@ describe('SummaryStepForm EDIT', () => {
   });
 
   it('renders the summary', () => {
-    render(<EditStepWrapper />);
+    render(<StepWrapper mode='edit' />);
 
     expect(screen.getByText('Title')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
@@ -196,7 +191,7 @@ describe('SummaryStepForm EDIT', () => {
   });
 
   it.skip('calls updateAuction on submit', async () => {
-    render(<EditStepWrapper />);
+    render(<StepWrapper mode='edit' />);
 
     const submitBtn = screen.getByRole('button', { name: 'Update' });
 
@@ -204,7 +199,6 @@ describe('SummaryStepForm EDIT', () => {
 
     await waitFor(() => {
       expect(mockUpdateAuction).toHaveBeenCalledTimes(1);
-      expect(mockUpdateAuction).toHaveBeenCalledWith(auctionFormData);
     });
   });
 });

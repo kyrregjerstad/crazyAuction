@@ -10,17 +10,36 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
-import useMultiStepAuctionForm from '@/lib/hooks/forms/useMultiStepForm';
+import {
+  AuctionFormInfo,
+  auctionFormInfoSchema,
+} from '@/lib/schemas/auctionSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ChangeEvent } from 'react';
+import { useForm } from 'react-hook-form';
 import { FormStepProps } from '../types';
 import StepNavigation from './StepNavigation';
-import { ChangeEvent, ChangeEventHandler } from 'react';
 
 const InfoStepForm = (props: FormStepProps) => {
-  const { currentStep, nextStep, prevStep } = props;
-  const { info, saveStep } = useMultiStepAuctionForm(props);
-  const { control, formState, setValue } = info;
+  const { currentStep, nextStep, prevStep, updateStore, storedData } = props;
 
-  const { isDirty, isSubmitting, isValid } = formState;
+  const saveStep = async (data: AuctionFormInfo) => {
+    updateStore(data);
+    nextStep();
+  };
+
+  const infoForm = useForm({
+    resolver: zodResolver(auctionFormInfoSchema),
+    defaultValues: {
+      title: storedData.title ?? '',
+      description: storedData.description ?? '',
+      tags: storedData.tags ?? [],
+    },
+  });
+
+  const { control, formState, setValue, handleSubmit } = infoForm;
+
+  const { isSubmitting } = formState;
 
   const handleTagsChange = (event: ChangeEvent<HTMLInputElement>) => {
     // Transform the input value into an array
@@ -30,8 +49,11 @@ const InfoStepForm = (props: FormStepProps) => {
   };
 
   return (
-    <Form {...info}>
-      <form className='flex w-full max-w-lg flex-col gap-5' onSubmit={saveStep}>
+    <Form {...infoForm}>
+      <form
+        className='flex w-full max-w-lg flex-col gap-5'
+        onSubmit={handleSubmit(saveStep)}
+      >
         <FormField
           control={control}
           name='title'
