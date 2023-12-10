@@ -37,32 +37,26 @@ test.describe('New Auction page', () => {
       Date.now = () => new Date('2024-01-01T00:00:00.000Z').valueOf();
     });
 
-    test.step('should complete the info step', async () => {
-      await page.getByPlaceholder('Title').fill('test title');
-      await page.getByPlaceholder('Description').fill('test description');
-      await page.getByPlaceholder('Tags').fill('tag1,tag2');
-      await page.getByRole('button', { name: 'Next' }).click();
-      await page.waitForURL('/auction?mode=create&step=media');
-    });
+    await page.getByPlaceholder('Title').fill('test title');
+    await page.getByPlaceholder('Description').fill('test description');
+    await page.getByPlaceholder('Tags').fill('tag1,tag2');
+    await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForURL('/auction?mode=create&step=media');
 
-    test.step('should complete the media step', async () => {
-      await expect(
-        page.getByText('Drag & drop files here, or click to select files'),
-      ).toBeVisible();
+    await expect(
+      page.getByText('Drag & drop files here, or click to select files'),
+    ).toBeVisible();
 
-      await page.getByRole('button', { name: 'Next' }).click();
-      await page.waitForURL('/auction?mode=create&step=time');
-    });
+    await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForURL('/auction?mode=create&step=time');
 
-    test.step('should complete the date time step', async () => {
-      await page.waitForURL('/auction?mode=create&step=time');
+    await page.waitForURL('/auction?mode=create&step=time');
 
-      await expect(page.getByTestId('calendar')).toBeVisible();
+    await expect(page.getByTestId('calendar')).toBeVisible();
 
-      // await page.getByText('10').click();
-      // await page.getByRole('textbox').fill('23:00');
-      // await page.getByRole('button', { name: 'Next' }).click();
-      // await page.waitForURL('/auction?mode=create&step=summary');
-    });
+    // await page.getByText('10').click();
+    // await page.getByRole('textbox').fill('23:00');
+    // await page.getByRole('button', { name: 'Next' }).click();
+    // await page.waitForURL('/auction?mode=create&step=summary');
   });
 });
