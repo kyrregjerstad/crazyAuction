@@ -1,8 +1,9 @@
 import { Login, loginSchema } from '@/lib/schemas/loginSchema';
+import clearCachesByServerAction from '@/lib/server/clearCachesByServerAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 const useLoginForm = () => {
   const router = useRouter();
@@ -40,6 +41,7 @@ const useLoginForm = () => {
         throw new Error('Response not ok');
       }
 
+      clearCachesByServerAction();
       router.push('/');
     } catch (error) {
       console.log(error);
