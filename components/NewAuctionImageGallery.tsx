@@ -65,7 +65,7 @@ const NewAuctionImageGallery = ({ images, setImages }: ImageGalleryProps) => {
           onDragEnd={handleDragEnd}
         >
           <SortableContext items={images} strategy={rectSortingStrategy}>
-            <div className='flex h-fit w-full flex-wrap gap-2'>
+            <div className='flex h-fit w-full flex-wrap justify-center gap-2'>
               <AnimatePresence>
                 {images.map((image, index) => (
                   <SortableItem
@@ -138,7 +138,7 @@ const SortableItem = ({
         {...attributes}
         {...listeners}
         className={cn(
-          'relative aspect-square max-w-[100px] overflow-hidden rounded-md border transition-shadow ',
+          'xs:max-w-[100px] relative aspect-square w-full max-w-[65px] overflow-hidden rounded-md border transition-shadow ',
           isDragging ? 'border border-accent shadow-md' : 'shadow-none',
         )}
       >
@@ -179,7 +179,7 @@ const RemoveImageButton = ({
       handleRemoveImage(image);
     }}
   >
-    <DeleteIcon className='h-4 w-4' />
+    <DeleteIcon color='white' className='h-4 w-4' />
   </Button>
 );
 

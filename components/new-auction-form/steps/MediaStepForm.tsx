@@ -81,22 +81,24 @@ const MediaStepForm = (props: FormStepProps) => {
 
   return (
     <>
-      <ImageDropzone
-        {...{
-          images,
-          setImages,
-          allImagesUploaded,
-        }}
-      />
+      <div className='flex h-full flex-1 flex-col justify-between'>
+        <ImageDropzone
+          {...{
+            images,
+            setImages,
+            allImagesUploaded,
+          }}
+        />
 
-      <ImageForm
-        {...{
-          mediaForm,
-          saveStep,
-          allImagesUploaded,
-          ...props,
-        }}
-      />
+        <ImageForm
+          {...{
+            mediaForm,
+            saveStep,
+            allImagesUploaded,
+            ...props,
+          }}
+        />
+      </div>
     </>
   );
 };
@@ -164,9 +166,12 @@ const ImageDropzone = ({
   };
   return (
     <form action={uploadImages} className='flex flex-col gap-4'>
-      <div {...getRootProps()} className='cursor-pointer'>
+      <div {...getRootProps()} className='flex cursor-pointer flex-col'>
+        <label htmlFor='files' className='sr-only pb-3 text-sm'>
+          Images
+        </label>
         <input {...getInputProps({ name: 'file' })} />
-        <div className='relative flex flex-col items-center justify-center gap-4 rounded-md bg-neutral-700 p-4 shadow-dropzone'>
+        <div className='relative flex flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 text-center text-black '>
           {images.length === 0 ? (
             <>
               <ArrowUpFromLine />
@@ -224,7 +229,7 @@ const ImageForm = ({
   return (
     <Form {...mediaForm}>
       <form
-        className='flex w-full max-w-lg flex-col gap-5'
+        className='flex w-full flex-col items-stretch justify-between'
         onSubmit={handleSubmit(saveStep)}
       >
         <FormField

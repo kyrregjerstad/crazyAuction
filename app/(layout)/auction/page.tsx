@@ -51,11 +51,11 @@ export default async function NewAuctionPage({ searchParams }: Props) {
     <>
       <div className='flex w-full max-w-6xl flex-col items-center justify-center p-4'>
         {mode === 'edit' ? (
-          <h1 className='pb-4 text-2xl font-bold sm:py-8 md:text-4xl lg:text-5xl'>
+          <h1 className='hidden pb-4 text-2xl font-bold sm:block sm:py-8 md:text-4xl lg:text-5xl'>
             Edit Auction
           </h1>
         ) : (
-          <h1 className='pb-4 text-2xl font-bold sm:py-8 md:text-4xl lg:text-5xl'>
+          <h1 className='hidden pb-4 text-2xl font-bold sm:block sm:py-8 md:text-4xl lg:text-5xl'>
             Create a New Auction
           </h1>
         )}

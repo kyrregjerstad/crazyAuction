@@ -8,10 +8,19 @@ module.exports = {
     './src/**/*.{ts,tsx}',
   ],
   theme: {
+    screens: {
+      xs: '450px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
+    },
     container: {
       center: true,
       padding: '2rem',
       screens: {
+        xs: '450px',
         '2xl': '1400px',
       },
     },
@@ -82,7 +91,7 @@ module.exports = {
         sm: 'calc(var(--radius) - 4px)',
       },
       boxShadow: {
-        dropzone: 'inset 0 0 5px 2px rgba(0, 0, 0, 0.25)',
+        dropzone: 'inset 0 0 5px 3px rgba(0, 0, 0, 0.2)',
       },
       keyframes: {
         'accordion-down': {
