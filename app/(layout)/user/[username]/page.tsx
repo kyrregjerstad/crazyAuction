@@ -19,7 +19,13 @@ const UserPage = async ({ params }: Props) => {
 
   const { username } = params;
 
-  if (!session) return null;
+  if (!session) {
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <p>You must be logged in to see this page</p>
+      </div>
+    );
+  }
 
   const jwt = session.user.accessToken;
 
