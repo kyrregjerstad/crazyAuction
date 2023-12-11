@@ -11,16 +11,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
+import { usePathname, useRouter } from 'next/navigation';
 
 const UserMenu = () => {
   const { data, status } = useSession();
   const avatarUrl = data?.user.avatar;
+  const pathname = usePathname();
+
+  console.log(pathname);
 
   return (
     <>
       {status === 'authenticated' ? (
         <>
-          <MagicButton />
+          {pathname !== '/auction' && <MagicButton />}
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar className='border-2 border-accent transition-transform hover:scale-110'>

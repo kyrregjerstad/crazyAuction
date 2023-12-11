@@ -9,7 +9,7 @@ type StepsProps = {
 
 const StepOverview = ({ currentStep, steps }: StepsProps) => {
   return (
-    <ul className='flex justify-between gap-2 bg-accent-950 p-4 sm:flex-col sm:justify-start'>
+    <ul className='flex justify-between gap-2 rounded-lg bg-accent-950 p-2 px-4 sm:flex-col sm:justify-start sm:p-4'>
       {steps.map(({ title, step }) => (
         <li
           key={title}

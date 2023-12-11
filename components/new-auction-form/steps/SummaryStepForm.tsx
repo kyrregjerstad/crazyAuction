@@ -91,7 +91,7 @@ const SummaryStepForm = (props: FormStepProps) => {
     <>
       {mode === 'create' ? (
         <form
-          className='flex flex-col gap-4'
+          className='flex h-full flex-1 flex-col justify-between gap-4'
           onSubmit={handleSubmitCreate(onSaveSummaryStep)}
         >
           <SummaryContent auctionFormData={storedData} mode={mode} />
@@ -104,7 +104,7 @@ const SummaryStepForm = (props: FormStepProps) => {
         </form>
       ) : (
         <form
-          className='flex flex-col gap-4'
+          className='flex h-full flex-col justify-between gap-4'
           onSubmit={handleSubmitEdit(onUpdateAuction)}
         >
           <SummaryContent auctionFormData={storedData} mode='edit' />
@@ -128,8 +128,8 @@ type SummaryContentProps = {
 };
 const SummaryContent = ({ auctionFormData, mode }: SummaryContentProps) => (
   <>
-    <div className='flex gap-4'>
-      <div className='flex w-full flex-col gap-2'>
+    <div className='flex flex-col gap-4 sm:flex-row sm:gap-8'>
+      <div className='flex w-full flex-col gap-2 sm:gap-8'>
         <div className='flex flex-col'>
           <span className='text-sm'>Title</span>
           <span className='rounded-md bg-foreground p-2 text-background'>
@@ -170,7 +170,7 @@ const SummaryContent = ({ auctionFormData, mode }: SummaryContentProps) => (
           </span>
         </div>
       </div>
-      <div className='flex flex-col gap-2'>
+      <div className='flex flex-col gap-2 sm:gap-8'>
         <div className='flex gap-2'>
           <div className='flex flex-1 flex-col'>
             <span className='text-sm'>Date</span>

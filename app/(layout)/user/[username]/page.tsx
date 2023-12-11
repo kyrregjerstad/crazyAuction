@@ -4,23 +4,28 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Listing } from '@/lib/schemas/listingSchema';
 import { getSingleUser } from '@/lib/services/getSingleUser';
 
+import UserListingsGrid from '@/components/UserListingsGrid';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import AvatarWithEdit from './Avatar';
-import AuctionItemCard from '@/components/AuctionItemCard';
-import AllListingsGrid from '@/components/ListingsGrid';
-import UserListingsGrid from '@/components/UserListingsGrid';
+import UserWinsTable from './UserWinsTable';
 
-interface Props {
+type Props = {
   params: { username: string };
-}
+};
 
 const UserPage = async ({ params }: Props) => {
   const session = await getServerSession(authOptions);
 
   const { username } = params;
 
-  if (!session) return null;
+  if (!session) {
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <p>You must be logged in to see this page</p>
+      </div>
+    );
+  }
 
   const jwt = session.user.accessToken;
 
@@ -34,10 +39,6 @@ const UserPage = async ({ params }: Props) => {
   const { avatar, name, credits, listings, wins } = user;
 
   const isLoggedInUser = session.user.name === username;
-
-  // if (!auctionItem) return null;
-
-  // const currentBid = auctionItem.bids.at(-1)?.amount || 0;
 
   return (
     <div className='grid w-full max-w-5xl gap-6 px-4 pt-6 md:grid-cols-3'>
@@ -67,8 +68,9 @@ const UserPage = async ({ params }: Props) => {
           <p>No auctions</p>
         )}
       </div>
-      <div className='rounded-lg  p-4 shadow-md md:col-span-3'>
+      <div className='rounded-lg py-4 shadow-md md:col-span-3'>
         <h2 className='mb-2 text-lg font-bold'>Wins</h2>
+        <UserWinsTable username={username} winIds={wins} />
         <div className='grid gap-4'></div>
       </div>
     </div>
