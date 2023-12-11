@@ -15,6 +15,7 @@ import useQuerySingleListing from '@/lib/hooks/useQuerySingleListing';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
+import { cn } from '@/lib/utils';
 
 dayjs.extend(relativeTime);
 
@@ -183,7 +184,7 @@ const BidHistory = ({
   if (!isLoggedIn) {
     return (
       <div className='w-full max-w-md rounded-lg p-6 text-foreground'>
-        <h2 className='mb-6 text-lg font-semibold text-accent'>Bid History</h2>
+        <h2 className='mb-6 text-lg font-semibold'>Bid History</h2>
         <div className='relative m-3 leading-loose'>
           <div className='absolute left-[10px] top-2 h-full w-[2px]  bg-gradient-to-b from-accent' />
           <div className='flex h-32 items-center justify-center'>
@@ -199,7 +200,7 @@ const BidHistory = ({
   if (!bids || bids.length === 0) {
     return (
       <div className='w-full max-w-md rounded-lg p-6 text-foreground'>
-        <h2 className='mb-6 text-lg font-semibold text-accent'>Bid History</h2>
+        <h2 className='mb-6 text-lg font-semibold'>Bid History</h2>
         <div className='relative m-3 leading-loose'>
           <div className='absolute left-[10px] top-2 h-full w-[2px]  bg-gradient-to-b from-accent' />
           <div className='flex h-32 items-center justify-center'>
@@ -211,7 +212,7 @@ const BidHistory = ({
   }
   return (
     <div className='w-full max-w-md rounded-lg p-6 text-foreground'>
-      <h2 className='mb-6 text-lg font-semibold text-accent'>Bid History</h2>
+      <h2 className='mb-6 text-lg font-semibold'>Bid History</h2>
       <div className='relative m-3 leading-loose'>
         <div className='absolute left-[10px] top-2 h-full w-[2px]  bg-gradient-to-b from-accent' />
         <ScrollArea className='h-96'>
@@ -234,15 +235,21 @@ const BidHistoryItem = ({ bid, index }: { bid: Bid; index: number }) => {
     <li className='mb-3'>
       <div className={`mb-1 flex items-center`}>
         <div
-          className={`${
-            index === 0 ? 'bg-accent' : 'bg-gray-600'
-          } z-10 h-6 w-6 rounded-full`}
+          className={cn(
+            index === 0 ? 'bg-accent' : 'bg-gray-600',
+            'z-10 h-6 w-6 rounded-full',
+          )}
         />
         <div className='ml-4 flex-1 font-medium'>{bidDate}</div>
       </div>
-      <div className='ml-12'>
-        <h3 className='font-semibold'>${amount}</h3>
-        <p className='text-sm text-gray-400'>{bidderName}</p>
+      <div className='pl-12 leading-none'>
+        <h3 className='font-semibold '>${amount}</h3>
+        <Link
+          className='text-sm text-gray-400 hover:underline'
+          href={`user/${bidderName}`}
+        >
+          {bidderName}
+        </Link>
       </div>
     </li>
   );
