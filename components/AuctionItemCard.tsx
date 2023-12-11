@@ -24,7 +24,7 @@ const AuctionItemCard = ({ listing }: Props) => {
   }
 
   return (
-    <Card className='relative flex flex-col overflow-hidden bg-secondary'>
+    <Card className='relative flex flex-col overflow-hidden'>
       <AuctionEndedBanner endsAt={endsAt} />
       <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
         <CardTitle className='text-lg font-bold text-secondary-foreground lg:text-2xl'>
@@ -33,7 +33,7 @@ const AuctionItemCard = ({ listing }: Props) => {
           </Link>
         </CardTitle>
       </CardHeader>
-      <CardContent className='grid  flex-1 '>
+      <CardContent className='grid flex-1 '>
         <div className='flex aspect-[16/10] items-center overflow-hidden rounded-md'>
           <Link href={`/item/${id}`} className='w-full'>
             <Image

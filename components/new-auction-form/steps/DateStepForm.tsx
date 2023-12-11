@@ -49,7 +49,7 @@ const DateStepForm = (props: FormStepProps) => {
   return (
     <Form {...dateTimeForm}>
       <form
-        className='flex w-full max-w-lg flex-col gap-5'
+        className='flex h-full w-full flex-1 flex-col justify-between gap-5'
         onSubmit={handleSubmit(saveStep)}
       >
         <FormField
@@ -76,27 +76,28 @@ const DateStepForm = (props: FormStepProps) => {
 
             return (
               <FormItem>
-                <FormLabel className='hidden'>End Date</FormLabel>
                 <FormControl>
-                  <div className='flex w-full flex-col items-center justify-center'>
-                    <Calendar
-                      mode='single'
-                      selected={new Date(field.value)}
-                      onSelect={handleDateChange}
-                      className='flex'
-                      disabled={(date) =>
-                        date < startOfDay.toDate() ||
-                        date > endOfDayOneYearFromNow.toDate()
-                      }
-                    />
-                    <div className='px-4 pb-4 pt-0'>
-                      <Label>Time</Label>
-                      <Input
-                        type='time'
-                        onChange={handleTimeChange}
-                        value={dayjs(field.value).format('HH:mm')}
-                        className='w-fit'
+                  <div className='flex w-full flex-col items-center justify-center sm:flex-row sm:items-start sm:justify-start'>
+                    <div className='xs:flex-row flex w-full flex-col justify-center gap-4 '>
+                      <Calendar
+                        mode='single'
+                        selected={new Date(field.value)}
+                        onSelect={handleDateChange}
+                        className='flex w-full max-w-sm rounded-lg bg-white p-4 text-black'
+                        disabled={(date) =>
+                          date < startOfDay.toDate() ||
+                          date > endOfDayOneYearFromNow.toDate()
+                        }
                       />
+                      <div className=''>
+                        <Label>Time</Label>
+                        <Input
+                          type='time'
+                          onChange={handleTimeChange}
+                          value={dayjs(field.value).format('HH:mm')}
+                          className='w-fit bg-white text-black'
+                        />
+                      </div>
                     </div>
                   </div>
                 </FormControl>
