@@ -74,7 +74,7 @@ describe('InfoStepForm', () => {
   it('renders form fields', () => {
     render(<StepWrapper />);
 
-    expect(screen.getByText('End Date')).toBeInTheDocument();
+    expect(screen.getByTestId('calendar')).toBeInTheDocument();
     expect(screen.getByText('Time')).toBeInTheDocument();
 
     expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
