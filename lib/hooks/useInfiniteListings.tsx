@@ -16,6 +16,7 @@ export const useInfiniteListings = () => {
         offset: pageParam * 100,
       }),
     initialPageParam: 0,
+    staleTime: 1000 * 10, // 10 seconds
     getNextPageParam: (lastPage, _allPages, lastPageParam) => {
       if (lastPage.length === 0) {
         return undefined;
