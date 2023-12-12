@@ -11,7 +11,7 @@ export type Order = 'asc' | 'desc';
 
 export type QueryParams = {
   sort?: Sort;
-  order?: Order;
+  sortOrder?: Order;
   _active?: boolean;
   _bids?: boolean;
   _seller?: boolean;
@@ -24,6 +24,7 @@ export type SearchParams = {
   sort?: Sort;
   order?: Order;
   active?: string;
+  q?: string;
 };
 
 type ID = string;

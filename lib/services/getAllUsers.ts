@@ -7,14 +7,14 @@ type Order = 'asc' | 'desc';
 type Params = {
   jwt: string;
   sort?: Sort;
-  order?: Order;
+  sortOrder?: Order;
   limit?: number;
   offset?: number;
 };
 
 const getAllUsers = async ({
   sort = 'credits',
-  order: sortOrder = 'desc',
+  sortOrder = 'desc',
   jwt,
 }: Params) => {
   try {
@@ -25,7 +25,7 @@ const getAllUsers = async ({
       queryParams: {
         _listings: true,
         sort,
-        order: sortOrder,
+        sortOrder,
       },
     });
     return res;

@@ -1,6 +1,7 @@
 import AllListingsGrid from '@/components/ListingsGrid';
 import SearchFilters from '@/components/SearchFilters';
-import { getAllListings } from '@/lib/services/getAllListings';
+import { searchOrderOptions, searchSortOptions } from '@/lib/constants';
+import { getListings } from '@/lib/services/getListings';
 import { SearchParams } from '@/lib/services/types';
 import {
   dehydrate,
@@ -18,11 +19,11 @@ export default async function HomePage({ searchParams }: Props) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchInfiniteQuery({
-    queryKey: ['allListings', sort, order],
+    queryKey: ['allListingsInfinite', sort, order],
     queryFn: () =>
-      getAllListings({
+      getListings({
         sort: sort === 'endsAt' ? 'endsAt' : 'created',
-        order,
+        sortOrder: order,
         limit: 100,
         offset: 0,
       }),
@@ -32,7 +33,11 @@ export default async function HomePage({ searchParams }: Props) {
   return (
     <div className='w-full max-w-7xl p-2 sm:p-4'>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <SearchFilters sort={sort} order={order} />
+        <SearchFilters
+          searchParams={{ sort, order }}
+          sortOptions={searchSortOptions}
+          orderOptions={searchOrderOptions}
+        />
         <AllListingsGrid />
       </HydrationBoundary>
     </div>
