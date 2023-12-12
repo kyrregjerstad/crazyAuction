@@ -1,26 +1,43 @@
 import Link from 'next/link';
 import { badgeVariants } from './ui/badge';
-import { SearchParams } from '@/lib/services/types';
+import { Order, SearchParams, Sort } from '@/lib/services/types';
+import { generateQueryObject } from '@/lib/utils';
 
-const SearchFilters = ({ sort, order, active }: SearchParams) => {
-  sort = sort || 'endsAt';
-  order = order || 'asc';
+type CommonOptions = {
+  label: string;
+  default?: boolean;
+};
+
+type SortOptions = {
+  value: Sort | undefined;
+} & CommonOptions;
+
+type OrderOptions = {
+  value: Order | undefined;
+} & CommonOptions;
+
+type Props = {
+  searchParams: SearchParams;
+  sortOptions: SortOptions[];
+  orderOptions: OrderOptions[];
+};
+
+const SearchFilters = ({ searchParams, sortOptions, orderOptions }: Props) => {
+  const { sort, order, q } = searchParams;
+
   return (
     <div className='flex w-full flex-col justify-center gap-4 sm:flex-row'>
       <div>
         <span className='text-xs'>Sort by</span>
         <div className='flex gap-2'>
           {sortOptions.map(({ value, label }) => (
-            <Link
+            <FilterLink
               key={value}
-              href={`?sort=${value || 'endsAt'}&order=${order || 'asc'}`}
-              className={badgeVariants({
-                variant: value === sort ? 'secondary' : 'outline',
-              })}
-              replace
-            >
-              {label}
-            </Link>
+              queryObject={{ sort: value, order, q }}
+              current={sort}
+              label={label}
+              value={value}
+            />
           ))}
         </div>
       </div>
@@ -29,16 +46,13 @@ const SearchFilters = ({ sort, order, active }: SearchParams) => {
         <span className='text-xs'>Order</span>
         <div className='flex gap-2'>
           {orderOptions.map(({ value, label }) => (
-            <Link
+            <FilterLink
               key={value}
-              href={`?sort=${sort || 'endsAt'}&order=${value || 'asc'}`}
-              className={badgeVariants({
-                variant: value === order ? 'secondary' : 'outline',
-              })}
-              replace
-            >
-              {label}
-            </Link>
+              queryObject={{ sort, order: value, q }}
+              current={order}
+              label={label}
+              value={value}
+            />
           ))}
         </div>
       </div>
@@ -48,20 +62,30 @@ const SearchFilters = ({ sort, order, active }: SearchParams) => {
 
 export default SearchFilters;
 
-export type Sorting = 'endsAt' | 'created' | 'price';
-export type SortingOrder = 'asc' | 'desc';
-
-export const sortOptions: {
-  value: Sorting;
+type FilterLinkProps = {
+  queryObject: SearchParams;
+  current: string | undefined;
   label: string;
-  default?: boolean;
-}[] = [
-  { value: 'endsAt', label: 'Ending Time', default: true },
-  { value: 'created', label: 'Creation Date' },
-  { value: 'price', label: 'Price' },
-];
+  value: string | undefined;
+};
 
-export const orderOptions: { value: SortingOrder; label: string }[] = [
-  { value: 'asc', label: 'Ascending' },
-  { value: 'desc', label: 'Descending' },
-];
+export const FilterLink = ({
+  queryObject,
+  current,
+  label,
+  value,
+}: FilterLinkProps) => {
+  const active = current === value;
+  return (
+    <Link
+      href={{ query: generateQueryObject(queryObject) }}
+      className={badgeVariants({
+        variant: active ? 'secondary' : 'outline',
+      })}
+      replace
+      data-testid={`filter-link${active ? '-active' : ''}`}
+    >
+      {label}
+    </Link>
+  );
+};

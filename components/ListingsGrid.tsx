@@ -1,9 +1,6 @@
 'use client';
 
-import useSortSearchParams from '@/lib/hooks/useSortSearchParams';
 import { ListingFull } from '@/lib/schemas/listingSchema';
-import { getAllListings } from '@/lib/services/getAllListings';
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { Fragment } from 'react';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
@@ -12,6 +9,7 @@ import AuctionItemCard from './AuctionItemCard';
 import Skeleton from './Skeleton';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
+import { useInfiniteListings } from '../lib/hooks/useInfiniteListings';
 
 const AllListingsGrid = () => {
   const router = useRouter();
@@ -82,28 +80,5 @@ const sortListingsByPrice = (listings: ListingFull[], order: string) => {
     const priceB = getCurrentPrice(b);
 
     return order === 'asc' ? priceA - priceB : priceB - priceA;
-  });
-};
-
-const useInfiniteListings = () => {
-  const { sort, order } = useSortSearchParams();
-
-  return useInfiniteQuery({
-    queryKey: ['allListings', sort, order],
-    queryFn: ({ pageParam = 0 }) =>
-      getAllListings({ sort, order, limit: 100, offset: pageParam * 100 }),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, _allPages, lastPageParam) => {
-      if (lastPage.length === 0) {
-        return undefined;
-      }
-      return lastPageParam + 1;
-    },
-    getPreviousPageParam: (_firstPage, _allPages, firstPageParam) => {
-      if (firstPageParam <= 0) {
-        return undefined;
-      }
-      return firstPageParam - 1;
-    },
   });
 };
