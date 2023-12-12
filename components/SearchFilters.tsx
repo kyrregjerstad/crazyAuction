@@ -21,10 +21,10 @@ type Props = {
   sortOptions: SortOptions[];
   orderOptions: OrderOptions[];
 };
+
 const SearchFilters = ({ searchParams, sortOptions, orderOptions }: Props) => {
   const { sort, order, q } = searchParams;
 
-  console.log('rendering');
   return (
     <div className='flex w-full flex-col justify-center gap-4 sm:flex-row'>
       <div>
@@ -68,19 +68,24 @@ type FilterLinkProps = {
   label: string;
   value: string | undefined;
 };
+
 export const FilterLink = ({
   queryObject,
   current,
   label,
   value,
-}: FilterLinkProps) => (
-  <Link
-    href={{ query: generateQueryObject(queryObject) }}
-    className={badgeVariants({
-      variant: current === value ? 'secondary' : 'outline',
-    })}
-    replace
-  >
-    {label}
-  </Link>
-);
+}: FilterLinkProps) => {
+  const active = current === value;
+  return (
+    <Link
+      href={{ query: generateQueryObject(queryObject) }}
+      className={badgeVariants({
+        variant: active ? 'secondary' : 'outline',
+      })}
+      replace
+      data-testid={`filter-link${active ? '-active' : ''}`}
+    >
+      {label}
+    </Link>
+  );
+};
