@@ -45,7 +45,7 @@ describe('getListings', () => {
         _bids: true,
         _active: true,
         sort: 'created',
-        order: 'desc',
+        sortOrder: 'desc',
         limit: undefined,
         offset: undefined,
       },
