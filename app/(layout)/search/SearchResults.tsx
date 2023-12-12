@@ -3,14 +3,17 @@
 import AuctionGrid from '@/components/AuctionGrid';
 import AuctionItemCard from '@/components/AuctionItemCard';
 import { getListings } from '@/lib/services/getListings';
+import { SearchParams } from '@/lib/services/types';
 import { useQuery } from '@tanstack/react-query';
 
 type Props = {
-  searchValue: string | undefined;
+  searchParams: SearchParams | undefined;
 };
-const SearchResults = ({ searchValue }: Props) => {
+const SearchResults = ({ searchParams }: Props) => {
+  const { q: searchValue, order, sort } = searchParams || {};
+
   const { data, isLoading } = useQuery({
-    queryKey: ['allListings', 'endsAt', 'asc'],
+    queryKey: ['allListings', sort, order],
     queryFn: () => getListings({ sort: 'endsAt', sortOrder: 'asc' }),
   });
 

@@ -1,22 +1,20 @@
+import SearchFilters from '@/components/SearchFilters';
+import { searchOrderOptions, searchSortOptions } from '@/lib/constants';
 import { getListings } from '@/lib/services/getListings';
+import { SearchParams } from '@/lib/services/types';
 import {
   HydrationBoundary,
   QueryClient,
   dehydrate,
 } from '@tanstack/react-query';
-import React from 'react';
 import SearchResults from './SearchResults';
-import { getAllListings } from '@/lib/services/getAllListings';
-import SearchFilters from '@/components/SearchFilters';
-import { searchOrderOptions, searchSortOptions } from '@/lib/constants';
-import { SearchParams } from '@/lib/services/types';
 
 type Props = {
   searchParams?: SearchParams;
 };
 
 const SearchPage = async ({ searchParams }: Props) => {
-  const { q, order, sort } = searchParams || {};
+  const { q, order = 'asc', sort = 'endsAt' } = searchParams || {};
 
   const queryClient = new QueryClient();
 
@@ -33,7 +31,7 @@ const SearchPage = async ({ searchParams }: Props) => {
         orderOptions={searchOrderOptions}
       />
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <SearchResults searchValue={q} />
+        <SearchResults searchParams={searchParams} />
       </HydrationBoundary>
     </div>
   );
