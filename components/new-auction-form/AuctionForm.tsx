@@ -1,14 +1,14 @@
 'use client';
 
 import { useEffect } from 'react';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import StepOverview from './StepOverview';
 import postListing from '@/lib/services/postListing';
 import useAuctionFormStep from '@/lib/hooks/useAuctionFormStep';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
 import updateAuction from '@/lib/services/updateAuction';
 import { ListingFull } from '@/lib/schemas/listingSchema';
-import { AuctionForm, FormStepProps, Step } from './types';
+import { AuctionForm, FormStepProps } from './types';
 
 import { Card } from '../ui/card';
 import {
@@ -74,7 +74,7 @@ const AuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
   };
 
   return (
-    <Card className='xs:p-8 flex min-h-[85dvh] w-full max-w-2xl flex-col gap-5 p-4 sm:h-[450px] sm:min-h-[500px] sm:flex-row sm:p-4'>
+    <Card className='flex min-h-[85dvh] w-full max-w-2xl flex-col gap-5 p-4 xs:p-8 sm:h-[450px] sm:min-h-[500px] sm:flex-row sm:p-4'>
       <StepOverview currentStep={currentStep} steps={steps} />
       <div className='flex h-full w-full flex-1 flex-col items-stretch'>
         <RenderStep />
