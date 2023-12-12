@@ -8,12 +8,9 @@ import { useState, useEffect } from 'react';
 import Sparkles from './Sparkles';
 
 const EndingTime = ({ endsAt }: { endsAt: string }) => {
-  const [hasMounted, setHasMounted] = useState(false);
-
   const [timeLeft, setTimeLeft] = useState<number>(calculateTimeLeft(endsAt));
 
   useEffect(() => {
-    setHasMounted(true);
     const interval = setInterval(() => {
       setTimeLeft(calculateTimeLeft(endsAt));
     }, 1000);
@@ -22,10 +19,6 @@ const EndingTime = ({ endsAt }: { endsAt: string }) => {
 
   const isEndingSoon = timeLeft < TimeIntervals.oneHour;
   const isEnded = timeLeft <= 0;
-
-  if (!hasMounted) {
-    return null; // Don't render anything until the first to avoid hydration mismatch
-  }
 
   if (isEnded) {
     return (
@@ -85,6 +78,16 @@ const FormattedTimeLeft = ({
 };
 
 const Countdown = ({ timeLeft }: { timeLeft: number }) => {
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) {
+    return null;
+  }
+
   const timeLeftString = formatTimeLeft(timeLeft);
 
   return (
