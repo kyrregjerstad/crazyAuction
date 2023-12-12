@@ -5,6 +5,9 @@ import UserMenu from './UserMenu';
 import Image from 'next/image';
 import Logo from '@/public/CrazyAuction-no-outline-no-hammer.svg';
 import Hammer from '@/public/CrazyAuction-hammer.svg';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
+import SearchInput from './Search';
 
 const Header = () => {
   return (
@@ -25,6 +28,9 @@ const Header = () => {
           </Link>
           <HeaderLinks />
         </nav>
+        <div className='flex'>
+          <SearchInput />
+        </div>
 
         <div className='flex gap-4'>
           <UserMenu />

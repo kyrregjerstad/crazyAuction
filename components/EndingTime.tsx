@@ -78,6 +78,16 @@ const FormattedTimeLeft = ({
 };
 
 const Countdown = ({ timeLeft }: { timeLeft: number }) => {
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) {
+    return null;
+  }
+
   const timeLeftString = formatTimeLeft(timeLeft);
 
   return (

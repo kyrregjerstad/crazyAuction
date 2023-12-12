@@ -14,7 +14,7 @@ import { pickRandom, rotateVariations, xVariations } from '@/lib/animation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 import useRegisterForm from '@/lib/hooks/forms/useRegisterForm';
-import { useAnimation } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
 
 const RegisterForm = () => {
@@ -24,7 +24,7 @@ const RegisterForm = () => {
   const {
     control,
     watch,
-    formState: { isSubmitting, isDirty, isSubmitSuccessful, isSubmitted },
+    formState: { isSubmitting, isDirty, isSubmitSuccessful, errors },
   } = form;
 
   const name = watch('name');
@@ -32,17 +32,16 @@ const RegisterForm = () => {
   const firstLetter = name && name.length > 0 ? name[0].toUpperCase() : '';
 
   useEffect(() => {
-    if (isSubmitted && !isSubmitSuccessful) {
-      animationControl.start({
-        x: pickRandom(xVariations),
-        rotate: pickRandom(rotateVariations),
-        transition: {
-          duration: 0.5,
-          repeatType: 'mirror',
-        },
-      });
-    }
-  }, [isSubmitSuccessful, isSubmitted, animationControl]);
+    if (!errors.root) return;
+    animationControl.start({
+      x: pickRandom(xVariations),
+      rotate: pickRandom(rotateVariations),
+      transition: {
+        duration: 0.5,
+        repeatType: 'mirror',
+      },
+    });
+  }, [errors.root, animationControl]);
 
   return (
     <>
@@ -130,20 +129,27 @@ const RegisterForm = () => {
             )}
           />
 
-          <Button
-            className='w-full bg-accent'
-            type='submit'
-            disabled={isSubmitting || !isDirty || isSubmitSuccessful}
-          >
-            <span id='confetti' />
-            {isSubmitting ? (
-              <Spinner />
-            ) : isSubmitSuccessful ? (
-              'Registered! 🎉'
-            ) : (
-              'Register'
-            )}
-          </Button>
+          <motion.div animate={animationControl}>
+            <Button
+              className='w-full bg-accent'
+              type='submit'
+              disabled={isSubmitting || !isDirty || isSubmitSuccessful}
+            >
+              <span id='confetti' />
+              {isSubmitting ? (
+                <Spinner />
+              ) : isSubmitSuccessful ? (
+                'Registered! 🎉'
+              ) : (
+                'Register'
+              )}
+            </Button>
+          </motion.div>
+          {errors.root && (
+            <p className='text-center text-destructive'>
+              {errors.root.message}
+            </p>
+          )}
         </form>
       </Form>
     </>

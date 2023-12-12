@@ -7,6 +7,16 @@ import { signIn } from 'next-auth/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useReward } from 'react-rewards';
 
+type APIError = {
+  message: string;
+};
+
+type APIResponse = {
+  errors: APIError[];
+  status: string;
+  statusCode: number;
+};
+
 const useRegisterForm = () => {
   const { toast } = useToast();
   const { reward } = useReward('confetti', 'confetti');
@@ -22,26 +32,11 @@ const useRegisterForm = () => {
     }, // set default values to empty strings to avoid uncontrolled to controlled error
   });
 
-  const { handleSubmit } = form;
+  const { handleSubmit, setError } = form;
 
   const onSubmit: SubmitHandler<Register> = async (data) => {
     try {
-      const res = await postRegisterUser(data);
-
-      if (!res) throw new Error('Something went wrong');
-      if ('errors' in res) {
-        toast({
-          title: 'Error',
-          description: res.errors.map((error) => error.message).join(' '),
-          variant: 'error',
-          duration: 7000,
-        });
-        form.setError('root', {
-          type: 'manual',
-          message: res.errors.map((error) => error.message).join(' '),
-        });
-        return;
-      }
+      await postRegisterUser(data);
 
       toast({
         title: 'Account created 🎉',
@@ -58,8 +53,21 @@ const useRegisterForm = () => {
         password: data.password,
         callbackUrl: '/',
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+
+      if (error.errors) {
+        const apiResponse: APIResponse = error;
+        if (apiResponse) {
+          apiResponse.errors.forEach((err) => {
+            setError('root', { message: err.message });
+          });
+        }
+      } else {
+        setError('root', {
+          message: 'An unexpected error occurred. Please try again.',
+        });
+      }
     }
   };
 

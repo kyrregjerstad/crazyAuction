@@ -1,16 +1,12 @@
-import {
-  Sorting,
-  SortingOrder,
-  orderOptions,
-  sortOptions,
-} from '@/components/SearchFilters';
 import { useSearchParams } from 'next/navigation';
+import { Order, Sort } from '../services/types';
+import { searchOrderOptions, searchSortOptions } from '../constants';
 
 const useSortSearchParams = () => {
   const searchParams = useSearchParams();
 
-  let sort = searchParams.get('sort') as Sorting | undefined;
-  let order = searchParams.get('order') as SortingOrder | undefined;
+  let sort = searchParams.get('sort') as Sort | undefined;
+  let order = searchParams.get('order') as Order | undefined;
 
   if (!sort) {
     sort = 'endsAt';
@@ -20,11 +16,11 @@ const useSortSearchParams = () => {
     order = 'asc';
   }
 
-  if (sort && !sortOptions.find((option) => option.value === sort)) {
+  if (sort && !searchSortOptions.find((option) => option.value === sort)) {
     sort = 'endsAt';
   }
 
-  if (order && !orderOptions.find((option) => option.value === order)) {
+  if (order && !searchOrderOptions.find((option) => option.value === order)) {
     order = 'asc';
   }
 
