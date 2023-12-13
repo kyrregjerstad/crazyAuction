@@ -246,7 +246,7 @@ const BidHistoryItem = ({ bid, index }: { bid: Bid; index: number }) => {
         <h3 className='font-semibold '>${amount}</h3>
         <Link
           className='text-sm text-gray-400 hover:underline'
-          href={`user/${bidderName}`}
+          href={`/user/${bidderName}`}
         >
           {bidderName}
         </Link>
