@@ -10,7 +10,6 @@ type Props = {
 };
 const StepNavigation = ({
   prevStep,
-  currentStep,
   disabled,
   prevBtnLabel,
   nextBtnLabel,

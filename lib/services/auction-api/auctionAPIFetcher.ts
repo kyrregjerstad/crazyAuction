@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { type ZodSchema } from 'zod';
 import { API_BASE_URL } from '../../constants';
 import {

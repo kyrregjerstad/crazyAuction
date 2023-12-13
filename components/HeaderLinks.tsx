@@ -1,8 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
-
-import React from 'react';
+import { usePathname } from 'next/navigation';
 
 const pages = [
   {
@@ -16,7 +14,6 @@ const pages = [
 ];
 
 const HeaderLinks = () => {
-  const searchParams = useSearchParams();
   const currentPath = usePathname();
 
   return (

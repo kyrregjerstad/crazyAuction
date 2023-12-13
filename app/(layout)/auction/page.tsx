@@ -17,22 +17,11 @@ type Props = {
 export default async function NewAuctionPage({ searchParams }: Props) {
   const session = await getServerSession();
 
-  let { mode, id, step } = searchParams || {
-    mode: 'create',
-    id: null,
-    step: 'info',
-  };
-
-  if (!mode) {
-    mode = 'create';
-  }
+  // eslint-disable-next-line prefer-const
+  let { mode = 'create', id, step = 'info' } = searchParams || {};
 
   if (mode && mode !== 'create' && mode !== 'edit') {
     mode = 'create';
-  }
-
-  if (!step) {
-    step = 'info';
   }
 
   let listing: AuctionFull | null = null;

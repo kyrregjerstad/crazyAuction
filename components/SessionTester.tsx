@@ -1,7 +1,5 @@
 'use client';
-import { getServerSession } from 'next-auth';
 import { useSession } from 'next-auth/react';
-import React from 'react';
 
 const SessionTester = () => {
   const session = useSession();

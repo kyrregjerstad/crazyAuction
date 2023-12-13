@@ -1,12 +1,9 @@
 import authOptions from '@/app/(auth)/authOptions';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Auction } from '@/lib/schemas';
 import { getSingleUser } from '@/lib/services/auction-api';
 
 import UserListingsGrid from '@/components/UserListingsGrid';
 import { getServerSession } from 'next-auth';
-import Link from 'next/link';
 import AvatarWithEdit from './Avatar';
 import UserWinsTable from './UserWinsTable';
 
@@ -78,24 +75,3 @@ const UserPage = async ({ params }: Props) => {
 };
 
 export default UserPage;
-
-type ListingProps = {
-  listing: Auction;
-};
-
-const Listing = ({ listing }: ListingProps) => {
-  return (
-    <>
-      <Card>
-        <CardHeader className='pb-4'>
-          <Link href={`/item/${listing.id}`}>
-            <CardTitle>{listing.title}</CardTitle>
-          </Link>
-        </CardHeader>
-        <CardContent>
-          <p className='text-sm'>{listing.description}</p>
-        </CardContent>
-      </Card>
-    </>
-  );
-};

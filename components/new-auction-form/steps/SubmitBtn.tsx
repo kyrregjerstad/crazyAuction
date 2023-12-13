@@ -9,7 +9,7 @@ type Props = {
   disabled: boolean;
 };
 const SubmitBtn = ({ disabled }: Props) => {
-  const { pending, data, method } = useFormStatus();
+  const { pending } = useFormStatus();
 
   return (
     <Button type='submit' variant='outline' disabled={pending || disabled}>

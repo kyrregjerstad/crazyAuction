@@ -115,7 +115,9 @@ const ImageDropzone = ({
   const onDrop = useCallback(
     (
       acceptedFiles: File[],
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       _fileRejections: FileRejection[],
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       _event: DropEvent,
     ) => {
       if (acceptedFiles?.length) {
@@ -214,7 +216,6 @@ const ImageForm = ({
   saveStep,
   allImagesUploaded,
   currentStep,
-  nextStep,
   prevStep,
 }: ImageFormProps) => {
   const {
