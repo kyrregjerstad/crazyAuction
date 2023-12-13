@@ -6,6 +6,8 @@ import AuthProvider from './(auth)/Provider';
 import './globals.css';
 import QueryClientProvider from './providers/QueryClientProvider';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import type { Metadata } from 'next';
+import { pageMetaData } from '@/lib/data/metadata';
 
 export default function RootLayout({
   children,
@@ -41,3 +43,7 @@ export default function RootLayout({
     </>
   );
 }
+
+export const metadata: Metadata = {
+  ...pageMetaData,
+};
