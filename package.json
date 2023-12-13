@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest",
+    "pre-push": "vitest --no-watch",
     "test:e2e": "playwright test --ui",
     "test:e2e:headless": "playwright test",
     "analyze": "ANALYZE=true next build",
