@@ -28,7 +28,6 @@ export default async function HomePage({ searchParams }: Props) {
         offset: 0,
       }),
     initialPageParam: 0,
-    staleTime: 1000 * 10, // 10 seconds
   });
 
   return (
