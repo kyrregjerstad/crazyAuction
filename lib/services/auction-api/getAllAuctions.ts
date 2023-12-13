@@ -1,13 +1,13 @@
-import { ListingFull } from '../../schemas/listingSchema';
+import { AuctionFull } from '@/lib/schemas';
 import { getAuctions } from './getAuctions';
-import { Sort, Order, QueryParams } from './types';
+import { QueryParams } from './types';
 
 const fetchAllAuctions = async ({
   sort = 'created',
   sortOrder = 'desc',
   limit = 100,
   offset = 0,
-}: QueryParams): Promise<ListingFull[]> => {
+}: QueryParams): Promise<AuctionFull[]> => {
   try {
     const listings = await getAuctions({
       sort,

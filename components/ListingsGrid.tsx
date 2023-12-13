@@ -1,6 +1,6 @@
 'use client';
 
-import { ListingFull } from '@/lib/schemas/listingSchema';
+import { AuctionFull } from '@/lib/schemas';
 import { useRouter } from 'next/navigation';
 import { Fragment } from 'react';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
@@ -67,14 +67,14 @@ const AllListingsGrid = () => {
 
 export default AllListingsGrid;
 
-const getCurrentPrice = (listing: ListingFull) => {
+const getCurrentPrice = (listing: AuctionFull) => {
   if (listing.bids && listing.bids.length > 0) {
     return Math.max(...listing.bids.map((bid) => bid.amount));
   }
   return 0; // or some default value
 };
 
-const sortListingsByPrice = (listings: ListingFull[], order: string) => {
+const sortListingsByPrice = (listings: AuctionFull[], order: string) => {
   return listings.sort((a, b) => {
     const priceA = getCurrentPrice(a);
     const priceB = getCurrentPrice(b);

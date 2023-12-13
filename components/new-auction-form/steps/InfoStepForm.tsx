@@ -10,10 +10,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
-import {
-  AuctionFormInfo,
-  auctionFormInfoSchema,
-} from '@/lib/schemas/auctionSchema';
+import { AuctionFormInfo, auctionFormInfoSchema } from '@/lib/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';

@@ -1,4 +1,4 @@
-import { singleListingSchema } from '@/lib/schemas/listingSchema';
+import { singleAuctionSchema } from '@/lib/schemas';
 import auctionAPIFetcher from './auctionAPIFetcher';
 
 type Params = {
@@ -11,7 +11,7 @@ export const postBid = async ({ listingId, amount, jwt }: Params) => {
   try {
     const res = await auctionAPIFetcher({
       endpoint: `/listings/${listingId}/bids`,
-      schema: singleListingSchema,
+      schema: singleAuctionSchema,
       jwt,
       method: 'POST',
       body: {

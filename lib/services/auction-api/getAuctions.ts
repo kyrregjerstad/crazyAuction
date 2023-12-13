@@ -1,6 +1,6 @@
-import { allListingsSchema } from '../../schemas/listingSchema';
+import { allAuctionsSchema } from '@/lib/schemas';
 import auctionAPIFetcher from './auctionAPIFetcher';
-import { Sort, Order, QueryParams } from './types';
+import { QueryParams } from './types';
 
 export const getAuctions = async ({
   sort = 'created',
@@ -12,7 +12,7 @@ export const getAuctions = async ({
   try {
     const res = await auctionAPIFetcher({
       endpoint: '/listings',
-      schema: allListingsSchema,
+      schema: allAuctionsSchema,
       queryParams: {
         _seller: true,
         _bids: true,

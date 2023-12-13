@@ -6,7 +6,7 @@ import StepOverview from './StepOverview';
 import { postAuction, updateAuction } from '@/lib/services/auction-api';
 import useAuctionFormStep from '@/lib/hooks/useAuctionFormStep';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
-import { ListingFull } from '@/lib/schemas/listingSchema';
+import { AuctionFull } from '@/lib/schemas';
 import { AuctionForm, FormStepProps } from './types';
 
 import { Card } from '../ui/card';
@@ -84,7 +84,7 @@ const AuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
 
 export default AuctionForm;
 
-const transformListingToStore = (listing: ListingFull | null) => {
+const transformListingToStore = (listing: AuctionFull | null) => {
   if (!listing) {
     return null;
   }

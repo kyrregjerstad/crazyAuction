@@ -1,8 +1,7 @@
-import { singleListingSchema } from '@/lib/schemas/listingSchema';
+import { singleAuctionSchema, UpdateAuctionForm } from '@/lib/schemas';
 
 import auctionAPIFetcher from './auctionAPIFetcher';
 import { getSession } from 'next-auth/react';
-import { UpdateAuctionForm } from '@/lib/schemas/updateAuctionSchema';
 
 const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
 
@@ -28,7 +27,7 @@ export const updateAuction = async ({ formData, id }: Params) => {
   try {
     const res = auctionAPIFetcher({
       endpoint: `/listings/${id}`,
-      schema: singleListingSchema,
+      schema: singleAuctionSchema,
       jwt,
       method: 'PUT',
       body: transformedFormData,

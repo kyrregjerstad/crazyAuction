@@ -1,5 +1,5 @@
 import { useToast } from '@/components/ui/use-toast';
-import { Register, registerSchema } from '@/lib/schemas/registerSchema';
+import { RegisterForm, registerSchema } from '@/lib/schemas';
 import { postRegisterUser } from '@/lib/services/auction-api';
 import { wait } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,7 +21,7 @@ const useRegisterForm = () => {
   const { toast } = useToast();
   const { reward } = useReward('confetti', 'confetti');
 
-  const form = useForm<Register>({
+  const form = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       name: '',
@@ -34,7 +34,7 @@ const useRegisterForm = () => {
 
   const { handleSubmit, setError } = form;
 
-  const onSubmit: SubmitHandler<Register> = async (data) => {
+  const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
     try {
       await postRegisterUser(data);
 

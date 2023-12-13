@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { AuctionFormComplete } from '@/lib/schemas/auctionSchema';
+import { AuctionFormComplete } from '@/lib/schemas';
 
 import { persist, createJSONStorage } from 'zustand/middleware';
 

@@ -1,9 +1,6 @@
 'use client';
 
-import {
-  AuctionFormComplete,
-  auctionFormSchemaComplete,
-} from '@/lib/schemas/auctionSchema';
+import { AuctionFormComplete, auctionFormSchemaComplete } from '@/lib/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
@@ -11,10 +8,7 @@ import { useForm } from 'react-hook-form';
 import Image from '../../Image';
 import { FormStepProps } from '../types';
 import StepNavigation from './StepNavigation';
-import {
-  UpdateAuctionForm,
-  updateAuctionSchema,
-} from '@/lib/schemas/updateAuctionSchema';
+import { UpdateAuctionForm, updateAuctionSchema } from '@/lib/schemas';
 
 const SummaryStepForm = (props: FormStepProps) => {
   const {

@@ -11,10 +11,7 @@ import { Input } from '@/components/ui/input';
 import Sparkles from '@/components/Sparkles';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
 import useStore from '@/lib/hooks/useStore';
-import {
-  AuctionFormMedia,
-  auctionFormMediaSchema,
-} from '@/lib/schemas/auctionSchema';
+import { AuctionFormMedia, auctionFormMediaSchema } from '@/lib/schemas';
 import { getCloudinarySignature } from '@/lib/server/actions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowUpFromLine } from 'lucide-react';

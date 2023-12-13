@@ -1,5 +1,5 @@
 import { AuctionForm } from '@/components/new-auction-form';
-import { ListingFull } from '@/lib/schemas/listingSchema';
+import { AuctionFull } from '@/lib/schemas';
 import { getSingleAuction } from '@/lib/services/auction-api/getSingleAuction';
 import { getServerSession } from 'next-auth';
 
@@ -35,7 +35,7 @@ export default async function NewAuctionPage({ searchParams }: Props) {
     step = 'info';
   }
 
-  let listing: ListingFull | null = null;
+  let listing: AuctionFull | null = null;
 
   if (id && mode === 'edit' && step === 'info') {
     const requestedListing = await getSingleAuction(id);

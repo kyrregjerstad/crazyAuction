@@ -1,4 +1,4 @@
-import { allUsersSchema } from '../../schemas/userSchema';
+import { allUsersSchema } from '@/lib/schemas';
 import auctionAPIFetcher from './auctionAPIFetcher';
 
 type Sort = 'name' | 'email' | 'avatar' | 'credits';

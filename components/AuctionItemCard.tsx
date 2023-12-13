@@ -1,4 +1,4 @@
-import { Listing, ListingFull } from '@/lib/schemas/listingSchema';
+import { Auction, AuctionFull } from '@/lib/schemas';
 import fallbackImg from '@/public/fallback-image.webp';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -12,7 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 dayjs.extend(relativeTime);
 
 type Props = {
-  listing: Listing | ListingFull;
+  listing: Auction | AuctionFull;
 };
 
 const AuctionItemCard = ({ listing }: Props) => {

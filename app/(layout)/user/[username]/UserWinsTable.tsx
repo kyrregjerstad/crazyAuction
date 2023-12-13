@@ -34,7 +34,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { ListingFull } from '@/lib/schemas/listingSchema';
+import { AuctionFull } from '@/lib/schemas';
 import { getMultipleAuctions } from '@/lib/services/auction-api';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -61,7 +61,7 @@ const UserWinsTable = ({ username, winIds }: Props) => {
   );
 };
 
-type ListingOrNull = ListingFull | null;
+type ListingOrNull = AuctionFull | null;
 
 const transformWins = (wins: ListingOrNull[]) => {
   return wins

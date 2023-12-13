@@ -1,7 +1,7 @@
 import authOptions from '@/app/(auth)/authOptions';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Listing } from '@/lib/schemas/listingSchema';
+import { Auction } from '@/lib/schemas';
 import { getSingleUser } from '@/lib/services/auction-api';
 
 import UserListingsGrid from '@/components/UserListingsGrid';
@@ -80,7 +80,7 @@ const UserPage = async ({ params }: Props) => {
 export default UserPage;
 
 type ListingProps = {
-  listing: Listing;
+  listing: Auction;
 };
 
 const Listing = ({ listing }: ListingProps) => {

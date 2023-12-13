@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { singleListingSchema } from './listingSchema';
+import { singleAuctionSchema } from './auctionSchema';
 
 export const singleUserSchema = z.object({
   name: z.string(),
@@ -7,7 +7,7 @@ export const singleUserSchema = z.object({
   avatar: z.string().nullable(),
   credits: z.number(),
   wins: z.array(z.string()),
-  listings: z.array(singleListingSchema).optional(),
+  listings: z.array(singleAuctionSchema).optional(),
   _count: z.object({
     listings: z.number(),
   }),

@@ -7,7 +7,7 @@ import AuctionItemCard from '@/components/AuctionItemCard';
 //   generateSampleData,
 //   TimeIntervals,
 // } from '@/lib/data/generateSampleData';
-import { ListingFull } from '@/lib/schemas/listingSchema';
+import { AuctionFull } from '@/lib/schemas';
 // import dynamic from 'next/dynamic';
 
 // use this page to test components at different sizes, colors, etc.

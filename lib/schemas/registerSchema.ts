@@ -42,4 +42,4 @@ export const registerResponseSchema = z.object({
 
 export type RegisterResponse = z.infer<typeof registerResponseSchema>;
 
-export type Register = z.infer<typeof registerSchema>;
+export type RegisterForm = z.infer<typeof registerSchema>;

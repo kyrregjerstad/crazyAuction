@@ -9,10 +9,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import {
-  AuctionFormDate,
-  auctionFormDateSchema,
-} from '@/lib/schemas/auctionSchema';
+import { AuctionFormDate, auctionFormDateSchema } from '@/lib/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Label } from '@radix-ui/react-dropdown-menu';
 import dayjs from 'dayjs';
@@ -78,7 +75,7 @@ const DateStepForm = (props: FormStepProps) => {
               <FormItem>
                 <FormControl>
                   <div className='flex w-full flex-col items-center justify-center sm:flex-row sm:items-start sm:justify-start'>
-                    <div className='xs:flex-row flex w-full flex-col justify-center gap-4 '>
+                    <div className='flex w-full flex-col justify-center gap-4 xs:flex-row '>
                       <Calendar
                         mode='single'
                         selected={new Date(field.value)}
