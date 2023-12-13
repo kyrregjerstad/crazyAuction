@@ -1,15 +1,9 @@
 import { allUsersSchema } from '@/lib/schemas';
 import auctionAPIFetcher from './auctionAPIFetcher';
+import { QueryParams } from './types';
 
-type Sort = 'name' | 'email' | 'avatar' | 'credits';
-type Order = 'asc' | 'desc';
-
-type Params = {
+type Params = QueryParams & {
   jwt: string;
-  sort?: Sort;
-  sortOrder?: Order;
-  limit?: number;
-  offset?: number;
 };
 
 export const getAllUsers = async ({

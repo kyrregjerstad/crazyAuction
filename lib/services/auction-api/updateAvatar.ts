@@ -1,4 +1,4 @@
-import { singleUserSchema } from '@/lib/schemas';
+import { updateAvatarSchema } from '@/lib/schemas';
 import auctionAPIFetcher from './auctionAPIFetcher';
 
 type Params = {
@@ -6,10 +6,6 @@ type Params = {
   avatar: string;
   jwt: string;
 };
-
-const updateAvatarSchema = singleUserSchema.omit({
-  _count: true,
-});
 
 export const updateAvatar = async ({ avatar, name, jwt }: Params) => {
   try {

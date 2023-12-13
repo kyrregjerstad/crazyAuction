@@ -35,4 +35,9 @@ export {
   type UpdateAuctionForm,
 } from './updateAuctionSchema';
 
-export { singleUserSchema, allUsersSchema, type User } from './userSchema';
+export {
+  singleUserSchema,
+  allUsersSchema,
+  updateAvatarSchema,
+  type User,
+} from './userSchema';

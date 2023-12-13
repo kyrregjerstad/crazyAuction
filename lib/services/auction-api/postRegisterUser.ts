@@ -5,7 +5,7 @@ import {
 } from '@/lib/schemas';
 import auctionAPIFetcher from './auctionAPIFetcher';
 
-type RegisterResponseError = {
+export type RegisterResponseError = {
   errors: [
     {
       message: string;

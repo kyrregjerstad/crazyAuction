@@ -16,3 +16,7 @@ export const singleUserSchema = z.object({
 export type User = z.infer<typeof singleUserSchema>;
 
 export const allUsersSchema = z.array(singleUserSchema);
+
+export const updateAvatarSchema = singleUserSchema.omit({
+  _count: true,
+});

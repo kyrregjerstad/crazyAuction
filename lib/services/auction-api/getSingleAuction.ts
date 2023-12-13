@@ -12,11 +12,14 @@ export const getSingleAuction = async (id: string) => {
       },
     });
 
+    const sortedBids =
+      res?.bids && Array.isArray(res.bids)
+        ? res.bids.sort((a, b) => b.amount - a.amount)
+        : [];
+
     const sortedRes = {
       ...res,
-      bids: res.bids.sort((a, b) => {
-        return b.amount - a.amount;
-      }),
+      bids: sortedBids,
     };
 
     return sortedRes;
