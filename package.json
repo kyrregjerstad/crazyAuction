@@ -77,7 +77,6 @@
     "zustand": "^4.4.6"
   },
   "devDependencies": {
-    "@faker-js/faker": "^8.3.1",
     "@hookform/devtools": "^4.3.1",
     "@playwright/test": "^1.40.1",
     "@tailwindcss/typography": "^0.5.10",
