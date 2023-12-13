@@ -61,7 +61,7 @@ const LinkPopover = ({ editMode, setEditMode }: LinkPopoverProps) => {
 
   const {
     control,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { isSubmitting, isSubmitSuccessful },
   } = form;
 
   return (

@@ -1,7 +1,6 @@
 import Graph from './Graph';
 
-import { ListingFull } from '@/lib/schemas/listingSchema';
-import { User } from '@/lib/schemas/userSchema';
+import { AuctionFull, User } from '@/lib/schemas';
 import { promises as fs } from 'fs';
 
 // const redis = Redis.fromEnv();
@@ -61,7 +60,7 @@ const GraphPage = async () => {
   );
   const allUsersFile = await fs.readFile('./public/allUsers.json', 'utf-8');
 
-  const allAuctions = JSON.parse(allAuctionsFile) as ListingFull[];
+  const allAuctions = JSON.parse(allAuctionsFile) as AuctionFull[];
   const allUsers = JSON.parse(allUsersFile) as TransformedUser[];
 
   const nodes: NodeType[] = allUsers.map((user) => ({

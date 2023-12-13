@@ -1,4 +1,4 @@
-import { Login, loginSchema } from '@/lib/schemas/loginSchema';
+import { LoginForm, loginSchema } from '@/lib/schemas';
 import clearCachesByServerAction from '@/lib/server/clearCachesByServerAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
@@ -7,7 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 const useLoginForm = () => {
   const router = useRouter();
-  const form = useForm<Login>({
+  const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
@@ -17,7 +17,7 @@ const useLoginForm = () => {
 
   const { setError, handleSubmit } = form;
 
-  const onSubmit: SubmitHandler<Login> = async ({ email, password }) => {
+  const onSubmit: SubmitHandler<LoginForm> = async ({ email, password }) => {
     try {
       const res = await signIn('credentials', {
         email,

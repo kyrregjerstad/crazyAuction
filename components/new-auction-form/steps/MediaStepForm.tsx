@@ -11,10 +11,7 @@ import { Input } from '@/components/ui/input';
 import Sparkles from '@/components/Sparkles';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
 import useStore from '@/lib/hooks/useStore';
-import {
-  AuctionFormMedia,
-  auctionFormMediaSchema,
-} from '@/lib/schemas/auctionSchema';
+import { AuctionFormMedia, auctionFormMediaSchema } from '@/lib/schemas';
 import { getCloudinarySignature } from '@/lib/server/actions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowUpFromLine } from 'lucide-react';
@@ -118,7 +115,9 @@ const ImageDropzone = ({
   const onDrop = useCallback(
     (
       acceptedFiles: File[],
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       _fileRejections: FileRejection[],
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       _event: DropEvent,
     ) => {
       if (acceptedFiles?.length) {
@@ -217,7 +216,6 @@ const ImageForm = ({
   saveStep,
   allImagesUploaded,
   currentStep,
-  nextStep,
   prevStep,
 }: ImageFormProps) => {
   const {

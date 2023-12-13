@@ -1,13 +1,11 @@
+import Hammer from '@/public/CrazyAuction-hammer.svg';
+import Logo from '@/public/CrazyAuction-no-outline-no-hammer.svg';
+import Image from 'next/image';
 import Link from 'next/link';
 import HeaderLine from './HeaderLine';
 import HeaderLinks from './HeaderLinks';
-import UserMenu from './UserMenu';
-import Image from 'next/image';
-import Logo from '@/public/CrazyAuction-no-outline-no-hammer.svg';
-import Hammer from '@/public/CrazyAuction-hammer.svg';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
 import SearchInput from './Search';
+import UserMenu from './UserMenu';
 
 const Header = () => {
   return (

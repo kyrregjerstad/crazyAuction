@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import SearchFilters, { FilterLink } from './SearchFilters';
 
-import { Order, Sort } from '@/lib/services/types';
+import { Order, Sort } from '@/lib/services/auction-api/types';
 
 const searchParams = { sort: 'price', order: 'asc', q: 'test' } as const;
 

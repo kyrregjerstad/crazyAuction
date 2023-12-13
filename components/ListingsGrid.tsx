@@ -1,15 +1,14 @@
 'use client';
 
-import { ListingFull } from '@/lib/schemas/listingSchema';
 import { useRouter } from 'next/navigation';
 import { Fragment } from 'react';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
+import { useInfiniteListings } from '../lib/hooks/useInfiniteListings';
 import AuctionGrid from './AuctionGrid';
 import AuctionItemCard from './AuctionItemCard';
 import Skeleton from './Skeleton';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
-import { useInfiniteListings } from '../lib/hooks/useInfiniteListings';
 
 const AllListingsGrid = () => {
   const router = useRouter();
@@ -67,18 +66,18 @@ const AllListingsGrid = () => {
 
 export default AllListingsGrid;
 
-const getCurrentPrice = (listing: ListingFull) => {
-  if (listing.bids && listing.bids.length > 0) {
-    return Math.max(...listing.bids.map((bid) => bid.amount));
-  }
-  return 0; // or some default value
-};
+// const getCurrentPrice = (listing: AuctionFull) => {
+//   if (listing.bids && listing.bids.length > 0) {
+//     return Math.max(...listing.bids.map((bid) => bid.amount));
+//   }
+//   return 0; // or some default value
+// };
 
-const sortListingsByPrice = (listings: ListingFull[], order: string) => {
-  return listings.sort((a, b) => {
-    const priceA = getCurrentPrice(a);
-    const priceB = getCurrentPrice(b);
+// const sortListingsByPrice = (listings: AuctionFull[], order: string) => {
+//   return listings.sort((a, b) => {
+//     const priceA = getCurrentPrice(a);
+//     const priceB = getCurrentPrice(b);
 
-    return order === 'asc' ? priceA - priceB : priceB - priceA;
-  });
-};
+//     return order === 'asc' ? priceA - priceB : priceB - priceA;
+//   });
+// };

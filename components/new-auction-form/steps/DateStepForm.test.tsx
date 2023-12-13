@@ -4,7 +4,6 @@ import DateStepForm from './DateStepForm';
 import useAuctionFormStore, {
   StoredData,
 } from '@/lib/hooks/useAuctionFormStore';
-import postListing from '@/lib/services/postListing';
 import { vi } from 'vitest';
 import { createStoredDataMock } from '@/lib/mocks/data';
 import { FormStepProps } from '../types';

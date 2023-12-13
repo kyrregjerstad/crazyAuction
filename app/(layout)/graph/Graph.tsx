@@ -1,5 +1,7 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 'use client';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import ForceGraph2D, {
   type ForceGraphMethods,
@@ -121,7 +123,7 @@ const Graph = ({ data }: Props) => {
     (
       link: ExtendedLinkObject,
       ctx: CanvasRenderingContext2D,
-      globalScale: number,
+      // globalScale: number,
     ) => {
       const start = link.source;
       const end = link.target;

@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { type ZodSchema } from 'zod';
-import { API_BASE_URL } from '../constants';
+import { API_BASE_URL } from '../../constants';
 import {
   DeleteEndpoints,
   GetEndpoints,
@@ -7,7 +8,7 @@ import {
   PutEndpoints,
   QueryParams,
 } from './types';
-import { createZodFetcher } from './zodFetcher';
+import { createZodFetcher } from '../zodFetcher';
 
 const fetchWithZod = createZodFetcher();
 

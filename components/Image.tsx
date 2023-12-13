@@ -50,11 +50,9 @@ export function cloudinaryLoader({ src, width, quality }: ImageLoaderProps) {
   return url;
 }
 
-type ImageProps = Omit<NextImageProps, 'loader'> & {
-  useCloudinaryLoader?: boolean;
-};
+type ImageProps = Omit<NextImageProps, 'loader'>;
 
-const Image = ({ useCloudinaryLoader = true, ...props }: ImageProps) => {
+const Image = ({ ...props }: ImageProps) => {
   return <NextImage loader={cloudinaryLoader} {...props} />;
 };
 

@@ -1,6 +1,6 @@
 'use client';
 import useSortSearchParams from '@/lib/hooks/useSortSearchParams';
-import { getListings } from '@/lib/services/getListings';
+import { getAuctions } from '@/lib/services/auction-api';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 export const useInfiniteListings = () => {
@@ -9,7 +9,7 @@ export const useInfiniteListings = () => {
   return useInfiniteQuery({
     queryKey: ['allListingsInfinite', sort, order],
     queryFn: ({ pageParam = 0 }) =>
-      getListings({
+      getAuctions({
         sort,
         sortOrder: order,
         limit: 100,

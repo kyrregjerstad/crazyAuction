@@ -1,32 +1,44 @@
 import { z } from 'zod';
 
-export const auctionFormInfoSchema = z.object({
-  title: z
-    .string()
-    .min(3, { message: 'Title can not be shorter than 3 characters' })
-    .max(280, { message: 'Title can not be longer than 280 characters' }),
-  description: z
-    .string()
-    .max(280, { message: 'Description cannot be longer than 280 characters' })
-    .nullable(),
-  tags: z.array(z.string()).max(8, 'A maximum of 8 tags are allowed'),
+const isoDate = z.string().refine((val) => !isNaN(Date.parse(val)), {
+  message: 'Invalid date format, expected ISO 8601 format',
 });
 
-export const auctionFormMediaSchema = z.object({
-  imageUrls: z.array(z.string().url()),
+export const singleAuctionSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string().nullable(),
+  tags: z.array(z.string()),
+  media: z.array(z.string().url()),
+  created: isoDate,
+  updated: isoDate,
+  endsAt: isoDate,
 });
 
-export const auctionFormDateSchema = z.object({
-  dateTime: z.string(),
+const bid = z.object({
+  id: z.string(),
+  amount: z.number(),
+  bidderName: z.string(),
+  created: isoDate,
 });
 
-export const auctionFormSchemaComplete = z.object({
-  ...auctionFormInfoSchema.shape,
-  ...auctionFormMediaSchema.shape,
-  ...auctionFormDateSchema.shape,
+const seller = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  avatar: z.string().nullable(),
 });
 
-export type AuctionFormComplete = z.infer<typeof auctionFormSchemaComplete>;
-export type AuctionFormInfo = z.infer<typeof auctionFormInfoSchema>;
-export type AuctionFormMedia = z.infer<typeof auctionFormMediaSchema>;
-export type AuctionFormDate = z.infer<typeof auctionFormDateSchema>;
+export const singleAuctionSchemaExtended = singleAuctionSchema.extend({
+  seller: seller,
+  bids: z.array(bid),
+  _count: z.object({
+    bids: z.number(),
+  }),
+});
+
+export type Seller = z.infer<typeof seller>;
+export type Bid = z.infer<typeof bid>;
+export type Auction = z.infer<typeof singleAuctionSchema>;
+export type AuctionFull = z.infer<typeof singleAuctionSchemaExtended>;
+
+export const allAuctionsSchema = z.array(singleAuctionSchemaExtended);

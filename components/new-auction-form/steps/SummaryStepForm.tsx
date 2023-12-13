@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  AuctionFormComplete,
-  auctionFormSchemaComplete,
-} from '@/lib/schemas/auctionSchema';
-import {
-  UpdateAuctionForm,
-  updateAuctionSchema,
-} from '@/lib/services/updateAuction';
+import { AuctionFormComplete, auctionFormSchemaComplete } from '@/lib/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
@@ -15,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import Image from '../../Image';
 import { FormStepProps } from '../types';
 import StepNavigation from './StepNavigation';
+import { UpdateAuctionForm, updateAuctionSchema } from '@/lib/schemas';
 
 const SummaryStepForm = (props: FormStepProps) => {
   const {
@@ -83,7 +77,7 @@ const SummaryStepForm = (props: FormStepProps) => {
   } = summaryFormCreate;
 
   const {
-    formState: { errors: errorsEdit, isSubmitting: isSubmittingEdit },
+    formState: { isSubmitting: isSubmittingEdit },
     handleSubmit: handleSubmitEdit,
   } = summaryFormEdit;
 
@@ -126,7 +120,7 @@ type SummaryContentProps = {
   auctionFormData?: Partial<AuctionFormComplete>;
   mode: 'create' | 'edit';
 };
-const SummaryContent = ({ auctionFormData, mode }: SummaryContentProps) => (
+const SummaryContent = ({ auctionFormData }: SummaryContentProps) => (
   <>
     <div className='flex flex-col gap-4 sm:flex-row sm:gap-8'>
       <div className='flex w-full flex-col gap-2 sm:gap-8'>

@@ -1,5 +1,5 @@
 import { useSearchParams } from 'next/navigation';
-import { Order, Sort } from '../services/types';
+import { Order, Sort } from '../services/auction-api/types';
 import { searchOrderOptions, searchSortOptions } from '../constants';
 
 const useSortSearchParams = () => {

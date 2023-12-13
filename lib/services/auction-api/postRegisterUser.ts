@@ -1,8 +1,8 @@
 import {
-  Register,
+  RegisterForm,
   RegisterResponse,
   registerResponseSchema,
-} from '../schemas/registerSchema';
+} from '@/lib/schemas';
 import auctionAPIFetcher from './auctionAPIFetcher';
 
 type RegisterResponseError = {
@@ -16,7 +16,7 @@ type RegisterResponseError = {
 };
 
 export const postRegisterUser = async (
-  params: Register,
+  params: RegisterForm,
 ): Promise<RegisterResponse | RegisterResponseError> => {
   const transformedParams = {
     name: params.name,

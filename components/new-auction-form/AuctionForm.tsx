@@ -3,11 +3,10 @@
 import { useEffect } from 'react';
 import isEqual from 'lodash/isEqual';
 import StepOverview from './StepOverview';
-import postListing from '@/lib/services/postListing';
+import { postAuction, updateAuction } from '@/lib/services/auction-api';
 import useAuctionFormStep from '@/lib/hooks/useAuctionFormStep';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
-import updateAuction from '@/lib/services/updateAuction';
-import { ListingFull } from '@/lib/schemas/listingSchema';
+import { AuctionFull } from '@/lib/schemas';
 import { AuctionForm, FormStepProps } from './types';
 
 import { Card } from '../ui/card';
@@ -54,7 +53,7 @@ const AuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
     storedData: auctionFormData,
     nextStep,
     prevStep,
-    postListing,
+    postListing: postAuction,
     updateAuction,
   } satisfies FormStepProps;
 
@@ -85,7 +84,7 @@ const AuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
 
 export default AuctionForm;
 
-const transformListingToStore = (listing: ListingFull | null) => {
+const transformListingToStore = (listing: AuctionFull | null) => {
   if (!listing) {
     return null;
   }

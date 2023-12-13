@@ -1,4 +1,4 @@
-import { allUsersSchema } from '../schemas/userSchema';
+import { allUsersSchema } from '@/lib/schemas';
 import auctionAPIFetcher from './auctionAPIFetcher';
 
 type Sort = 'name' | 'email' | 'avatar' | 'credits';
@@ -12,7 +12,7 @@ type Params = {
   offset?: number;
 };
 
-const getAllUsers = async ({
+export const getAllUsers = async ({
   sort = 'credits',
   sortOrder = 'desc',
   jwt,
@@ -34,5 +34,3 @@ const getAllUsers = async ({
     throw error;
   }
 };
-
-export default getAllUsers;
