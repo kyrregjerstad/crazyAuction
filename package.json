@@ -15,6 +15,9 @@
     "sourcemap": "source-map-explorer .next/static/**/*.js",
     "prepare": "husky install"
   },
+  "engines": {
+    "node": ">=18.17.0"
+  },
   "dependencies": {
     "@cloudinary/react": "^1.11.2",
     "@cloudinary/url-gen": "^1.13.0",
