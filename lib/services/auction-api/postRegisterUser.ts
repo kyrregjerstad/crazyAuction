@@ -2,7 +2,7 @@ import {
   Register,
   RegisterResponse,
   registerResponseSchema,
-} from '../schemas/registerSchema';
+} from '../../schemas/registerSchema';
 import auctionAPIFetcher from './auctionAPIFetcher';
 
 type RegisterResponseError = {

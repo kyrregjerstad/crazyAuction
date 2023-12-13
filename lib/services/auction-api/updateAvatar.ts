@@ -1,9 +1,5 @@
-import { API_PROFILES_URL } from '@/lib/constants';
-import { createZodFetcher } from 'zod-fetch';
-import { singleUserSchema } from '../schemas/userSchema';
+import { singleUserSchema } from '../../schemas/userSchema';
 import auctionAPIFetcher from './auctionAPIFetcher';
-
-const fetchWithZod = createZodFetcher();
 
 type Params = {
   name: string;

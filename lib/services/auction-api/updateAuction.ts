@@ -1,28 +1,17 @@
 import { singleListingSchema } from '@/lib/schemas/listingSchema';
-import { z } from 'zod';
+
 import auctionAPIFetcher from './auctionAPIFetcher';
 import { getSession } from 'next-auth/react';
+import { UpdateAuctionForm } from '@/lib/schemas/updateAuctionSchema';
 
 const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
-
-export const updateAuctionSchema = z.object({
-  title: z.string().min(1).max(280).optional(),
-  description: z.string().min(1).max(280).nullable().optional(),
-  imageUrls: z.array(z.string().url()).optional(),
-  tags: z
-    .array(z.string())
-    .max(8, 'A maximum of 8 tags are allowed')
-    .optional(),
-});
-
-export type UpdateAuctionForm = z.infer<typeof updateAuctionSchema>;
 
 type Params = {
   formData: UpdateAuctionForm;
   id: string;
 };
 
-const updateAuction = async ({ formData, id }: Params) => {
+export const updateAuction = async ({ formData, id }: Params) => {
   const session = await getSession();
   const jwt = session?.user?.accessToken;
   const transformedMediaLinks = formData.imageUrls?.map(
@@ -53,5 +42,3 @@ const updateAuction = async ({ formData, id }: Params) => {
 };
 
 export type UpdateAuction = typeof updateAuction;
-
-export default updateAuction;

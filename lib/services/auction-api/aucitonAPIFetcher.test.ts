@@ -6,7 +6,7 @@ const mockSchema = z.object({
   key: z.string(),
 });
 
-vi.mock('./zodFetcher', () => {
+vi.mock('@/lib/services/zodFetcher', () => {
   return {
     createZodFetcher: () =>
       vi.fn(() => Promise.resolve({ parsedData: 'mockData' })),
@@ -15,7 +15,6 @@ vi.mock('./zodFetcher', () => {
 
 describe('auctionAPIFetcher', () => {
   const mockID = '123';
-  const mockName = 'JohnDoe';
 
   // Test GET Endpoints
   it('should fetch listings', async () => {

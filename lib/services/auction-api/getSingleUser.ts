@@ -1,4 +1,4 @@
-import { singleUserSchema } from '../schemas/userSchema';
+import { singleUserSchema } from '../../schemas/userSchema';
 import auctionAPIFetcher from './auctionAPIFetcher';
 
 type Params = {

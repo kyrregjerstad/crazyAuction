@@ -1,6 +1,6 @@
 import { useToast } from '@/components/ui/use-toast';
 import { Register, registerSchema } from '@/lib/schemas/registerSchema';
-import { postRegisterUser } from '@/lib/services/postSignUp';
+import { postRegisterUser } from '@/lib/services/auction-api';
 import { wait } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';

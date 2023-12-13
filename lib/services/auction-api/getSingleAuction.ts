@@ -1,7 +1,7 @@
-import { singleListingSchemaExtended } from '../schemas/listingSchema';
+import { singleListingSchemaExtended } from '../../schemas/listingSchema';
 import auctionAPIFetcher from './auctionAPIFetcher';
 
-export const getSingleListing = async (id: string) => {
+export const getSingleAuction = async (id: string) => {
   try {
     const res = await auctionAPIFetcher({
       endpoint: `/listings/${id}`,

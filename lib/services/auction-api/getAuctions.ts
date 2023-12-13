@@ -1,4 +1,4 @@
-import { allListingsSchema } from '../schemas/listingSchema';
+import { allListingsSchema } from '../../schemas/listingSchema';
 import auctionAPIFetcher from './auctionAPIFetcher';
 import { Sort, Order } from './types';
 
@@ -10,7 +10,7 @@ type Params = {
   offset?: number;
 };
 
-export const getListings = async ({
+export const getAuctions = async ({
   sort = 'created',
   sortOrder = 'desc',
   active = true,

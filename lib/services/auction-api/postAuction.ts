@@ -9,7 +9,7 @@ type Params = {
   formData: AuctionFormComplete;
 };
 
-const postListing = async ({ formData }: Params) => {
+export const postAuction = async ({ formData }: Params) => {
   const session = await getSession();
   const jwt = session?.user?.accessToken;
   const transformedMediaLinks = formData.imageUrls.map(
@@ -39,5 +39,3 @@ const postListing = async ({ formData }: Params) => {
     throw error;
   }
 };
-
-export default postListing;

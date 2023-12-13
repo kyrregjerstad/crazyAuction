@@ -4,10 +4,6 @@ import {
   AuctionFormComplete,
   auctionFormSchemaComplete,
 } from '@/lib/schemas/auctionSchema';
-import {
-  UpdateAuctionForm,
-  updateAuctionSchema,
-} from '@/lib/services/updateAuction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
@@ -15,6 +11,10 @@ import { useForm } from 'react-hook-form';
 import Image from '../../Image';
 import { FormStepProps } from '../types';
 import StepNavigation from './StepNavigation';
+import {
+  UpdateAuctionForm,
+  updateAuctionSchema,
+} from '@/lib/schemas/updateAuctionSchema';
 
 const SummaryStepForm = (props: FormStepProps) => {
   const {

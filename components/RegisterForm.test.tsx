@@ -1,5 +1,5 @@
 import { emptyRegisterResponse } from '@/lib/mocks/data';
-import { postRegisterUser } from '@/lib/services/postSignUp';
+import { postRegisterUser } from '@/lib/services/auction-api';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { signIn } from 'next-auth/react';
@@ -11,7 +11,7 @@ vi.mock('next-auth/react', () => ({
   signIn: vi.fn(),
 }));
 
-vi.mock('@/lib/services/postSignUp', () => ({
+vi.mock('@/lib/services/auction-api', () => ({
   postRegisterUser: vi.fn(),
 }));
 

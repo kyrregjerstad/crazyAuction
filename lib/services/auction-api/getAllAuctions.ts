@@ -1,5 +1,5 @@
-import { ListingFull } from '../schemas/listingSchema';
-import { getListings } from './getListings';
+import { ListingFull } from '../../schemas/listingSchema';
+import { getAuctions } from './getAuctions';
 import { Sort, Order } from './types';
 
 type Params = {
@@ -10,26 +10,25 @@ type Params = {
   offset?: number;
 };
 
-const fetchAllListings = async ({
+const fetchAllAuctions = async ({
   sort = 'created',
   order: sortOrder = 'desc',
   limit = 100,
   offset = 0,
 }: Params): Promise<ListingFull[]> => {
   try {
-    const listings = await getListings({
+    const listings = await getAuctions({
       sort,
       sortOrder: sortOrder,
       limit,
       offset,
     });
     if (listings.length < limit) {
-      // checks if the number of listings returned is less than the limit
       return listings;
     }
 
     // Recursively fetch the next page
-    const nextListings = await fetchAllListings({
+    const nextListings = await fetchAllAuctions({
       sort,
       order: sortOrder,
       limit,
@@ -43,6 +42,6 @@ const fetchAllListings = async ({
 };
 
 // Wrapper function to fetch all listings
-export const getAllListings = async (params: Params) => {
-  return fetchAllListings(params);
+export const getAllAuctions = async (params: Params) => {
+  return fetchAllAuctions(params);
 };

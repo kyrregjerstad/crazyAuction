@@ -1,7 +1,7 @@
 import SearchFilters from '@/components/SearchFilters';
 import { searchOrderOptions, searchSortOptions } from '@/lib/constants';
-import { getListings } from '@/lib/services/getListings';
-import { SearchParams } from '@/lib/services/types';
+import { getAuctions } from '@/lib/services/auction-api';
+import { SearchParams } from '@/lib/services/auction-api/types';
 import {
   HydrationBoundary,
   QueryClient,
@@ -20,7 +20,7 @@ const SearchPage = async ({ searchParams }: Props) => {
 
   await queryClient.prefetchQuery({
     queryKey: ['allListings', sort, order],
-    queryFn: () => getListings({ sort, sortOrder: order }),
+    queryFn: () => getAuctions({ sort, sortOrder: order }),
   });
 
   return (

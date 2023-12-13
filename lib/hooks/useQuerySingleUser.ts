@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getSingleUser } from '../services/getSingleUser';
+import { getSingleUser } from '@/lib/services/auction-api';
 import { useClientJWT } from './useClientJWT';
 
 type Params = {

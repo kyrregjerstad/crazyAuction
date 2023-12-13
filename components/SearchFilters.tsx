@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { badgeVariants } from './ui/badge';
-import { Order, SearchParams, Sort } from '@/lib/services/types';
+import { Order, SearchParams, Sort } from '@/lib/services/auction-api/types';
 import { generateQueryObject } from '@/lib/utils';
 
 type CommonOptions = {

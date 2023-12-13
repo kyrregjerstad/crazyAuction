@@ -7,7 +7,7 @@ type Params = {
   jwt: string;
 };
 
-export const placeBid = async ({ listingId, amount, jwt }: Params) => {
+export const postBid = async ({ listingId, amount, jwt }: Params) => {
   try {
     const res = await auctionAPIFetcher({
       endpoint: `/listings/${listingId}/bids`,

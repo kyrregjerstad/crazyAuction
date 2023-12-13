@@ -1,6 +1,6 @@
 'use client';
 
-import { placeBid } from '@/lib/services/placeBid';
+import { postBid } from '@/lib/services/auction-api';
 import { QueryClient, useMutation } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
@@ -22,7 +22,7 @@ const BidBox = ({ listingId, currentBid }: BidBoxProps) => {
 
   const { mutate } = useMutation({
     mutationFn: (amount: number) =>
-      placeBid({
+      postBid({
         listingId,
         amount: amount,
         jwt: data!.user.accessToken,

@@ -1,5 +1,5 @@
 import { useToast } from '@/components/ui/use-toast';
-import { updateAvatar } from '@/lib/services/updateAvatar';
+import { updateAvatar } from '@/lib/services/auction-api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';

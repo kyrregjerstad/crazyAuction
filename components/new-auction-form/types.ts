@@ -1,7 +1,7 @@
 import { StoredData } from '@/lib/hooks/useAuctionFormStore';
 import { AuctionFormComplete } from '@/lib/schemas/auctionSchema';
 import { Listing, ListingFull } from '@/lib/schemas/listingSchema';
-import { UpdateAuction } from '@/lib/services/updateAuction';
+import { type UpdateAuction } from '@/lib/services/auction-api';
 
 export type Step = 'info' | 'media' | 'time' | 'summary';
 

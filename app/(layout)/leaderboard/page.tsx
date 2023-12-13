@@ -1,8 +1,8 @@
 // import Leaderboard from '@/components/Leaderboard';
 import dynamic from 'next/dynamic';
 import { useServerJWT } from '@/lib/hooks/useServerJWT';
-import getAllUsers from '@/lib/services/getAllUsers';
-import { SearchParams } from '@/lib/services/types';
+import { getAllUsers } from '@/lib/services/auction-api';
+import { SearchParams } from '@/lib/services/auction-api/types';
 import {
   dehydrate,
   HydrationBoundary,
