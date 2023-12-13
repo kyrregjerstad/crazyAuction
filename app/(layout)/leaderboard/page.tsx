@@ -1,4 +1,5 @@
-import Leaderboard from '@/components/Leaderboard';
+// import Leaderboard from '@/components/Leaderboard';
+import dynamic from 'next/dynamic';
 import { useServerJWT } from '@/lib/hooks/useServerJWT';
 import getAllUsers from '@/lib/services/getAllUsers';
 import { SearchParams } from '@/lib/services/types';
@@ -7,6 +8,10 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+
+const Leaderboard = dynamic(() => import('@/components/Leaderboard'), {
+  ssr: true,
+});
 
 type Props = {
   searchParams?: SearchParams;

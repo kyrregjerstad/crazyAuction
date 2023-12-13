@@ -1,5 +1,21 @@
+const withPlugins = require('next-compose-plugins');
+const withBundleAnalyzer = require('@next/bundle-analyzer');
+const { withSentryConfig } = require('@sentry/nextjs');
+
+const bundleAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+  productionBrowserSourceMaps: true,
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.devtool = 'source-map';
+    }
+  },
+
   images: {
     domains: ['res.cloudinary.com'],
     remotePatterns: [
@@ -11,13 +27,7 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
-
-// Injected content via Sentry wizard below
-
-const { withSentryConfig } = require('@sentry/nextjs');
-
-module.exports = withSentryConfig(
+const sentryConfig = withSentryConfig(
   module.exports,
   {
     // For all available options, see:
@@ -48,3 +58,5 @@ module.exports = withSentryConfig(
     disableLogger: true,
   },
 );
+
+module.exports = withPlugins([sentryConfig, bundleAnalyzer], nextConfig);
