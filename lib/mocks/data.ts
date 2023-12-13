@@ -22,7 +22,7 @@ export const emptyBid = {
   bidderName: '',
 } as Bid;
 
-export const emptyListing = {
+export const emptyAuction = {
   id: '',
   title: '',
   description: '',

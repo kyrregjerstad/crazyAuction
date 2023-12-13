@@ -1,7 +1,7 @@
 import { getAuctions } from './getAuctions';
 import * as auctionAPIFetcherModule from './auctionAPIFetcher';
 import { allAuctionsSchema } from '@/lib/schemas';
-import { emptyBid, emptyListing } from '../../mocks/data';
+import { emptyBid, emptyAuction } from '../../mocks/data';
 import { Mock } from 'vitest';
 
 vi.mock('./auctionAPIFetcher', () => {
@@ -19,7 +19,7 @@ vi.mock('@/lib/schemas', () => {
 describe('getListings', () => {
   const mockFetchResponse = [
     {
-      ...emptyListing,
+      ...emptyAuction,
       id: '1',
       title: 'Listing 1',
       description: 'Description 1',

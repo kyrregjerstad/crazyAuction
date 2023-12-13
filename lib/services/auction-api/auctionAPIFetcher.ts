@@ -38,10 +38,7 @@ async function auctionAPIFetcher<TData, TMethod extends Methods = 'GET'>(
   const url = new URL(API_BASE_URL + endpoint);
 
   if (queryParams) {
-    Object.entries(queryParams).forEach(([key, value]) => {
-      if (!value) return;
-      url.searchParams.append(key, value.toString());
-    });
+    appendQueryParams(url, queryParams);
   }
 
   const headers = new Headers({
@@ -71,3 +68,13 @@ async function auctionAPIFetcher<TData, TMethod extends Methods = 'GET'>(
 }
 
 export default auctionAPIFetcher;
+
+export const appendQueryParams = (
+  url: URL,
+  queryParams: Record<string, any>,
+) => {
+  Object.entries(queryParams).forEach(([key, value]) => {
+    if (!value) return;
+    url.searchParams.append(key, value.toString());
+  });
+};

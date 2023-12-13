@@ -2,7 +2,7 @@ import { AuctionFull } from '@/lib/schemas';
 import { getAuctions } from './getAuctions';
 import { QueryParams } from './types';
 
-const fetchAllAuctions = async ({
+export const fetchAllAuctions = async ({
   sort = 'created',
   sortOrder = 'desc',
   limit = 100,
