@@ -26,6 +26,7 @@ const MagicButton = () => {
       <Link
         className={buttonVariants({ variant: 'magic' })}
         href='/auction?mode=create'
+        data-testid='new-auction-navbar-link'
       >
         <Sparkles animate={animate} color='white'>
           New Auction

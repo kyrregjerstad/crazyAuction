@@ -18,25 +18,42 @@ const UserMenu = () => {
   const avatarUrl = data?.user.avatar;
   const pathname = usePathname();
 
-  console.log(pathname);
-
   return (
     <>
       {status === 'authenticated' ? (
         <>
-          {pathname !== '/auction' && <MagicButton />}
+          <div className='hidden sm:block'>
+            {pathname !== '/auction' && <MagicButton />}
+          </div>
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger data-testid='user-menu-trigger'>
               <Avatar className='border-2 border-accent transition-transform hover:scale-110'>
                 <AvatarImage src={avatarUrl} />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>CA</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
               <DropdownMenuItem asChild>
                 <Link
+                  href='/auction?mode=create'
+                  className='flex w-full justify-end p-0 py-2 sm:hidden'
+                  data-testid='new-auction-menu-link'
+                >
+                  New Auction
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  href='/leaderboard'
+                  className='flex w-full justify-end p-0 py-2 md:hidden'
+                >
+                  Leaderboard
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
                   href={`/user/${data.user.name}`}
-                  className='flex w-full items-center justify-center p-0 py-2 text-center'
+                  className='flex w-full justify-end p-0 py-2'
                 >
                   My Profile
                 </Link>
@@ -46,7 +63,7 @@ const UserMenu = () => {
                 <Button
                   onClick={() => signOut({ redirect: true, callbackUrl: '/' })}
                   variant='text'
-                  className='w-full p-0 '
+                  className='flex w-full justify-end p-0 px-2'
                 >
                   Log out
                 </Button>
