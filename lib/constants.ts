@@ -1,4 +1,4 @@
-import { Order, Sort } from './services/types';
+import { Order, Sort } from './services/auction-api/types';
 
 export const API_BASE_URL = 'https://api.noroff.dev/api/v1/auction';
 

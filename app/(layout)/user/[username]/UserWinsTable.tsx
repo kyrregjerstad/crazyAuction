@@ -34,8 +34,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { ListingFull } from '@/lib/schemas/listingSchema';
-import { getMultipleListings } from '@/lib/services/getMultipleListings';
+import { AuctionFull } from '@/lib/schemas';
+import { getMultipleAuctions } from '@/lib/services/auction-api';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 
@@ -46,7 +46,7 @@ type Props = {
 const UserWinsTable = ({ username, winIds }: Props) => {
   const { data: wins, isLoading } = useQuery({
     queryKey: ['userWins', winIds, username],
-    queryFn: () => getMultipleListings(winIds),
+    queryFn: () => getMultipleAuctions(winIds),
   });
 
   if (isLoading) return <p>Loading...</p>;
@@ -61,7 +61,7 @@ const UserWinsTable = ({ username, winIds }: Props) => {
   );
 };
 
-type ListingOrNull = ListingFull | null;
+type ListingOrNull = AuctionFull | null;
 
 const transformWins = (wins: ListingOrNull[]) => {
   return wins

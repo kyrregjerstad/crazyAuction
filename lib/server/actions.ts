@@ -1,5 +1,5 @@
 'use server';
-import { v2 as cloudinary, ConfigOptions } from 'cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
 import { z } from 'zod';
 
 const cloudinaryConfig = cloudinary.config({
@@ -74,8 +74,6 @@ export async function uploadToCloudinary(formData: FormData) {
   form.append('signature', signature);
   form.append('timestamp', timestamp.toString());
   form.append('folder', 'crazy_auction');
-
-  const endpoint = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL;
 
   const uploadPromises = files.map(async (file, index) => {
     console.log(`Uploading file ${index + 1} of ${files.length}`);

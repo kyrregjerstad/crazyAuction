@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
-import auctionAPIFetcher from './auctionAPIFetcher';
+import auctionAPIFetcher, { appendQueryParams } from './auctionAPIFetcher';
 
 const mockSchema = z.object({
   key: z.string(),
 });
 
-vi.mock('./zodFetcher', () => {
+vi.mock('@/lib/services/zodFetcher', () => {
   return {
     createZodFetcher: () =>
       vi.fn(() => Promise.resolve({ parsedData: 'mockData' })),
@@ -15,7 +15,6 @@ vi.mock('./zodFetcher', () => {
 
 describe('auctionAPIFetcher', () => {
   const mockID = '123';
-  const mockName = 'JohnDoe';
 
   // Test GET Endpoints
   it('should fetch listings', async () => {
@@ -77,5 +76,16 @@ describe('auctionAPIFetcher', () => {
     });
 
     expect(result).toEqual({ parsedData: 'mockData' });
+  });
+});
+
+describe('appendQueryParams', () => {
+  it('should append query params to a URL', () => {
+    const url = new URL('https://example.com');
+    appendQueryParams(url, { sort: 'created', sortOrder: 'desc' });
+
+    expect(url.toString()).toEqual(
+      'https://example.com/?sort=created&sortOrder=desc',
+    );
   });
 });

@@ -5,8 +5,16 @@ name: CI
 on:
   push:
     branches: [main, development]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.env.example'
+      - '.gitignore'
   pull_request:
     branches: [main, development]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.env.example'
+      - '.gitignore'
 
 env:
   CI: true
@@ -20,8 +28,28 @@ jobs:
         with:
           bun-version: latest
 
-  unit-test:
+  lint:
     needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - run: bun run lint
+      - name: Update lint Badge
+        uses: RubbaBoy/BYOB@v1.3.0
+        if: ${{ always() }}
+        with:
+          name: lint
+          status: ${{ job.status }}
+          color: ${{ job.status == 'success' && '31A802' || job.status == 'failure' && 'D10007' || 'E0A607' }}
+          label: 'Lint Status'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  unit-test:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
@@ -41,7 +69,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
   build:
-    needs: setup
+    needs: lint
     runs-on: ubuntu-latest
     outputs:
       build-artifact: build

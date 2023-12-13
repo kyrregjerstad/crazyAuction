@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getSingleListing } from '../services/getSingleListing';
+import { getSingleAuction } from '../services/auction-api/getSingleAuction';
 
 type Params = {
   listingId: string;
@@ -7,7 +7,7 @@ type Params = {
 const useQuerySingleListing = ({ listingId }: Params) => {
   const query = useQuery({
     queryKey: ['singleListing', listingId],
-    queryFn: () => getSingleListing(listingId),
+    queryFn: () => getSingleAuction(listingId),
     refetchInterval: 10000, // refetch every 10 seconds
   });
 

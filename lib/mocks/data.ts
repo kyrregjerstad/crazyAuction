@@ -1,6 +1,5 @@
 import { StoredData } from '../hooks/useAuctionFormStore';
-import { Bid, ListingFull, Seller } from '../schemas/listingSchema';
-import { RegisterResponse } from '../schemas/registerSchema';
+import { Bid, AuctionFull, Seller, RegisterResponse } from '@/lib/schemas';
 
 export const emptyRegisterResponse = {
   id: 0,
@@ -23,7 +22,7 @@ export const emptyBid = {
   bidderName: '',
 } as Bid;
 
-export const emptyListing = {
+export const emptyAuction = {
   id: '',
   title: '',
   description: '',
@@ -37,7 +36,7 @@ export const emptyListing = {
   _count: {
     bids: 0,
   },
-} as ListingFull;
+} as AuctionFull;
 
 export const createStoredDataMock = (params?: StoredData): StoredData => {
   return {

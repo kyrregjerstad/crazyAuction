@@ -1,22 +1,25 @@
-import { singleListingSchemaExtended } from '../schemas/listingSchema';
+import { singleAuctionSchemaExtended } from '@/lib/schemas';
 import auctionAPIFetcher from './auctionAPIFetcher';
 
-export const getSingleListing = async (id: string) => {
+export const getSingleAuction = async (id: string) => {
   try {
     const res = await auctionAPIFetcher({
       endpoint: `/listings/${id}`,
-      schema: singleListingSchemaExtended,
+      schema: singleAuctionSchemaExtended,
       queryParams: {
         _bids: true,
         _seller: true,
       },
     });
 
+    const sortedBids =
+      res?.bids && Array.isArray(res.bids)
+        ? res.bids.sort((a, b) => b.amount - a.amount)
+        : [];
+
     const sortedRes = {
       ...res,
-      bids: res.bids.sort((a, b) => {
-        return b.amount - a.amount;
-      }),
+      bids: sortedBids,
     };
 
     return sortedRes;

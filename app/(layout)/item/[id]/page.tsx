@@ -1,4 +1,4 @@
-import { getSingleListing } from '@/lib/services/getSingleListing';
+import { getSingleAuction } from '@/lib/services/auction-api/getSingleAuction';
 import {
   dehydrate,
   HydrationBoundary,
@@ -18,7 +18,7 @@ const ItemDetailsPage = async ({ params: { id } }: Props) => {
 
   await queryClient.prefetchQuery({
     queryKey: ['singleListing', id],
-    queryFn: () => getSingleListing(id),
+    queryFn: () => getSingleAuction(id),
   });
 
   return (

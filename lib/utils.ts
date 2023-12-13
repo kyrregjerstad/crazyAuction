@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from 'clsx';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
-import { SearchParams } from './services/types';
+import { SearchParams } from './services/auction-api/types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

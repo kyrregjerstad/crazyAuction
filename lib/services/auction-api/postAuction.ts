@@ -1,6 +1,5 @@
-import { singleListingSchema } from '@/lib/schemas/listingSchema';
+import { singleAuctionSchema, AuctionFormComplete } from '@/lib/schemas';
 import { getSession } from 'next-auth/react';
-import { AuctionFormComplete } from '@/lib/schemas/auctionSchema';
 import auctionAPIFetcher from './auctionAPIFetcher';
 
 const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
@@ -9,7 +8,7 @@ type Params = {
   formData: AuctionFormComplete;
 };
 
-const postListing = async ({ formData }: Params) => {
+export const postAuction = async ({ formData }: Params) => {
   const session = await getSession();
   const jwt = session?.user?.accessToken;
   const transformedMediaLinks = formData.imageUrls.map(
@@ -27,7 +26,7 @@ const postListing = async ({ formData }: Params) => {
   try {
     const res = await auctionAPIFetcher({
       endpoint: `/listings`,
-      schema: singleListingSchema,
+      schema: singleAuctionSchema,
       method: 'POST',
       jwt,
       body: transformedFormData,
@@ -39,5 +38,3 @@ const postListing = async ({ formData }: Params) => {
     throw error;
   }
 };
-
-export default postListing;

@@ -1,7 +1,7 @@
-import { getListings } from './getListings';
+import { getAuctions } from './getAuctions';
 import * as auctionAPIFetcherModule from './auctionAPIFetcher';
-import { allListingsSchema } from '../schemas/listingSchema';
-import { emptyBid, emptyListing } from '../mocks/data';
+import { allAuctionsSchema } from '@/lib/schemas';
+import { emptyBid, emptyAuction } from '../../mocks/data';
 import { Mock } from 'vitest';
 
 vi.mock('./auctionAPIFetcher', () => {
@@ -10,16 +10,16 @@ vi.mock('./auctionAPIFetcher', () => {
   };
 });
 
-vi.mock('../schemas/listing', () => {
+vi.mock('@/lib/schemas', () => {
   return {
-    allListingsSchema: {},
+    allAuctionsSchema: {},
   };
 });
 
 describe('getListings', () => {
   const mockFetchResponse = [
     {
-      ...emptyListing,
+      ...emptyAuction,
       id: '1',
       title: 'Listing 1',
       description: 'Description 1',
@@ -35,11 +35,11 @@ describe('getListings', () => {
       mockFetchResponse,
     );
 
-    const listings = await getListings({});
+    const listings = await getAuctions({});
 
     expect(auctionAPIFetcherModule.default).toHaveBeenCalledWith({
       endpoint: '/listings',
-      schema: allListingsSchema,
+      schema: allAuctionsSchema,
       queryParams: {
         _seller: true,
         _bids: true,

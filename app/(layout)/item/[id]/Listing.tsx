@@ -2,7 +2,7 @@
 
 import ImageGallery from '@/components/ImageGallery';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Bid } from '@/lib/schemas/listingSchema';
+import { Bid } from '@/lib/schemas';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 

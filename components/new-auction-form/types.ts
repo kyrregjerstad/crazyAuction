@@ -1,20 +1,19 @@
 import { StoredData } from '@/lib/hooks/useAuctionFormStore';
-import { AuctionFormComplete } from '@/lib/schemas/auctionSchema';
-import { Listing, ListingFull } from '@/lib/schemas/listingSchema';
-import { UpdateAuction } from '@/lib/services/updateAuction';
+import { AuctionFormComplete, Auction, AuctionFull } from '@/lib/schemas';
+import { type UpdateAuction } from '@/lib/services/auction-api';
 
 export type Step = 'info' | 'media' | 'time' | 'summary';
 
 export type AuctionForm = {
   mode?: 'create' | 'edit';
-  listing: ListingFull | null;
+  listing: AuctionFull | null;
 };
 
 export type PostListing = ({
   formData,
 }: {
   formData: AuctionFormComplete;
-}) => Promise<Listing>;
+}) => Promise<Auction>;
 
 export type FormStepProps = AuctionForm & {
   currentStep: Step;

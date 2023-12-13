@@ -30,14 +30,6 @@ export type SearchParams = {
 type ID = string;
 type NAME = string;
 
-export type BaseEndpoints =
-  | '/auth/register'
-  | '/auth/login'
-  | '/profiles'
-  | '/profiles/'
-  | '/listings'
-  | '/listings/';
-
 export type GetEndpoints =
   | `/listings`
   | `/profiles`
@@ -51,12 +43,6 @@ export type PostEndpoints =
   | `/auth/login`
   | `/listings`
   | `/listings/${ID}/bids`;
-
-export type EndpointMethodMap = {
-  '/auth/register': 'POST';
-  '/auth/login': 'POST';
-  '/listings': 'POST' | 'GET';
-};
 
 export type PutEndpoints = `/listings/${ID}` | `/profiles/${NAME}/media`;
 

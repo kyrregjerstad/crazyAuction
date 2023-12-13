@@ -97,7 +97,7 @@ const SortableItem = ({
   index,
   handleRemoveImage,
 }: SortableItemProps) => {
-  const { id, previewUrl, publicUrl } = image;
+  const { id, previewUrl } = image;
 
   const {
     attributes,
@@ -138,7 +138,7 @@ const SortableItem = ({
         {...attributes}
         {...listeners}
         className={cn(
-          'xs:max-w-[100px] relative aspect-square w-full max-w-[65px] overflow-hidden rounded-md border transition-shadow ',
+          'relative aspect-square w-full max-w-[65px] overflow-hidden rounded-md border transition-shadow xs:max-w-[100px] ',
           isDragging ? 'border border-accent shadow-md' : 'shadow-none',
         )}
       >

@@ -1,6 +1,6 @@
 import { useToast } from '@/components/ui/use-toast';
-import { Register, registerSchema } from '@/lib/schemas/registerSchema';
-import { postRegisterUser } from '@/lib/services/postSignUp';
+import { RegisterForm, registerSchema } from '@/lib/schemas';
+import { postRegisterUser } from '@/lib/services/auction-api';
 import { wait } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
@@ -21,7 +21,7 @@ const useRegisterForm = () => {
   const { toast } = useToast();
   const { reward } = useReward('confetti', 'confetti');
 
-  const form = useForm<Register>({
+  const form = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       name: '',
@@ -34,7 +34,7 @@ const useRegisterForm = () => {
 
   const { handleSubmit, setError } = form;
 
-  const onSubmit: SubmitHandler<Register> = async (data) => {
+  const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
     try {
       await postRegisterUser(data);
 
@@ -53,6 +53,7 @@ const useRegisterForm = () => {
         password: data.password,
         callbackUrl: '/',
       });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error(error);
 

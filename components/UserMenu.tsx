@@ -1,6 +1,7 @@
 'use client';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import MagicButton from './MagicButton';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button, buttonVariants } from './ui/button';
@@ -11,7 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import { usePathname, useRouter } from 'next/navigation';
 
 const UserMenu = () => {
   const { data, status } = useSession();

@@ -1,13 +1,12 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import MediaStepForm from './MediaStepForm';
 
 import useAuctionFormStore, {
   StoredData,
 } from '@/lib/hooks/useAuctionFormStore';
-import postListing from '@/lib/services/postListing';
-import { vi } from 'vitest';
 import { createStoredDataMock } from '@/lib/mocks/data';
+import { postAuction } from '@/lib/services/auction-api';
+import { vi } from 'vitest';
 import { FormStepProps } from '../types';
 
 const nextStepMock = vi.fn();
@@ -68,7 +67,7 @@ const StepWrapper = ({
     nextStep: nextStepMock,
     storedData: storedDataProp,
     prevStep: vi.fn(),
-    postListing,
+    postListing: postAuction,
     updateAuction: vi.fn(),
   } satisfies FormStepProps;
 

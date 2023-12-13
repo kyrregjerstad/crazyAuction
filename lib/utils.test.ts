@@ -1,4 +1,4 @@
-import { SearchParams } from './services/types';
+import { SearchParams } from './services/auction-api/types';
 import { generateQueryObject } from './utils';
 
 describe('generateQueryObject', () => {

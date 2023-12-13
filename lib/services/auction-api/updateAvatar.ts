@@ -1,19 +1,11 @@
-import { API_PROFILES_URL } from '@/lib/constants';
-import { createZodFetcher } from 'zod-fetch';
-import { singleUserSchema } from '../schemas/userSchema';
+import { updateAvatarSchema } from '@/lib/schemas';
 import auctionAPIFetcher from './auctionAPIFetcher';
-
-const fetchWithZod = createZodFetcher();
 
 type Params = {
   name: string;
   avatar: string;
   jwt: string;
 };
-
-const updateAvatarSchema = singleUserSchema.omit({
-  _count: true,
-});
 
 export const updateAvatar = async ({ avatar, name, jwt }: Params) => {
   try {

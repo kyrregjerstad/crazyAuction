@@ -16,7 +16,7 @@ const authOptions: NextAuthOptions = {
         email: { label: 'Email', type: 'email', placeholder: '@noroff.no' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const res = await fetch(API_LOGIN_URL, {
           method: 'POST',
           body: JSON.stringify(credentials),
@@ -38,6 +38,7 @@ const authOptions: NextAuthOptions = {
     },
 
     session: async ({ session, token }) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       session.user = token.user as any;
       return session;
     },

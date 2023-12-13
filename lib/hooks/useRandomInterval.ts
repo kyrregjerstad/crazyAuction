@@ -16,7 +16,7 @@ const useRandomInterval = (
   }, [callback]);
 
   useEffect(() => {
-    let isEnabled =
+    const isEnabled =
       typeof minDelay === 'number' && typeof maxDelay === 'number';
 
     if (isEnabled) {

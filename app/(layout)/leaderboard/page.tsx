@@ -1,28 +1,17 @@
-// import Leaderboard from '@/components/Leaderboard';
-import dynamic from 'next/dynamic';
 import { useServerJWT } from '@/lib/hooks/useServerJWT';
-import getAllUsers from '@/lib/services/getAllUsers';
-import { SearchParams } from '@/lib/services/types';
+import { getAllUsers } from '@/lib/services/auction-api';
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import dynamic from 'next/dynamic';
 
 const Leaderboard = dynamic(() => import('@/components/Leaderboard'), {
   ssr: true,
 });
 
-type Props = {
-  searchParams?: SearchParams;
-};
-
-export default async function LeaderboardPage({ searchParams }: Props) {
-  const { sort, order } = searchParams || {
-    sort: 'endsAt',
-    order: 'asc',
-  };
-
+export default async function LeaderboardPage() {
   const queryClient = new QueryClient();
   const jwt = await useServerJWT();
 
