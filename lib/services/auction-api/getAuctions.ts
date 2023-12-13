@@ -1,22 +1,14 @@
 import { allListingsSchema } from '../../schemas/listingSchema';
 import auctionAPIFetcher from './auctionAPIFetcher';
-import { Sort, Order } from './types';
-
-type Params = {
-  sort?: Sort;
-  sortOrder?: Order;
-  active?: boolean;
-  limit?: number;
-  offset?: number;
-};
+import { Sort, Order, QueryParams } from './types';
 
 export const getAuctions = async ({
   sort = 'created',
   sortOrder = 'desc',
-  active = true,
+  _active = true,
   limit,
   offset,
-}: Params) => {
+}: QueryParams) => {
   try {
     const res = await auctionAPIFetcher({
       endpoint: '/listings',
@@ -24,7 +16,7 @@ export const getAuctions = async ({
       queryParams: {
         _seller: true,
         _bids: true,
-        _active: active,
+        _active,
         sort,
         sortOrder,
         limit,
