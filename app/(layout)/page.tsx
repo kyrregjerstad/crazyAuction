@@ -8,6 +8,8 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import type { Metadata } from 'next';
+import { pageMetaData } from '@/lib/data/metadata';
 
 type Props = {
   searchParams?: SearchParams;
@@ -46,3 +48,8 @@ export default async function HomePage({ searchParams }: Props) {
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'edge';
+
+export const metadata: Metadata = {
+  ...pageMetaData,
+  title: 'CrazyAuction | Home',
+};
