@@ -25,6 +25,10 @@ vi.mock('next/navigation', () => ({
 }));
 
 describe('LoginForm', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   const signInMock = signIn as Mock;
 
   it('renders email and password input fields', () => {
@@ -50,6 +54,26 @@ describe('LoginForm', () => {
     await waitFor(() => {
       expect(signInMock).toHaveBeenCalledWith('credentials', {
         email: 'test@stud.noroff.no',
+        password: 'password123',
+        redirect: false,
+      });
+    });
+  });
+
+  it('submits the form with email and password', async () => {
+    render(<LoginForm />);
+
+    const emailInput = screen.getByPlaceholderText('your-email@stud.noroff.no');
+    const passwordInput = screen.getByPlaceholderText('Password');
+    const submitButton = screen.getByRole('button', { name: /login/i });
+
+    await userEvent.type(emailInput, 'test@noroff.no');
+    await userEvent.type(passwordInput, 'password123');
+    userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(signInMock).toHaveBeenCalledWith('credentials', {
+        email: 'test@noroff.no',
         password: 'password123',
         redirect: false,
       });
@@ -84,7 +108,7 @@ describe('LoginForm', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Email must end with @stud.noroff.no'),
+        screen.getByText('Email must end with @noroff.no or @stud.noroff.no'),
       ).toBeInTheDocument();
     });
   });

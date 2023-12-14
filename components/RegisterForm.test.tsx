@@ -86,7 +86,9 @@ describe('LoginForm', () => {
     );
     await userEvent.click(screen.getByRole('button', { name: 'Register' }));
     expect(
-      screen.getByText('Email must be a valid stud.noroff.no email address.'),
+      screen.getByText(
+        'Email must be a valid noroff.no or stud.noroff.no email address.',
+      ),
     ).toBeInTheDocument();
   });
 

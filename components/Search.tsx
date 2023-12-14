@@ -21,7 +21,11 @@ const SearchInput = () => {
 
   return (
     <form onSubmit={onSubmit} className='relative max-w-lg flex-1 px-4'>
+      <label htmlFor='search' className='sr-only'>
+        Search
+      </label>
       <Input
+        id='search'
         key={searchParams?.get('q')}
         type='text'
         name='search'
@@ -32,6 +36,7 @@ const SearchInput = () => {
       />
       <div className='absolute right-0 top-0 mr-3 flex h-full items-center'>
         <Button variant='text' className='text-foreground'>
+          <span className='sr-only'>search</span>
           <SearchIcon />
         </Button>
       </div>

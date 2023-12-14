@@ -5,9 +5,9 @@ export const loginSchema = z.object({
     .string()
     .email()
     .refine(
-      (email) => {
-        return email.endsWith('@stud.noroff.no' || '@noroff.no');
-      },
+      (email) =>
+        email.endsWith('@stud.noroff.no') || email.endsWith('@noroff.no'),
+
       {
         message: 'Email must end with @noroff.no or @stud.noroff.no',
       },

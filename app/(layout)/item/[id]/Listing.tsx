@@ -37,10 +37,11 @@ const SingleListingPage = ({ listingId, isAuthenticated }: Props) => {
   const isLoggedInUser = useIsLoggedInUser(singleListing?.seller.name);
 
   const startingBid = calculateStartingAmount(
-    singleListing?.bids?.at(-1)?.amount || 0,
+    singleListing?.bids?.at(0)?.amount || 0,
   );
 
-  const currentBid = singleListing?.bids?.at(-1)?.amount || 0;
+  const currentBid = singleListing?.bids?.at(0)?.amount || 0;
+
   const [amount, setAmount] = useState(startingBid); // default to 10% more than the current bid (rounded), or 1 more than the current for low values
 
   if (isLoading) {
@@ -186,7 +187,6 @@ const BidHistory = ({
       <div className='w-full max-w-md rounded-lg p-6 text-foreground'>
         <h2 className='mb-6 text-lg font-semibold'>Bid History</h2>
         <div className='relative m-3 leading-loose'>
-          <div className='absolute left-[10px] top-2 h-full w-[2px]  bg-gradient-to-b from-accent' />
           <div className='flex h-32 items-center justify-center'>
             <p className='text-gray-400'>
               You must be logged in to view bid history
