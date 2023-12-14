@@ -10,7 +10,7 @@ import Skeleton from './Skeleton';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 
-const AllListingsGrid = () => {
+const AllAuctionsGrid = () => {
   const router = useRouter();
   const skeletonArr = Array.from({ length: 30 }, (_, i) => i);
 
@@ -64,7 +64,7 @@ const AllListingsGrid = () => {
   );
 };
 
-export default AllListingsGrid;
+export default AllAuctionsGrid;
 
 // const getCurrentPrice = (listing: AuctionFull) => {
 //   if (listing.bids && listing.bids.length > 0) {

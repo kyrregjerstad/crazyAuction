@@ -93,6 +93,9 @@ module.exports = {
       boxShadow: {
         dropzone: 'inset 0 0 5px 3px rgba(0, 0, 0, 0.2)',
       },
+      gridTemplateColumns: {
+        auctions: 'repeat(auto-fill, minmax(240px, 1fr))',
+      },
       keyframes: {
         'accordion-down': {
           from: { height: 0 },

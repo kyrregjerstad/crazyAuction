@@ -29,7 +29,7 @@ const AuctionItemCard = ({ listing }: Props) => {
       <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
         <CardTitle className='text-lg font-bold text-secondary-foreground lg:text-2xl'>
           <Link href={`/item/${id}`} className='line-clamp-1'>
-            {title}
+            {title || 'Untitled'}
           </Link>
         </CardTitle>
       </CardHeader>
@@ -40,7 +40,7 @@ const AuctionItemCard = ({ listing }: Props) => {
               src={media.at(0) || fallbackImg}
               width={600}
               height={400}
-              alt='Product Image'
+              alt={`CrazyAuction item ${title}`}
               className='w-full'
             />
           </Link>
@@ -52,7 +52,7 @@ const AuctionItemCard = ({ listing }: Props) => {
         <div className='flex-1' />
         <div className='flex items-center justify-between pb-4 sm:flex-col sm:items-start sm:justify-start'>
           <p className='mt-2 text-xl text-card-foreground'>
-            ${bids?.at(-1)?.amount || '0'}
+            ${bids?.at(0)?.amount || '0'}
           </p>
           <EndingTime endsAt={endsAt} />
         </div>
