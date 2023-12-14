@@ -13,8 +13,9 @@ export const registerSchema = z
     email: z
       .string()
       .email('Invalid email format.')
-      .refine((email) => email.endsWith('@stud.noroff.no'), {
-        message: 'Email must be a valid stud.noroff.no email address.',
+      .refine((email) => email.endsWith('@stud.noroff.no' || '@noroff.no'), {
+        message:
+          'Email must be a valid noroff.no or stud.noroff.no email address.',
       }),
     password: z.string().min(8, 'Password must be at least 8 characters.'),
     repeatPassword: z.string(),
