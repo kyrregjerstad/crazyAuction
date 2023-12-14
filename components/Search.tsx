@@ -20,10 +20,7 @@ const SearchInput = () => {
   };
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className='w-max-[550px] relative w-full lg:w-80 xl:w-full'
-    >
+    <form onSubmit={onSubmit} className='relative max-w-lg flex-1 px-4'>
       <Input
         key={searchParams?.get('q')}
         type='text'

@@ -30,7 +30,7 @@ const DateStepForm = (props: FormStepProps) => {
 
   const { control, formState, handleSubmit } = dateTimeForm;
 
-  const { isSubmitting, isValid } = formState;
+  const { isSubmitting, isValid, isDirty } = formState;
 
   const saveStep = async (data: AuctionFormDate) => {
     updateStore(data);
@@ -103,7 +103,7 @@ const DateStepForm = (props: FormStepProps) => {
           }}
         />
         <StepNavigation
-          disabled={!isValid || isSubmitting}
+          disabled={!isValid || isSubmitting || !isDirty}
           currentStep={currentStep}
           prevStep={prevStep}
         />
