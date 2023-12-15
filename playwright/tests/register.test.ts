@@ -27,7 +27,9 @@ test.describe('Register page', () => {
       ),
     ).toBeVisible();
     await expect(
-      page.getByText('Email must be a valid stud.noroff.no email address.'),
+      page.getByText(
+        'Email must be a valid noroff.no or stud.noroff.no email address.',
+      ),
     ).toBeVisible();
     await expect(
       page.getByText('Password must be at least 8 characters.'),

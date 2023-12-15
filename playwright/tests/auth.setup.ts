@@ -1,5 +1,6 @@
+import { expect, test as setup } from '@playwright/test';
 import fs from 'fs';
-import { test as setup, expect } from '@playwright/test';
+import { authFile } from '../constants';
 
 const isCI = process.env.CI === 'true';
 
@@ -7,8 +8,6 @@ const shouldSkipSetup = (filePath: string): [boolean, string] => {
   const shouldSkip = fs.existsSync(filePath) && !isCI;
   return [shouldSkip, `File ${filePath} already exists. Skipping setup.`];
 };
-
-const authFile = 'playwright/.auth/user.json';
 
 setup('authenticate', async ({ page, context }) => {
   const [skip, reason] = shouldSkipSetup(authFile);

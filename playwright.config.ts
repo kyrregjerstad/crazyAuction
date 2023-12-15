@@ -28,7 +28,10 @@ export default defineConfig({
   },
   // Configure projects for major browsers.
   projects: [
-    { name: 'setup', testMatch: /.*\.setup\.ts/ },
+    {
+      name: 'setup',
+      testMatch: /.*\.setup\.ts/,
+    },
 
     {
       name: 'chromium',
@@ -36,6 +39,7 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/user.json',
       },
+      dependencies: ['setup'],
     },
   ],
   // Run your local dev server before starting the tests.

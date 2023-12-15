@@ -11,7 +11,7 @@ test.describe('Profile page', () => {
     ).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Credits' })).toBeVisible();
     await expect(
-      page.getByRole('heading', { name: '0 auctions' }),
+      page.getByRole('heading', { name: '1 auction' }),
     ).toBeVisible();
     await expect(
       page.getByRole('heading', { name: 'Active Auctions' }),

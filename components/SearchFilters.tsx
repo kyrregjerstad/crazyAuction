@@ -26,7 +26,10 @@ const SearchFilters = ({ searchParams, sortOptions, orderOptions }: Props) => {
   const { sort, order, q } = searchParams;
 
   return (
-    <div className='flex w-full flex-col justify-center gap-4 sm:flex-row'>
+    <div
+      className='flex w-full flex-col justify-center gap-4 sm:flex-row'
+      data-testid='search-filters'
+    >
       <div>
         <span className='text-xs'>Sort by</span>
         <div className='flex gap-2'>
