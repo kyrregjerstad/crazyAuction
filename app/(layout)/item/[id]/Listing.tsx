@@ -65,7 +65,7 @@ const SingleListingPage = ({ listingId, isAuthenticated }: Props) => {
             className='font-mono text-5xl tracking-tighter'
             incrementColor='#ea0062'
           /> */}
-          <div className='text-5xl'>
+          <div className='text-5xl' data-testid='current-bid'>
             ${' '}
             {isPending ? (
               <span className='opacity-50'>{pendingAmount}</span>
@@ -144,7 +144,11 @@ const SingleListingPage = ({ listingId, isAuthenticated }: Props) => {
               </svg>
             )}
             <span className='font-medium'>
-              <Link href={`/user/${seller.name}`} className='hover:underline'>
+              <Link
+                href={`/user/${seller.name}`}
+                className='hover:underline'
+                data-testid='seller'
+              >
                 {seller.name}
               </Link>
             </span>
