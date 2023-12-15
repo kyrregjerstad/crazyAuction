@@ -16,7 +16,7 @@ test.describe('Login page', () => {
     await page.getByPlaceholder('Password').fill('123456789');
     await page.getByRole('button', { name: 'Login' }).click();
     await expect(
-      page.getByText('Email must end with @stud.noroff.no'),
+      page.getByText('Email must end with @noroff.no or @stud.noroff.no'),
     ).toBeVisible();
 
     const cookies = await context.cookies();
