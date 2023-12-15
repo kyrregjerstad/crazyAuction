@@ -18,3 +18,15 @@ export const normalizeResponse = (listing: AuctionFull) => {
 
   return normalizedListing;
 };
+
+type NormalizedResponse = ReturnType<typeof normalizeResponse>;
+
+export const sortAuctionsByPrice = (
+  auctions: NormalizedResponse[],
+  sortOrder: 'asc' | 'desc',
+) =>
+  auctions.sort((a, b) =>
+    sortOrder === 'asc'
+      ? a.currentBid - b.currentBid
+      : b.currentBid - a.currentBid,
+  );
