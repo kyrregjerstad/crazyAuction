@@ -2,6 +2,8 @@ import { getSingleAuction } from './getSingleAuction';
 import * as auctionAPIFetcherModule from './auctionAPIFetcher';
 import { singleAuctionSchemaExtended } from '@/lib/schemas';
 import { Mock } from 'vitest';
+import { normalizeResponse } from './utils';
+import { emptyAuction, emptyBid } from '@/lib/mocks/data';
 
 vi.mock('./auctionAPIFetcher', () => ({
   default: vi.fn(),
@@ -23,20 +25,24 @@ describe('getSingleAuction', () => {
     });
   });
 
-  it('should return auction data with sorted bids on successful fetch', async () => {
+  it('should return auction data with normalized data on successful fetch', async () => {
     const mockResponse = {
+      ...emptyAuction,
       id: mockId,
-      bids: [{ amount: 100 }, { amount: 200 }, { amount: 150 }],
+      bids: [
+        { ...emptyBid, amount: 100 },
+        { ...emptyBid, amount: 200 },
+        { ...emptyBid, amount: 150 },
+      ],
     };
-    const sortedBids = [...mockResponse.bids].sort(
-      (a, b) => b.amount - a.amount,
-    );
+
+    const normalizedData = normalizeResponse(mockResponse);
 
     (auctionAPIFetcherModule.default as Mock).mockResolvedValue(mockResponse);
 
     const response = await getSingleAuction(mockId);
 
-    expect(response).toEqual({ ...mockResponse, bids: sortedBids });
+    expect(response).toEqual({ ...normalizedData });
   });
 
   it('should throw an error if fetching auction data fails', async () => {

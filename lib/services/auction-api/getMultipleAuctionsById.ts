@@ -1,6 +1,6 @@
 import { getSingleAuction } from './getSingleAuction';
 
-export const getMultipleAuctions = async (ids: string[]) => {
+export const getMultipleAuctionsById = async (ids: string[]) => {
   const listingPromises = ids.map((id) =>
     getSingleAuction(id).catch((error) => {
       console.error(`Failed to fetch listing with ID ${id}:`, error);
