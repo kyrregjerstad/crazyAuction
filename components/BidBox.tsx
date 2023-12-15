@@ -23,7 +23,7 @@ const BidBox = ({ listingId, currentBid }: BidBoxProps) => {
   const { mutate } = useMutation({
     mutationFn: (amount: number) =>
       postBid({
-        listingId,
+        auctionId: listingId,
         amount: amount,
         jwt: data!.user.accessToken,
       }),

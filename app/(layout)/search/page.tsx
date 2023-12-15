@@ -19,7 +19,7 @@ const SearchPage = async ({ searchParams }: Props) => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['allListings', sort, order],
+    queryKey: ['allAuctions', sort, order],
     queryFn: () => getAuctions({ sort, sortOrder: order }),
   });
 

@@ -2,16 +2,16 @@ import { useQuery } from '@tanstack/react-query';
 import { getSingleAuction } from '../services/auction-api/getSingleAuction';
 
 type Params = {
-  listingId: string;
+  auctionId: string;
 };
-const useQuerySingleListing = ({ listingId }: Params) => {
+const useQuerySingleAuction = ({ auctionId }: Params) => {
   const query = useQuery({
-    queryKey: ['singleListing', listingId],
-    queryFn: () => getSingleAuction(listingId),
+    queryKey: ['singleAuction', auctionId],
+    queryFn: () => getSingleAuction(auctionId),
     refetchInterval: 10000, // refetch every 10 seconds
   });
 
   return { ...query };
 };
 
-export default useQuerySingleListing;
+export default useQuerySingleAuction;

@@ -21,7 +21,7 @@ export default async function HomePage({ searchParams }: Props) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchInfiniteQuery({
-    queryKey: ['allListingsInfinite', sort, order],
+    queryKey: ['allAuctionsInfinite', sort, order],
     queryFn: () =>
       getAuctions({
         sort,
