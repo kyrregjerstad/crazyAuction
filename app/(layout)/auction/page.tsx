@@ -29,7 +29,7 @@ export default async function NewAuctionPage({ searchParams }: Props) {
   if (id && mode === 'edit' && step === 'info') {
     const requestedListing = await getSingleAuction(id);
 
-    if (session?.user.name === requestedListing.seller.name) {
+    if (session?.user.name === requestedListing?.seller.name) {
       listing = requestedListing;
     } else {
       mode = 'create';
