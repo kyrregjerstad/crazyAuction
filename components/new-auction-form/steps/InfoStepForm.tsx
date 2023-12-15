@@ -81,7 +81,7 @@ const InfoStepForm = (props: FormStepProps) => {
                     maxLength={250}
                     {...field}
                     value={field.value || ''}
-                    className='bg-foreground text-background'
+                    className='min-h-[150px] bg-foreground text-background'
                   />
                 </FormControl>
                 <FormMessage />

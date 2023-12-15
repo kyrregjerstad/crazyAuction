@@ -23,6 +23,7 @@ import NewAuctionImageGallery from '../../NewAuctionImageGallery';
 import { FormStepProps, Step, UploadImage } from '../types';
 import StepNavigation from './StepNavigation';
 import SubmitBtn from './SubmitBtn';
+import { Button } from '@/components/ui/button';
 
 const MediaStepForm = (props: FormStepProps) => {
   const { updateStore } = useAuctionFormStore();
@@ -76,16 +77,49 @@ const MediaStepForm = (props: FormStepProps) => {
     setAllImagesUploaded(areAllImagesUploaded);
   }, [images, setValue, isSubmitSuccessful, updateStore]);
 
+  const handleAddImageUrl = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const imageUrl = formData.get('imageUrl') as string;
+    if (!imageUrl) return;
+
+    const newImages = [
+      ...images,
+      {
+        id: nanoid(),
+        file: undefined,
+        previewUrl: imageUrl,
+        publicUrl: imageUrl,
+      },
+    ];
+
+    setImages(newImages);
+    e.currentTarget.reset();
+  };
+
   return (
     <>
       <div className='flex h-full flex-1 flex-col justify-between'>
-        <ImageDropzone
-          {...{
-            images,
-            setImages,
-            allImagesUploaded,
-          }}
-        />
+        <div className='flex flex-col gap-3'>
+          <form className='flex gap-2' onSubmit={handleAddImageUrl}>
+            <Input placeholder='image url' type='url' name='imageUrl' />
+            <Button
+              variant='outline'
+              type='submit'
+              disabled={images.length >= 8}
+            >
+              add
+            </Button>
+          </form>
+          <ImageDropzone
+            {...{
+              images,
+              setImages,
+              allImagesUploaded,
+            }}
+          />
+        </div>
 
         <ImageForm
           {...{
