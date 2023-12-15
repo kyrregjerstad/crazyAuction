@@ -17,12 +17,17 @@ export const getSingleAuction = async (id: string) => {
         ? res.bids.sort((a, b) => b.amount - a.amount)
         : [];
 
-    const sortedRes = {
+    const active = res?.endsAt > new Date().toISOString();
+    const currentBid = sortedBids[0]?.amount || 0;
+
+    const normalizedRes = {
       ...res,
       bids: sortedBids,
+      currentBid,
+      active,
     };
 
-    return sortedRes;
+    return normalizedRes;
   } catch (error) {
     console.error(error);
     throw error;
