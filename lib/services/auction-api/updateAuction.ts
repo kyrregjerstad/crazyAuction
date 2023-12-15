@@ -25,7 +25,7 @@ export const updateAuction = async ({ formData, id }: Params) => {
   };
 
   try {
-    const res = auctionAPIFetcher({
+    const res = await auctionAPIFetcher({
       endpoint: `/listings/${id}`,
       schema: singleAuctionSchema,
       jwt,

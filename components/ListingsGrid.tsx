@@ -3,19 +3,19 @@
 import { useRouter } from 'next/navigation';
 import { Fragment } from 'react';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
-import { useInfiniteListings } from '../lib/hooks/useInfiniteListings';
+import { useInfiniteAuctions } from '../lib/hooks/useInfiniteListings';
 import AuctionGrid from './AuctionGrid';
 import AuctionItemCard from './AuctionItemCard';
 import Skeleton from './Skeleton';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 
-const AllListingsGrid = () => {
+const AllAuctionsGrid = () => {
   const router = useRouter();
   const skeletonArr = Array.from({ length: 30 }, (_, i) => i);
 
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useInfiniteListings();
+    useInfiniteAuctions();
 
   const [ref] = useInfiniteScroll({
     loading: isLoading,
@@ -64,7 +64,7 @@ const AllListingsGrid = () => {
   );
 };
 
-export default AllListingsGrid;
+export default AllAuctionsGrid;
 
 // const getCurrentPrice = (listing: AuctionFull) => {
 //   if (listing.bids && listing.bids.length > 0) {

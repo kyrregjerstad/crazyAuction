@@ -3,11 +3,11 @@ import useSortSearchParams from '@/lib/hooks/useSortSearchParams';
 import { getAuctions } from '@/lib/services/auction-api';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-export const useInfiniteListings = () => {
+export const useInfiniteAuctions = () => {
   const { sort, order } = useSortSearchParams();
 
   return useInfiniteQuery({
-    queryKey: ['allListingsInfinite', sort, order],
+    queryKey: ['allAuctionsInfinite', sort, order],
     queryFn: ({ pageParam = 0 }) =>
       getAuctions({
         sort,

@@ -8,7 +8,8 @@ import {
 } from '@tanstack/react-query';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { getServerSession } from 'next-auth/next';
-import SingleListingPage from './Listing';
+import SingleAuctionPage from './Listing';
+import { redirect } from 'next/navigation';
 
 type Props = {
   params: { id: string };
@@ -18,17 +19,22 @@ const ItemDetailsPage = async ({ params: { id } }: Props) => {
   const session = await getServerSession(authOptions);
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: ['singleListing', id],
-    queryFn: () => getSingleAuction(id),
-  });
+  try {
+    await queryClient.prefetchQuery({
+      queryKey: ['singleAuction', id],
+      queryFn: () => getSingleAuction(id),
+    });
+  } catch (error) {
+    console.log(error);
+    redirect('/404');
+  }
 
   return (
     <div className='mx-auto max-w-5xl p-8'>
       <div className='grid items-start gap-8 md:grid-cols-2'>
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <SingleListingPage
-            listingId={id}
+          <SingleAuctionPage
+            auctionId={id}
             isAuthenticated={!!session?.user.name}
           />
         </HydrationBoundary>
@@ -57,7 +63,7 @@ export async function generateMetadata(
   const auction = await getSingleAuction(id);
 
   return {
-    title: `${auction.title} | CrazyAuction`,
-    description: auction.description,
+    title: `${auction?.title} | CrazyAuction`,
+    description: auction?.description,
   };
 }

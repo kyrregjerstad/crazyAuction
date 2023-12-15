@@ -5,53 +5,89 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Bid } from '@/lib/schemas';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-
 import AnimatedButton from '@/components/AnimatedButton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import useMutateSingleListing from '@/lib/hooks/useMutateSingleListing';
-import useQuerySingleListing from '@/lib/hooks/useQuerySingleListing';
+import useMutateAuction from '@/lib/hooks/useMutateAuction';
+import useQuerySingleAuction from '@/lib/hooks/useQuerySingleAuction';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import EndingTime from '@/components/EndingTime';
+import { Trash2 } from 'lucide-react';
+
+import { useToast } from '@/components/ui/use-toast';
+import { useRouter } from 'next/navigation';
 
 dayjs.extend(relativeTime);
 
 type Props = {
-  listingId: string;
+  auctionId: string;
   isAuthenticated: boolean;
 };
-const SingleListingPage = ({ listingId, isAuthenticated }: Props) => {
-  const { data: singleListing, isLoading } = useQuerySingleListing({
-    listingId,
+const SingleAuctionPage = ({
+  auctionId: auctionId,
+  isAuthenticated,
+}: Props) => {
+  const { data: auction, isLoading } = useQuerySingleAuction({
+    auctionId,
   });
 
+  const { deleteAuctionMutation, postBidMutation } = useMutateAuction({
+    auctionId,
+  });
+
+  const router = useRouter();
+
   const {
-    mutate,
-    isPending,
+    mutate: mutateBid,
+    isPending: bidPending,
     variables: pendingAmount,
-  } = useMutateSingleListing({ listingId });
+  } = postBidMutation;
 
-  const isLoggedInUser = useIsLoggedInUser(singleListing?.seller.name);
+  const { mutate: deleteAuction, isPending: deletePending } =
+    deleteAuctionMutation;
 
-  const startingBid = calculateStartingAmount(
-    singleListing?.bids?.at(-1)?.amount || 0,
-  );
+  const { toast } = useToast();
 
-  const currentBid = singleListing?.bids?.at(-1)?.amount || 0;
+  const isLoggedInUser = useIsLoggedInUser(auction?.seller.name);
+  const startingBid = calculateStartingAmount(auction?.currentBid || 0);
   const [amount, setAmount] = useState(startingBid); // default to 10% more than the current bid (rounded), or 1 more than the current for low values
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (!singleListing) {
-    return <div>No listing found</div>;
+  if (!auction) {
+    return (
+      <div className='col-span-2 flex w-full justify-center text-center'>
+        No listing found
+      </div>
+    );
   }
 
-  const { title, description, seller, media, bids } = singleListing;
+  const handleDelete = async () => {
+    try {
+      deleteAuction();
+      toast({
+        title: 'Success',
+        description: 'Auction deleted successfully',
+        variant: 'success',
+      });
+      router.push('/');
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: `${JSON.stringify(error)}`,
+        variant: 'error',
+      });
+    }
+  };
+
+  const { title, description, seller, media, bids, currentBid, active } =
+    auction;
 
   return (
     <>
@@ -59,60 +95,70 @@ const SingleListingPage = ({ listingId, isAuthenticated }: Props) => {
       <div className='space-y-6'>
         <h1 className='text-3xl font-bold'>{title}</h1>
         <div className='flex items-end text-xl font-bold text-white'>
-          {/* <AnimatedCounter
-            value={isPending ? pendingAmount : currentBid}
-            className='font-mono text-5xl tracking-tighter'
-            incrementColor='#ea0062'
-          /> */}
-          <div className='text-5xl'>
+          <div className='text-5xl' data-testid='current-bid'>
             ${' '}
-            {isPending ? (
+            {bidPending ? (
               <span className='opacity-50'>{pendingAmount}</span>
             ) : (
               <span>{currentBid}</span>
             )}
           </div>
         </div>
-        {isLoggedInUser ? (
-          <Link
-            href={`/auction/?mode=edit&id=${listingId}`}
-            className={buttonVariants({ variant: 'accent' })}
-          >
-            Edit Listing
-          </Link>
+        {isLoggedInUser && active ? (
+          <div className='flex items-center gap-4'>
+            <Link
+              href={`/auction/?mode=edit&id=${auctionId}`}
+              className={buttonVariants({ variant: 'accent' })}
+            >
+              Edit Listing
+            </Link>
+            <DeleteButton
+              handleDelete={handleDelete}
+              deletePending={deletePending}
+            />
+          </div>
         ) : (
-          <div className='flex w-full max-w-sm items-center space-x-2'>
-            {isAuthenticated ? (
+          <div className='flex flex-col'>
+            {active ? (
               <>
-                <Input
-                  type='number'
-                  placeholder={`${Math.round(currentBid * 1.1)}`}
-                  className='w-24'
-                  min={currentBid + 1}
-                  onChange={(e) => setAmount(Number(e.target.value))}
-                  value={amount}
-                  disabled={!isAuthenticated || isPending}
-                />
+                <EndingTime endsAt={auction.endsAt} />
+                {isAuthenticated ? (
+                  <div className='flex w-full max-w-sm items-center space-x-2'>
+                    <Input
+                      type='number'
+                      placeholder={`${Math.round(currentBid * 1.1)}`}
+                      className='w-24'
+                      min={currentBid + 1}
+                      onChange={(e) => setAmount(Number(e.target.value))}
+                      value={amount}
+                      disabled={!isAuthenticated || bidPending}
+                    />
 
-                <AnimatedButton
-                  isLink={false}
-                  variant='magic'
-                  repeat={true}
-                  className='w-18'
-                  onClick={() => {
-                    mutate(amount);
-                  }}
-                  disabled={
-                    !isAuthenticated || isPending || amount < currentBid
-                  }
-                >
-                  Place a bid
-                </AnimatedButton>
+                    <AnimatedButton
+                      isLink={false}
+                      variant='magic'
+                      repeat={true}
+                      className='w-18'
+                      onClick={() => {
+                        mutateBid(amount);
+                      }}
+                      disabled={
+                        !isAuthenticated || bidPending || amount < currentBid
+                      }
+                    >
+                      Place a bid
+                    </AnimatedButton>
+                  </div>
+                ) : (
+                  <p className='text-sm text-gray-400'>
+                    You must be logged in to place a bid
+                  </p>
+                )}
               </>
             ) : (
-              <p className='text-sm text-gray-400'>
-                You must be logged in to place a bid
-              </p>
+              <>
+                <p className='text-sm text-gray-400'>This auction has ended</p>
+              </>
             )}
           </div>
         )}
@@ -143,7 +189,11 @@ const SingleListingPage = ({ listingId, isAuthenticated }: Props) => {
               </svg>
             )}
             <span className='font-medium'>
-              <Link href={`/user/${seller.name}`} className='hover:underline'>
+              <Link
+                href={`/user/${seller.name}`}
+                className='hover:underline'
+                data-testid='seller'
+              >
                 {seller.name}
               </Link>
             </span>
@@ -166,27 +216,26 @@ const SingleListingPage = ({ listingId, isAuthenticated }: Props) => {
             <span className='ml-2'>Verified Seller</span>
           </div>
         </div>
-        <BidHistory bids={bids} isLoggedIn={isAuthenticated} />
+        <BidHistory bids={bids} isAuthenticated={isAuthenticated} />
       </div>
     </>
   );
 };
 
-export default SingleListingPage;
+export default SingleAuctionPage;
 
 const BidHistory = ({
   bids,
-  isLoggedIn,
+  isAuthenticated,
 }: {
   bids?: Bid[];
-  isLoggedIn: boolean;
+  isAuthenticated: boolean;
 }) => {
-  if (!isLoggedIn) {
+  if (!isAuthenticated) {
     return (
       <div className='w-full max-w-md rounded-lg p-6 text-foreground'>
         <h2 className='mb-6 text-lg font-semibold'>Bid History</h2>
         <div className='relative m-3 leading-loose'>
-          <div className='absolute left-[10px] top-2 h-full w-[2px]  bg-gradient-to-b from-accent' />
           <div className='flex h-32 items-center justify-center'>
             <p className='text-gray-400'>
               You must be logged in to view bid history
@@ -266,3 +315,18 @@ const useIsLoggedInUser = (username: string | undefined) => {
 
 const calculateStartingAmount = (currentBid: number) =>
   Math.max(Math.round(currentBid * 1.1), currentBid + 1);
+
+const DeleteButton = ({
+  handleDelete,
+  deletePending,
+}: {
+  handleDelete: () => Promise<void>;
+  deletePending: boolean;
+}) => {
+  return (
+    <Button onClick={handleDelete} disabled={deletePending} variant='text'>
+      <Trash2 />
+      <span className='sr-only'>Delete Auction</span>
+    </Button>
+  );
+};

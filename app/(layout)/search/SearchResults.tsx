@@ -13,7 +13,7 @@ const SearchResults = ({ searchParams }: Props) => {
   const { q: searchValue, order, sort } = searchParams || {};
 
   const { data, isLoading } = useQuery({
-    queryKey: ['allListings', sort, order],
+    queryKey: ['allAuctions', sort, order],
     queryFn: () => getAuctions({ sort: 'endsAt', sortOrder: 'asc' }),
   });
 

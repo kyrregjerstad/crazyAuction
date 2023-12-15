@@ -1,6 +1,7 @@
 import { allAuctionsSchema } from '@/lib/schemas';
 import auctionAPIFetcher from './auctionAPIFetcher';
 import { QueryParams } from './types';
+import { normalizeResponse, sortAuctionsByPrice } from './utils';
 
 export const getAuctions = async ({
   sort = 'created',
@@ -17,25 +18,20 @@ export const getAuctions = async ({
         _seller: true,
         _bids: true,
         _active,
-        sort,
+        sort: sort === 'endsAt' ? 'endsAt' : 'created',
         sortOrder,
         limit,
         offset,
       },
     });
 
-    const sortedRes = res.map((listing) => {
-      const bids = listing.bids.sort((a, b) => {
-        return b.amount - a.amount;
-      });
+    const normalizedRes = res.map((listing) => normalizeResponse(listing));
 
-      return {
-        ...listing,
-        bids,
-      };
-    });
+    if (sort === 'price') {
+      return sortAuctionsByPrice(normalizedRes, sortOrder);
+    }
 
-    return sortedRes;
+    return normalizedRes;
   } catch (error) {
     console.error(error);
     throw error;

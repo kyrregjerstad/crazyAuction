@@ -1,4 +1,4 @@
-import AllListingsGrid from '@/components/ListingsGrid';
+import AllAuctionsGrid from '@/components/ListingsGrid';
 import SearchFilters from '@/components/SearchFilters';
 import { searchOrderOptions, searchSortOptions } from '@/lib/constants';
 import { getAuctions } from '@/lib/services/auction-api';
@@ -21,10 +21,10 @@ export default async function HomePage({ searchParams }: Props) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchInfiniteQuery({
-    queryKey: ['allListingsInfinite', sort, order],
+    queryKey: ['allAuctionsInfinite', sort, order],
     queryFn: () =>
       getAuctions({
-        sort: sort === 'endsAt' ? 'endsAt' : 'created',
+        sort,
         sortOrder: order,
         limit: 100,
         offset: 0,
@@ -33,14 +33,14 @@ export default async function HomePage({ searchParams }: Props) {
   });
 
   return (
-    <div className='w-full max-w-7xl p-2 sm:p-4'>
+    <div className='w-full max-w-8xl p-2 sm:p-4'>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <SearchFilters
           searchParams={{ sort, order }}
           sortOptions={searchSortOptions}
           orderOptions={searchOrderOptions}
         />
-        <AllListingsGrid />
+        <AllAuctionsGrid />
       </HydrationBoundary>
     </div>
   );
