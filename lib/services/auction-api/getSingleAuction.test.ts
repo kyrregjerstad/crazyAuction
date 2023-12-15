@@ -45,12 +45,10 @@ describe('getSingleAuction', () => {
     expect(response).toEqual({ ...normalizedData });
   });
 
-  it('should throw an error if fetching auction data fails', async () => {
+  it('should return null if fetching auction data fails', async () => {
     const mockError = new Error('Auction fetch failed');
     (auctionAPIFetcherModule.default as Mock).mockRejectedValue(mockError);
 
-    await expect(getSingleAuction(mockId)).rejects.toThrow(
-      'Auction fetch failed',
-    );
+    await expect(getSingleAuction(mockId)).resolves.toBeNull();
   });
 });
