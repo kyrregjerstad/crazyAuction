@@ -36,6 +36,8 @@ export const singleAuctionSchemaExtended = singleAuctionSchema.extend({
   }),
 });
 
+export const voidSchema = z.void();
+
 export type Seller = z.infer<typeof seller>;
 export type Bid = z.infer<typeof bid>;
 export type Auction = z.infer<typeof singleAuctionSchema>;

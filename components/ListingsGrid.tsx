@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { Fragment } from 'react';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
-import { useInfiniteListings } from '../lib/hooks/useInfiniteListings';
+import { useInfiniteAuctions } from '../lib/hooks/useInfiniteListings';
 import AuctionGrid from './AuctionGrid';
 import AuctionItemCard from './AuctionItemCard';
 import Skeleton from './Skeleton';
@@ -15,7 +15,7 @@ const AllAuctionsGrid = () => {
   const skeletonArr = Array.from({ length: 30 }, (_, i) => i);
 
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useInfiniteListings();
+    useInfiniteAuctions();
 
   const [ref] = useInfiniteScroll({
     loading: isLoading,

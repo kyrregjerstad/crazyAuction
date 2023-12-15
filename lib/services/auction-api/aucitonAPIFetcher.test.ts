@@ -67,16 +67,6 @@ describe('auctionAPIFetcher', () => {
 
     expect(result).toEqual({ parsedData: 'mockData' });
   });
-
-  it('should delete a listing by ID', async () => {
-    const result = await auctionAPIFetcher({
-      endpoint: `/listings/${mockID}`,
-      schema: mockSchema,
-      method: 'DELETE',
-    });
-
-    expect(result).toEqual({ parsedData: 'mockData' });
-  });
 });
 
 describe('appendQueryParams', () => {

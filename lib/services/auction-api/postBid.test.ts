@@ -14,7 +14,7 @@ describe('postBid', () => {
 
   it('should call auctionAPIFetcher with correct parameters', async () => {
     await postBid({
-      listingId: mockListingId,
+      auctionId: mockListingId,
       amount: mockAmount,
       jwt: mockJwt,
     });
@@ -35,7 +35,7 @@ describe('postBid', () => {
     (auctionAPIFetcherModule.default as Mock).mockResolvedValue(mockResponse);
 
     const response = await postBid({
-      listingId: mockListingId,
+      auctionId: mockListingId,
       amount: mockAmount,
       jwt: mockJwt,
     });
@@ -48,7 +48,7 @@ describe('postBid', () => {
     (auctionAPIFetcherModule.default as Mock).mockRejectedValue(mockError);
 
     await expect(
-      postBid({ listingId: mockListingId, amount: mockAmount, jwt: mockJwt }),
+      postBid({ auctionId: mockListingId, amount: mockAmount, jwt: mockJwt }),
     ).rejects.toThrow('Bid submission failed');
   });
 });

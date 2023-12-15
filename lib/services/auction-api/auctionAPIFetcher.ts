@@ -59,6 +59,17 @@ async function auctionAPIFetcher<TData, TMethod extends Methods = 'GET'>(
   }
 
   try {
+    if (method === 'DELETE') {
+      const res = await fetch(url.toString(), options);
+      if (!res.ok) {
+        try {
+          const data = await res.json();
+          return Promise.reject(data);
+        } catch (error) {
+          throw new Error(res.statusText);
+        }
+      }
+    }
     const res = await fetchWithZod(schema, url.toString(), options);
     return res;
   } catch (error) {
