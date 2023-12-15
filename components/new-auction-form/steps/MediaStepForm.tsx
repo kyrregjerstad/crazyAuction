@@ -80,6 +80,11 @@ const MediaStepForm = (props: FormStepProps) => {
   const handleAddImageUrl = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (images.length >= 8) {
+      alert('You can only submit up to 8 images.');
+      return;
+    }
+
     const formData = new FormData(e.currentTarget);
     const imageUrl = formData.get('imageUrl') as string;
     if (!imageUrl) return;
@@ -154,6 +159,11 @@ const ImageDropzone = ({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       _event: DropEvent,
     ) => {
+      if (images.length + acceptedFiles.length > 8) {
+        alert('You can only submit up to 8 images.');
+        return;
+      }
+
       if (acceptedFiles?.length) {
         const newImages = Array.from(acceptedFiles).map((file) => ({
           id: nanoid(),
@@ -165,7 +175,7 @@ const ImageDropzone = ({
         setImages((prevImages) => [...prevImages, ...newImages]);
       }
     },
-    [setImages],
+    [setImages, images],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
