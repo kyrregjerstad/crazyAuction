@@ -42,9 +42,8 @@ test.describe('Auction item logged out', () => {
       page.getByRole('img', { name: 'Product Image' }),
     ).toBeVisible();
 
-    await expect(
-      page.getByText('You must be logged in to place a bid'),
-    ).toBeVisible();
+    await expect(page.getByText('This auction has ended')).toBeVisible();
+
     await expect(page.getByText('You must be logged in to view')).toBeVisible();
   });
 });

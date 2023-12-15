@@ -1,4 +1,4 @@
-import { getMultipleAuctions } from './getMultipleAuctions';
+import { getMultipleAuctionsById } from './getMultipleAuctionsById';
 import * as getSingleAuctionModule from './getSingleAuction';
 import { Mock } from 'vitest';
 
@@ -15,7 +15,7 @@ describe('getMultipleAuctions', () => {
       .mockResolvedValueOnce(mockListings[1])
       .mockResolvedValueOnce(mockListings[2]);
 
-    const results = await getMultipleAuctions(mockIds);
+    const results = await getMultipleAuctionsById(mockIds);
 
     expect(results).toEqual(mockListings);
     expect(getSingleAuctionModule.getSingleAuction).toHaveBeenCalledTimes(
@@ -36,7 +36,7 @@ describe('getMultipleAuctions', () => {
       .mockRejectedValueOnce(new Error('Fetch failed'))
       .mockResolvedValueOnce({ id: 'id3' });
 
-    const results = await getMultipleAuctions(mockIds);
+    const results = await getMultipleAuctionsById(mockIds);
 
     expect(results).toEqual([{ id: 'id1' }, { id: 'id3' }]);
   });
