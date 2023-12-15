@@ -16,6 +16,6 @@ export const getSingleAuction = async (id: string) => {
     return normalizeResponse(res);
   } catch (error) {
     console.error(error);
-    throw error;
+    return null;
   }
 };

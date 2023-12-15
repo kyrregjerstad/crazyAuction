@@ -61,7 +61,11 @@ const SingleAuctionPage = ({
   }
 
   if (!auction) {
-    return <div>No listing found</div>;
+    return (
+      <div className='col-span-2 flex w-full justify-center text-center'>
+        No listing found
+      </div>
+    );
   }
 
   const handleDelete = async () => {
