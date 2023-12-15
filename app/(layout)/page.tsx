@@ -24,7 +24,7 @@ export default async function HomePage({ searchParams }: Props) {
     queryKey: ['allListingsInfinite', sort, order],
     queryFn: () =>
       getAuctions({
-        sort: sort === 'endsAt' ? 'endsAt' : 'created',
+        sort,
         sortOrder: order,
         limit: 100,
         offset: 0,
