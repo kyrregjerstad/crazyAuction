@@ -16,7 +16,6 @@ vi.mock('@/lib/services/zodFetcher', () => {
 describe('auctionAPIFetcher', () => {
   const mockID = '123';
 
-  // Test GET Endpoints
   it('should fetch listings', async () => {
     const result = await auctionAPIFetcher({
       endpoint: '/listings',
