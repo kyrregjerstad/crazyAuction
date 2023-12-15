@@ -10,7 +10,7 @@ test.describe('Test page navigation un-authenticated', () => {
     await page.getByRole('link', { name: 'CrazyAuction CrazyAuction' }).click();
     await expect(page).toHaveURL('/');
 
-    await page.getByRole('link', { name: 'Auctions' }).click();
+    await page.getByRole('link', { name: 'Auctions' }).first().click();
     await expect(page).toHaveURL('/');
 
     await page.getByRole('link', { name: 'Leaderboard' }).click();
