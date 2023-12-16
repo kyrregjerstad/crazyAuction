@@ -6,6 +6,7 @@ import UserListingsGrid from '@/components/UserListingsGrid';
 import { getServerSession } from 'next-auth';
 import AvatarWithEdit from './Avatar';
 import UserWinsTable from './UserWinsTable';
+import UserAllAuctionsTable from './UserAllAuctionsTable';
 
 type Props = {
   params: { username: string };
@@ -34,6 +35,8 @@ const UserPage = async ({ params }: Props) => {
   if (!user) return null;
 
   const { avatar, name, credits, listings, wins } = user;
+
+  const allAuctionIds = listings?.map((listing) => listing.id);
 
   const isLoggedInUser = session.user.name === username;
 
@@ -64,6 +67,14 @@ const UserPage = async ({ params }: Props) => {
         ) : (
           <p>No auctions</p>
         )}
+      </div>
+      <div className='rounded-lg py-4 shadow-md md:col-span-3'>
+        <h2 className='mb-2 text-lg font-bold'>All auctions</h2>
+        <UserAllAuctionsTable
+          username={username}
+          allAuctionIds={allAuctionIds}
+        />
+        <div className='grid gap-4'></div>
       </div>
       <div className='rounded-lg py-4 shadow-md md:col-span-3'>
         <h2 className='mb-2 text-lg font-bold'>Wins</h2>
