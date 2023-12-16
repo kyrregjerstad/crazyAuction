@@ -118,8 +118,6 @@ const SortableItem = ({
 
   return (
     <motion.div
-      layout
-      layoutId={id}
       className={cn('relative', isDragging && 'z-50')}
       key={id}
       initial={{ opacity: 0 }}

@@ -11,12 +11,23 @@ import {
   TableHeader,
   TableRow,
 } from './ui/table';
+import { useToast } from './ui/use-toast';
 
 const Leaderboard = () => {
-  const { data: users, isLoading } = useQueryAllUsers();
+  const { data: users, isLoading, error } = useQueryAllUsers();
+  const { toast } = useToast();
 
   if (isLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    toast({
+      title: 'Error',
+      description: error.message,
+      variant: 'error',
+    });
+    return <div>Error: {error.message}</div>;
   }
 
   if (!users) {

@@ -17,7 +17,6 @@ import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 
 import SortIcon from '@/components/icons/SortIcon';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -41,12 +40,12 @@ import Link from 'next/link';
 
 type Props = {
   username: string;
-  winIds: string[];
+  allAuctionIds: string[] | undefined;
 };
-const UserWinsTable = ({ username, winIds }: Props) => {
+const UserAllAuctionsTable = ({ username, allAuctionIds }: Props) => {
   const { data: wins, isLoading } = useQuery({
-    queryKey: ['userWins', winIds, username],
-    queryFn: () => getMultipleAuctions(winIds),
+    queryKey: ['userWins', allAuctionIds, username],
+    queryFn: () => getMultipleAuctions(allAuctionIds || []),
   });
 
   if (isLoading) return <p>Loading...</p>;
@@ -61,7 +60,7 @@ const UserWinsTable = ({ username, winIds }: Props) => {
   );
 };
 
-export default UserWinsTable;
+export default UserAllAuctionsTable;
 
 const columnHelper = createColumnHelper<TransformWins[0]>();
 
@@ -91,7 +90,10 @@ export const columns = [
       const id = row.original.id;
       return (
         <div className='pl-2 sm:px-4'>
-          <Link href={`/item/${id}`} className='hover:underline'>
+          <Link
+            href={`/item/${id}`}
+            className='line-clamp-1 w-full max-w-xs hover:underline'
+          >
             {row.getValue('title')}
           </Link>
         </div>
@@ -120,7 +122,7 @@ export const columns = [
       );
     },
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('price'));
+      const amount = parseFloat(row.getValue('price')) || 0;
 
       const formatted = new Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -146,7 +148,7 @@ export const columns = [
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           size='sm'
         >
-          Date
+          End date
           <SortIcon sort={sort} />
         </Button>
       );
@@ -158,7 +160,7 @@ export const columns = [
       return <div className='sm:px-4'>{formattedDate}</div>;
     },
   }),
-  columnHelper.accessor('seller', {
+  columnHelper.accessor('created', {
     header: ({ column }) => {
       const sortingState = column.getIsSorted();
       const sort =
@@ -174,24 +176,16 @@ export const columns = [
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           size='sm'
         >
-          Seller
+          Created
           <SortIcon sort={sort} />
         </Button>
       );
     },
-    cell: ({ getValue }) => {
-      const { avatar, name } = getValue() as { avatar: string; name: string };
-      return (
-        <div className='flex gap-2 pr-2 sm:px-4'>
-          <Avatar className='hidden h-6 w-6 border border-accent-500 sm:block'>
-            <AvatarImage src={avatar || ''} />
-            <AvatarFallback>{name[0]}</AvatarFallback>
-          </Avatar>
-          <Link href={`/user/${name}`} className='break-all hover:underline'>
-            {name}
-          </Link>
-        </div>
-      );
+    cell: ({ row }) => {
+      const formattedDate = new Date(
+        row.getValue('created'),
+      ).toLocaleDateString();
+      return <div className='sm:px-4'>{formattedDate}</div>;
     },
   }),
 ] as Column<TransformWins[0]>[];
@@ -230,7 +224,7 @@ export const DataTable = ({ wins }: { wins: TransformWins }) => {
           onChange={(event) =>
             table.getColumn('title')?.setFilterValue(event.target.value)
           }
-          className='max-w-sm'
+          className='max-w-md'
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

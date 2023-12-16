@@ -3,9 +3,12 @@
 import { TimeIntervals } from '@/lib/data/generateSampleData';
 import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { useState, useEffect } from 'react';
 import Sparkles from './Sparkles';
+
+dayjs.extend(relativeTime);
 
 const EndingTime = ({ endsAt }: { endsAt: string }) => {
   const [timeLeft, setTimeLeft] = useState<number>(calculateTimeLeft(endsAt));
