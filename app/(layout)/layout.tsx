@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import '../globals.css';
+import Footer from '@/components/Footer';
 
 export default function RootLayout({
   children,
@@ -13,6 +14,7 @@ export default function RootLayout({
       <main className='min-h-[100dvh - 4rem] flex flex-col items-center justify-between'>
         {children}
       </main>
+      <Footer />
     </>
   );
 }
