@@ -6,6 +6,7 @@ import HeaderLine from './HeaderLine';
 import HeaderLinks from './HeaderLinks';
 import SearchInput from './Search';
 import UserMenu from './UserMenu';
+import { Suspense } from 'react';
 
 const Header = () => {
   return (
@@ -26,7 +27,9 @@ const Header = () => {
           </Link>
           <HeaderLinks />
         </nav>
-        <SearchInput />
+        <Suspense>
+          <SearchInput />
+        </Suspense>
 
         <div className='flex gap-4'>
           <UserMenu />
