@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import isEqual from 'lodash/isEqual';
 import StepOverview from './StepOverview';
 import { postAuction, updateAuction } from '@/lib/services/auction-api';
@@ -76,7 +76,9 @@ const AuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
     <Card className='flex min-h-[85dvh] w-full max-w-2xl flex-col gap-5 p-4 xs:p-8 sm:h-[450px] sm:min-h-[500px] sm:flex-row sm:p-4'>
       <StepOverview currentStep={currentStep} steps={steps} />
       <div className='flex h-full w-full flex-1 flex-col items-stretch'>
-        <RenderStep />
+        <Suspense>
+          <RenderStep />
+        </Suspense>
       </div>
     </Card>
   );
