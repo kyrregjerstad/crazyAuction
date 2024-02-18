@@ -1,13 +1,13 @@
-import { Toaster } from '@/components/ui/toaster';
-import { pageMetaData } from '@/lib/data/metadata';
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import './globals.css';
+import type { Metadata } from 'next';
 import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
-import type { Metadata } from 'next';
-import AuthProvider from './(auth)/Provider';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Toaster } from '@/components/ui/toaster';
+import { pageMetaData } from '@/lib/data/metadata';
 import { Analytics } from './Analytics';
-import './globals.css';
 import QueryClientProvider from './providers/QueryClientProvider';
+import AuthProvider from './(auth)/Provider';
 
 export default function RootLayout({
   children,
