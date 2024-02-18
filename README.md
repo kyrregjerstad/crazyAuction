@@ -1,8 +1,8 @@
 ## Installation
 
-![](https://byob.yarr.is/kyrregjerstad/noroff-semester-project-2/unit-test)
-![](https://byob.yarr.is/kyrregjerstad/noroff-semester-project-2/build)
-![](https://byob.yarr.is/kyrregjerstad/noroff-semester-project-2/e2e-tests)
+![](https://byob.yarr.is/kyrregjerstad/crazyAuction/unit-test)
+![](https://byob.yarr.is/kyrregjerstad/crazyAuction/build)
+![](https://byob.yarr.is/kyrregjerstad/crazyAuction/e2e-tests)
 
 Welcome to CrazyAuction, a frontend-focused project developed as part of my second year semester project at Noroff. This application serves as an interactive platform for users to engage in online auctions, showcasing my skills in frontend development and design.
 
@@ -37,8 +37,8 @@ Ensure you have [Bun installed](https://bun.sh/docs/installation) on your system
 Clone the repository and install dependencies:
 
 ```bash
-gh repo clone kyrregjerstad/noroff-semester-project-2
-cd noroff-semester-project-2
+gh repo clone kyrregjerstad/crazyAuction
+cd crazyAuction
 bun install
 ```
 

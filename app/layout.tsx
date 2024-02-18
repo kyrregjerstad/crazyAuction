@@ -1,13 +1,13 @@
 import { Toaster } from '@/components/ui/toaster';
+import { pageMetaData } from '@/lib/data/metadata';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
-import Script from 'next/script';
+import type { Metadata } from 'next';
 import AuthProvider from './(auth)/Provider';
+import { Analytics } from './Analytics';
 import './globals.css';
 import QueryClientProvider from './providers/QueryClientProvider';
-import { SpeedInsights } from '@vercel/speed-insights/next';
-import type { Metadata } from 'next';
-import { pageMetaData } from '@/lib/data/metadata';
 
 export default function RootLayout({
   children,
@@ -16,16 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <Script id='hotjar'>
-        {`(function(h,o,t,j,a,r){
-        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-        h._hjSettings={hjid:3751458,hjsv:6};
-        a=o.getElementsByTagName('head')[0];
-        r=o.createElement('script');r.async=1;
-        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-        a.appendChild(r);
-    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`}
-      </Script>
+      <Analytics />
       <html
         lang='en'
         className={`${GeistSans.variable} ${GeistMono.variable} dark`}
