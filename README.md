@@ -68,5 +68,5 @@ bun run test:e2e
 bun run test:e2e:headless
 ```
 
-Academic Context
+**Academic Context:**
 This project is part of my academic coursework at Noroff. It serves as a platform to apply and showcase the skills and knowledge I've acquired in frontend web development.
