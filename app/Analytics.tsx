@@ -6,7 +6,7 @@ export const Analytics = () => {
       <Script
         defer
         data-domain='crazy.auction'
-        src='https://analytics.kyrre.dev/js/script.js'
+        src='https://insight.webstad.com/js/script.js'
       />
     </>
   );
