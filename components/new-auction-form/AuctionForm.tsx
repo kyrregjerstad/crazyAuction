@@ -7,7 +7,7 @@ import { postAuction, updateAuction } from '@/lib/services/auction-api';
 import useAuctionFormStep from '@/lib/hooks/useAuctionFormStep';
 import useAuctionFormStore from '@/lib/hooks/useAuctionFormStore';
 import { AuctionFull } from '@/lib/schemas';
-import { AuctionForm, FormStepProps } from './types';
+import { type AuctionForm as AuctionFormType, FormStepProps } from './types';
 
 import { Card } from '../ui/card';
 import {
@@ -18,7 +18,7 @@ import {
 } from './steps';
 import { useStore } from 'zustand';
 
-const AuctionForm = ({ mode = 'create', listing }: AuctionForm) => {
+const AuctionForm = ({ mode = 'create', listing }: AuctionFormType) => {
   const { getCurrentStep, nextStep, prevStep, steps } = useAuctionFormStep({
     mode,
   });

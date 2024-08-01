@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  Column,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -194,7 +193,7 @@ export const columns = [
       );
     },
   }),
-] as Column<TransformWins[0]>[];
+];
 
 export const DataTable = ({ wins }: { wins: TransformWins }) => {
   const [sorting, setSorting] = useState<SortingState>([]);

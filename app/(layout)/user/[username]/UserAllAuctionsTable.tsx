@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  Column,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -188,7 +187,7 @@ export const columns = [
       return <div className='sm:px-4'>{formattedDate}</div>;
     },
   }),
-] as Column<TransformWins[0]>[];
+];
 
 export const DataTable = ({ wins }: { wins: TransformWins }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
