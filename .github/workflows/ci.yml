@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: pnpm/action-setup@v4.0.0
         with:
           version: latest
 
@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: pnpm/action-setup@v4.0.0
         with:
           version: latest
       - run: pnpm install
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: pnpm/action-setup@v4.0.0
         with:
           version: latest
       - run: pnpm install
@@ -75,7 +75,7 @@ jobs:
       build-artifact: build
     steps:
       - uses: actions/checkout@v4.1.1
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: pnpm/action-setup@v4.0.0
         with:
           version: latest
       - run: pnpm install
@@ -107,7 +107,7 @@ jobs:
       PLAYWRIGHT_PASSWORD: ${{ secrets.PLAYWRIGHT_PASSWORD }}
     steps:
       - uses: actions/checkout@v4.1.1
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: pnpm/action-setup@v4.0.0
         with:
           version: latest
 
