@@ -228,9 +228,6 @@ importers:
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.19(postcss@8.4.40)
-      bun-types:
-        specifier: ^1.1.21
-        version: 1.1.21
       css-mediaquery:
         specifier: ^0.1.2
         version: 0.1.2
@@ -1630,9 +1627,6 @@ packages:
   '@types/node@14.18.63':
     resolution: {integrity: sha512-fAtCfv4jJg+ExtXhvCkCqUKZ+4ok/JQk01qDKhL5BDDoS3AxKXhV5/MAVUZyQnSEd2GT92fkgZl0pz0Q0AzcIQ==}
 
-  '@types/node@20.12.14':
-    resolution: {integrity: sha512-scnD59RpYD91xngrQQLGkE+6UrHUPzeKZWhhjBSa3HSkwjbQc38+q3RoIVEwxQGRw3M+j5hpNAM+lgV3cVormg==}
-
   '@types/node@20.14.13':
     resolution: {integrity: sha512-+bHoGiZb8UiQ0+WEtmph2IWQCjIqg8MDZMAV+ppRRhUZnquF5mQkP/9vpSwJClEiSM/C7fZZExPzfU0vJTyp8w==}
 
@@ -1659,9 +1653,6 @@ packages:
 
   '@types/webxr@0.5.16':
     resolution: {integrity: sha512-0E0Cl84FECtzrB4qG19TNTqpunw0F1YF0QZZnFMF6pDw1kNKJtrlTKlVB34stGIsHbZsYQ7H0tNjPfZftkHHoA==}
-
-  '@types/ws@8.5.10':
-    resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
 
   '@typescript-eslint/eslint-plugin@7.18.0':
     resolution: {integrity: sha512-94EQTWZ40mzBc42ATNIBimBEDltSJ9RQHCC8vc/PDbxi4k8dVwUAv4o98dk50M1zB+JGFxp43FP7f8+FP8R6Sw==}
@@ -2043,9 +2034,6 @@ packages:
 
   buffer@6.0.3:
     resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
-
-  bun-types@1.1.21:
-    resolution: {integrity: sha512-oz9q2KGiuQZciV8oBCYfTTwJMWEFFYBF0gOyO0dsV06yQvJIiFMcUx5PDk580UJ2Po5amtwjgRJ8ksxSiCueHQ==}
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -6240,10 +6228,6 @@ snapshots:
 
   '@types/node@14.18.63': {}
 
-  '@types/node@20.12.14':
-    dependencies:
-      undici-types: 5.26.5
-
   '@types/node@20.14.13':
     dependencies:
       undici-types: 5.26.5
@@ -6275,10 +6259,6 @@ snapshots:
       meshoptimizer: 0.18.1
 
   '@types/webxr@0.5.16': {}
-
-  '@types/ws@8.5.10':
-    dependencies:
-      '@types/node': 20.14.13
 
   '@typescript-eslint/eslint-plugin@7.18.0(@typescript-eslint/parser@7.5.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)(typescript@5.5.4)':
     dependencies:
@@ -6746,11 +6726,6 @@ snapshots:
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
-
-  bun-types@1.1.21:
-    dependencies:
-      '@types/node': 20.12.14
-      '@types/ws': 8.5.10
 
   busboy@1.6.0:
     dependencies:

@@ -36,7 +36,7 @@ jobs:
       - uses: pnpm/action-setup@v2.0.1
         with:
           version: latest
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install
       - run: pnpm run lint
       - name: Update lint Badge
         uses: RubbaBoy/BYOB@v1.3.0
@@ -56,7 +56,7 @@ jobs:
       - uses: pnpm/action-setup@v2.0.1
         with:
           version: latest
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install
       - run: pnpm run test
       - name: Update unit-test Badge
         uses: RubbaBoy/BYOB@v1.3.0
@@ -78,7 +78,7 @@ jobs:
       - uses: pnpm/action-setup@v2.0.1
         with:
           version: latest
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install
       - run: pnpm run build
 
       - name: Save build folder
@@ -111,7 +111,7 @@ jobs:
         with:
           version: latest
 
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install
       - run: pnpm exec playwright install --with-deps
 
       - name: Download the build folder
