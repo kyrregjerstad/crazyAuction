@@ -24,20 +24,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
-      - uses: oven-sh/setup-bun@v1
+      - uses: pnpm/action-setup@v2.0.1
         with:
-          bun-version: latest
+          version: latest
 
   lint:
     needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
-      - uses: oven-sh/setup-bun@v1
+      - uses: pnpm/action-setup@v2.0.1
         with:
-          bun-version: latest
-      - run: bun install --frozen-lockfile
-      - run: bun run lint
+          version: latest
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint
       - name: Update lint Badge
         uses: RubbaBoy/BYOB@v1.3.0
         if: ${{ always() }}
@@ -53,11 +53,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
-      - uses: oven-sh/setup-bun@v1
+      - uses: pnpm/action-setup@v2.0.1
         with:
-          bun-version: latest
-      - run: bun install --frozen-lockfile
-      - run: bun run test
+          version: latest
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run test
       - name: Update unit-test Badge
         uses: RubbaBoy/BYOB@v1.3.0
         if: ${{ always() }}
@@ -75,11 +75,11 @@ jobs:
       build-artifact: build
     steps:
       - uses: actions/checkout@v4.1.1
-      - uses: oven-sh/setup-bun@v1
+      - uses: pnpm/action-setup@v2.0.1
         with:
-          bun-version: latest
-      - run: bun install --frozen-lockfile
-      - run: bun run build
+          version: latest
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
 
       - name: Save build folder
         uses: actions/upload-artifact@v3
@@ -107,12 +107,12 @@ jobs:
       PLAYWRIGHT_PASSWORD: ${{ secrets.PLAYWRIGHT_PASSWORD }}
     steps:
       - uses: actions/checkout@v4.1.1
-      - uses: oven-sh/setup-bun@v1
+      - uses: pnpm/action-setup@v2.0.1
         with:
-          bun-version: latest
+          version: latest
 
-      - run: bun install --frozen-lockfile
-      - run: bunx playwright install --with-deps
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps
 
       - name: Download the build folder
         uses: actions/download-artifact@v3
@@ -121,7 +121,7 @@ jobs:
           path: .next
 
       - name: Run e2e tests
-        run: bun run test:e2e:headless
+        run: pnpm run test:e2e:headless
       - uses: actions/upload-artifact@v3
         with:
           name: playwright-report

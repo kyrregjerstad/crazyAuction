@@ -14,7 +14,7 @@ The objective of this project was to create a dynamic and user-friendly frontend
 
 - Interactive User Interface: Delivering a seamless and engaging user experience.
 - Responsive Design: Ensuring accessibility across various devices and screen sizes.
-- Modern Web Technologies: Utilizing NextJS 14, Shadcn, TailwindCSS, TypeScript, and Bun.
+- Modern Web Technologies: Utilizing NextJS 14, Shadcn, TailwindCSS, TypeScript, and pnpm.
 
 ## Features
 
@@ -32,14 +32,14 @@ The objective of this project was to create a dynamic and user-friendly frontend
 
 ## Installation
 
-Ensure you have [Bun installed](https://bun.sh/docs/installation) on your system to manage dependencies and run the project.
+Ensure you have [pnpm installed](https://pnpm.io/installation) on your system to manage dependencies and run the project.
 
 Clone the repository and install dependencies:
 
 ```bash
 gh repo clone kyrregjerstad/crazyAuction
 cd crazyAuction
-bun install
+pnpm i
 ```
 
 ### Running Locally
@@ -47,7 +47,7 @@ bun install
 Start the development server:
 
 ```bash
-bun run dev
+pnpm dev
 ```
 
 Visit http://localhost:3000 to interact with the application.
@@ -58,14 +58,14 @@ Maintain code integrity and functionality with unit and end-to-end testing:
 
 ```bash
 # Unit tests:
-bun run test
+pnpm test
 
 # End-to-End tests (build the application first):
-bun run build
-bun run test:e2e
+pnpm build
+pnpm test:e2e
 
 # Run End-to-End tests in headless mode:
-bun run test:e2e:headless
+pnpm test:e2e:headless
 ```
 
 **Academic Context:**
